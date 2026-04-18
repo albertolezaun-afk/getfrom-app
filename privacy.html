@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pol&iacute;tica de Privacidad — From</title>
+    <meta name="description" content="Política de privacidad de From. Cómo tratamos tus datos, qué recopilamos y qué no.">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22V8"/><path d="M12 8C12 8 8 4 8 2"/><path d="M12 8C12 8 16 4 16 2"/>
+                <path d="M12 14C12 14 8 10 6 9"/><path d="M12 14C12 14 16 10 18 9"/>
+            </svg>
+            From
+        </a>
+        <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links">
+            <a href="index.html#features">Funciones</a>
+            <a href="pricing.html">Precios</a>
+            <a href="support.html">Soporte</a>
+            <a href="index.html#download" class="btn-nav">Descargar</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <h1>Pol&iacute;tica de Privacidad</h1>
+    <p>En From, la privacidad no es una caracter&iacute;stica. Es la arquitectura.</p>
+</div>
+
+<!-- Legal content -->
+<div class="legal-body">
+    <p class="legal-updated">&Uacute;ltima actualizaci&oacute;n: 18 de abril de 2026</p>
+
+    <h2>1. Qui&eacute;nes somos</h2>
+    <p>From es una aplicaci&oacute;n nativa para macOS desarrollada por Alberto Lezaun (&ldquo;nosotros&rdquo;, &ldquo;nuestro&rdquo;). Nuestra direcci&oacute;n de contacto es <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>.</p>
+
+    <h2>2. Principio fundamental</h2>
+    <p>From es una aplicaci&oacute;n local-first. Esto significa que <strong>tus notas, tareas y archivos se almacenan exclusivamente en tu dispositivo</strong> (y en tu cuenta de iCloud si eliges usarla). No tenemos acceso a tu contenido, no lo almacenamos en nuestros servidores y no podemos leerlo.</p>
+
+    <h2>3. Datos que NO recopilamos</h2>
+    <ul>
+        <li><strong>Contenido de tus notas:</strong> Nunca sale de tu Mac ni de tu iCloud privado.</li>
+        <li><strong>Telemetr&iacute;a o anal&iacute;ticas de uso:</strong> No rastreamos qu&eacute; funciones usas, cu&aacute;nto tiempo pasas en la app ni c&oacute;mo navegas.</li>
+        <li><strong>Datos de comportamiento:</strong> No registramos clics, scroll, b&uacute;squedas ni ninguna interacci&oacute;n con la app.</li>
+        <li><strong>Identificadores de dispositivo:</strong> No recopilamos UUIDs, direcciones MAC ni informaci&oacute;n del hardware.</li>
+        <li><strong>Ubicaci&oacute;n:</strong> No accedemos a la ubicaci&oacute;n del dispositivo.</li>
+    </ul>
+
+    <h2>4. Datos que s&iacute; procesamos</h2>
+    <p>Si eliges crear una cuenta (necesaria solo para la suscripci&oacute;n o la IA gestionada), procesamos los siguientes datos:</p>
+
+    <h3>4.1 Datos de cuenta</h3>
+    <ul>
+        <li><strong>Email:</strong> Para identificar tu cuenta y comunicarnos contigo.</li>
+        <li><strong>Contrase&ntilde;a:</strong> Almacenada con hash bcrypt (coste 12). Nunca almacenamos tu contrase&ntilde;a en texto plano.</li>
+        <li><strong>Estado de suscripci&oacute;n:</strong> Tu plan actual y fechas de facturaci&oacute;n.</li>
+        <li><strong>Balance de tokens:</strong> Si usas la IA gestionada, registramos el consumo de tokens para facturaci&oacute;n.</li>
+    </ul>
+
+    <h3>4.2 Datos de pago</h3>
+    <p>Los pagos se procesan a trav&eacute;s de <strong>LemonSqueezy</strong>. No almacenamos datos de tarjetas de cr&eacute;dito ni informaci&oacute;n financiera. LemonSqueezy act&uacute;a como procesador de pagos y tiene su propia pol&iacute;tica de privacidad que puedes consultar en su web.</p>
+
+    <h3>4.3 Datos de IA</h3>
+    <p>Cuando usas la funci&oacute;n de IA (chat, editor IA o agentes):</p>
+    <ul>
+        <li>From busca localmente en tus notas los fragmentos relevantes a tu consulta.</li>
+        <li>Solo esos fragmentos, junto con tu pregunta, se env&iacute;an a la API del proveedor de IA seleccionado (Anthropic, OpenAI o Google).</li>
+        <li><strong>No almacenamos las consultas ni las respuestas en nuestros servidores.</strong></li>
+        <li>El tratamiento de los datos por parte del proveedor de IA se rige por su propia pol&iacute;tica de privacidad.</li>
+        <li>Si usas tu propia API key, las consultas van directamente desde tu Mac al proveedor, sin pasar por ning&uacute;n servidor nuestro.</li>
+    </ul>
+
+    <h3>4.4 Notas publicadas</h3>
+    <p>Si eliges publicar una nota (funci&oacute;n opcional), el contenido de esa nota espec&iacute;fica se almacena en nuestro servidor para hacerla accesible p&uacute;blicamente. Puedes despublicar cualquier nota en cualquier momento, lo que elimina el contenido de nuestro servidor.</p>
+
+    <h3>4.5 Integraciones con Google</h3>
+    <p>Si conectas Google Drive o Google Docs:</p>
+    <ul>
+        <li>Usamos OAuth 2.0 para autenticaci&oacute;n. No almacenamos tu contrase&ntilde;a de Google.</li>
+        <li>Los tokens de acceso se almacenan localmente en tu Mac, en el Keychain de macOS.</li>
+        <li>Accedemos &uacute;nicamente a los archivos y carpetas que t&uacute; seleccionas expl&iacute;citamente.</li>
+        <li>La sincronizaci&oacute;n con Google Docs ocurre directamente entre tu Mac y los servidores de Google.</li>
+    </ul>
+
+    <h2>5. Base legal del tratamiento</h2>
+    <p>De acuerdo con el Reglamento General de Protecci&oacute;n de Datos (RGPD), tratamos tus datos con las siguientes bases legales:</p>
+    <ul>
+        <li><strong>Ejecuci&oacute;n del contrato:</strong> Datos de cuenta necesarios para proporcionar el servicio (Art. 6.1.b RGPD).</li>
+        <li><strong>Consentimiento:</strong> Para integraciones opcionales como Google Drive (Art. 6.1.a RGPD).</li>
+        <li><strong>Inter&eacute;s leg&iacute;timo:</strong> Para prevenci&oacute;n de fraude y seguridad del servicio (Art. 6.1.f RGPD).</li>
+    </ul>
+
+    <h2>6. D&oacute;nde se almacenan los datos</h2>
+    <ul>
+        <li><strong>Tus notas:</strong> En tu Mac y/o en tu iCloud Drive privado (gestionado por Apple).</li>
+        <li><strong>Datos de cuenta:</strong> En servidores en la Uni&oacute;n Europea o Estados Unidos (Railway), protegidos con cifrado en tr&aacute;nsito (TLS) y en reposo.</li>
+        <li><strong>API keys:</strong> Almacenadas exclusivamente en tu Mac. Si usas la IA gestionada, las API keys del servicio se almacenan cifradas (AES) en nuestro servidor.</li>
+    </ul>
+
+    <h2>7. Retenci&oacute;n de datos</h2>
+    <ul>
+        <li><strong>Datos de cuenta:</strong> Se mantienen mientras tu cuenta est&eacute; activa. Se eliminan en un plazo de 30 d&iacute;as tras la solicitud de eliminaci&oacute;n de cuenta.</li>
+        <li><strong>Datos de pago:</strong> Retenidos seg&uacute;n las obligaciones legales de facturaci&oacute;n (m&iacute;nimo 4 a&ntilde;os seg&uacute;n legislaci&oacute;n espa&ntilde;ola).</li>
+        <li><strong>Notas publicadas:</strong> Se eliminan inmediatamente al despublicar.</li>
+    </ul>
+
+    <h2>8. Tus derechos</h2>
+    <p>De acuerdo con el RGPD y la LOPDGDD, tienes derecho a:</p>
+    <ul>
+        <li><strong>Acceso:</strong> Solicitar una copia de los datos que tenemos sobre ti.</li>
+        <li><strong>Rectificaci&oacute;n:</strong> Corregir datos inexactos.</li>
+        <li><strong>Supresi&oacute;n:</strong> Solicitar la eliminaci&oacute;n de tu cuenta y datos asociados.</li>
+        <li><strong>Portabilidad:</strong> Exportar tus datos en formato legible. Tus notas ya son archivos Markdown est&aacute;ndar.</li>
+        <li><strong>Oposici&oacute;n:</strong> Oponerte al tratamiento de tus datos.</li>
+        <li><strong>Limitaci&oacute;n:</strong> Solicitar la limitaci&oacute;n del tratamiento.</li>
+    </ul>
+    <p>Para ejercer cualquiera de estos derechos, escr&iacute;benos a <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>.</p>
+
+    <h2>9. Cookies</h2>
+    <p>La web getfrom.app no utiliza cookies de rastreo ni anal&iacute;ticas. No usamos Google Analytics, Facebook Pixel ni ning&uacute;n servicio de seguimiento similar.</p>
+
+    <h2>10. Menores</h2>
+    <p>From no est&aacute; dirigido a menores de 16 a&ntilde;os. No recopilamos conscientemente datos de menores. Si crees que un menor ha creado una cuenta, cont&aacute;ctanos para que la eliminemos.</p>
+
+    <h2>11. Cambios en esta pol&iacute;tica</h2>
+    <p>Podemos actualizar esta pol&iacute;tica de privacidad. Los cambios se publicar&aacute;n en esta p&aacute;gina con la fecha de actualizaci&oacute;n. Si los cambios son significativos, te notificaremos por email.</p>
+
+    <h2>12. Contacto</h2>
+    <p>Para cualquier pregunta sobre privacidad, escr&iacute;benos a <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>.</p>
+    <p>Tambi&eacute;n puedes presentar una reclamaci&oacute;n ante la Agencia Espa&ntilde;ola de Protecci&oacute;n de Datos (AEPD) en <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a>.</p>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <a href="/" class="nav-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22V8"/><path d="M12 8C12 8 8 4 8 2"/><path d="M12 8C12 8 16 4 16 2"/>
+                    <path d="M12 14C12 14 8 10 6 9"/><path d="M12 14C12 14 16 10 18 9"/>
+                </svg>
+                From
+            </a>
+            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Producto</h4>
+            <a href="index.html#features">Funciones</a>
+            <a href="pricing.html">Precios</a>
+            <a href="index.html#download">Descargar</a>
+        </div>
+        <div class="footer-col">
+            <h4>Soporte</h4>
+            <a href="support.html">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app">Contacto</a>
+            <a href="account.html">Mi cuenta</a>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="privacy.html">Privacidad</a>
+            <a href="terms.html">T&eacute;rminos</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 From. Hecho en Espa&ntilde;a. &mdash; <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>
+    </div>
+</footer>
+
+</body>
+</html>

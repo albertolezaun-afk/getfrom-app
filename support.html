@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte — From</title>
+    <meta name="description" content="Centro de ayuda de From. Preguntas frecuentes, guías y contacto.">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="/" class="nav-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22V8"/><path d="M12 8C12 8 8 4 8 2"/><path d="M12 8C12 8 16 4 16 2"/>
+                <path d="M12 14C12 14 8 10 6 9"/><path d="M12 14C12 14 16 10 18 9"/>
+            </svg>
+            From
+        </a>
+        <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links">
+            <a href="index.html#features">Funciones</a>
+            <a href="index.html#sync">Sync</a>
+            <a href="index.html#ai">IA</a>
+            <a href="pricing.html">Precios</a>
+            <a href="support.html">Soporte</a>
+            <a href="index.html#download" class="btn-nav">Descargar</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="page-hero">
+    <h1>Centro de ayuda</h1>
+    <p>&iquest;Necesitas ayuda con From? Aqu&iacute; encontrar&aacute;s respuestas a las preguntas m&aacute;s frecuentes y formas de contactarnos.</p>
+</div>
+
+<!-- Contact options -->
+<section class="section" style="padding-top: 0;">
+    <div class="support-grid">
+        <div class="support-card">
+            <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <h3>Email</h3>
+            <p>Escr&iacute;benos directamente y te responderemos lo antes posible.</p>
+            <a href="mailto:hola@getfrom.app" class="btn-primary btn-small">hola@getfrom.app</a>
+        </div>
+        <div class="support-card">
+            <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3>Desde la app</h3>
+            <p>En From, ve a Ajustes &rarr; Soporte para enviar comentarios o reportar problemas directamente.</p>
+        </div>
+        <div class="support-card">
+            <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <h3>FAQ</h3>
+            <p>Consulta las preguntas frecuentes m&aacute;s abajo. Probablemente tu duda ya est&eacute; resuelta.</p>
+            <a href="#faq" class="btn-secondary btn-small">Ver FAQ</a>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<div class="section-alt" id="faq">
+    <section class="section" style="padding-top: 0; padding-bottom: 0;">
+        <div class="section-header">
+            <h2>Preguntas frecuentes</h2>
+        </div>
+
+        <div class="faq">
+            <!-- Getting started -->
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo instalo From?</h3>
+                <p>Descarga el archivo .dmg desde nuestra web, &aacute;brelo y arrastra From a tu carpeta de Aplicaciones. No necesitas instalador ni crear una cuenta para empezar.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;D&oacute;nde se guardan mis notas?</h3>
+                <p>En una carpeta de tu Mac. Por defecto, From crea un espacio en iCloud Drive, pero puedes elegir cualquier carpeta. Tus notas son archivos .md est&aacute;ndar que puedes abrir con cualquier editor.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;Puedo usar una carpeta de Obsidian existente?</h3>
+                <p>S&iacute;. Puedes apuntar From a cualquier carpeta existente con archivos Markdown. From leer&aacute; la estructura y te permitir&aacute; trabajar con esas notas.</p>
+            </div>
+
+            <!-- Sync -->
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo funciona la sincronizaci&oacute;n?</h3>
+                <p>From usa iCloud Drive. Si tu espacio est&aacute; en iCloud (opci&oacute;n por defecto), las notas se sincronizan autom&aacute;ticamente entre todos tus Macs. No hay que configurar nada extra.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;Puedo acceder a mis notas desde iPhone?</h3>
+                <p>Tus notas en iCloud Drive son accesibles desde la app Archivos de iOS, o con cualquier editor Markdown para iPhone. La app nativa de From para iOS est&aacute; en desarrollo.</p>
+            </div>
+
+            <!-- AI -->
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo configuro la IA?</h3>
+                <p>Ve a Ajustes &rarr; IA. Elige entre modo autom&aacute;tico (suscripci&oacute;n), manual (tu propia API key) o Claude OAuth (tu suscripci&oacute;n de Claude). En modo manual, pega tu API key y elige el modelo.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;Mis notas se env&iacute;an a un servidor?</h3>
+                <p>No. From indexa tus notas localmente. Cuando usas la IA, solo el fragmento relevante se env&iacute;a a la API del proveedor (Anthropic, OpenAI o Google) para procesar tu consulta. Nada se almacena en servidores externos.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;Qu&eacute; proveedores de IA soporta From?</h3>
+                <p>Anthropic (Claude), OpenAI (GPT) y Google (Gemini). Puedes cambiar de proveedor en cualquier momento desde Ajustes &rarr; IA.</p>
+            </div>
+
+            <!-- Integrations -->
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo conecto Apple Calendar?</h3>
+                <p>From pide permiso de acceso a Calendar cuando lo activas en Ajustes &rarr; Integraciones. Una vez concedido, tus eventos aparecen autom&aacute;ticamente en el timeline.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo conecto Google Drive?</h3>
+                <p>Ve a Ajustes &rarr; Google. Haz clic en &ldquo;Conectar cuenta&rdquo; y sigue el proceso de autorizaci&oacute;n de Google. Puedes conectar m&uacute;ltiples cuentas.</p>
+            </div>
+
+            <!-- Account -->
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo cancelo mi suscripci&oacute;n?</h3>
+                <p>Puedes cancelar en cualquier momento desde <a href="account.html">tu cuenta</a> o directamente en la app en Ajustes &rarr; Cuenta. La cancelaci&oacute;n es inmediata y no se cobra m&aacute;s.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;C&oacute;mo elimino mi cuenta?</h3>
+                <p>Env&iacute;a un email a <a href="mailto:hola@getfrom.app?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta">hola@getfrom.app</a> con el asunto &ldquo;Solicitud de eliminaci&oacute;n de cuenta&rdquo;. Eliminaremos todos los datos asociados en nuestro servidor. Tus notas locales no se ven afectadas.</p>
+            </div>
+            <div class="faq-item">
+                <h3>&iquest;Qu&eacute; pasa si dejo de usar From?</h3>
+                <p>Nada. Tus notas son archivos .md en tu ordenador. Siguen ah&iacute;, legibles con cualquier editor de texto. No hay formato propietario, no hay dependencia, no hay lock-in.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+    <h2>&iquest;No encuentras lo que buscas?</h2>
+    <p>Escr&iacute;benos y te ayudaremos personalmente.</p>
+    <a href="mailto:hola@getfrom.app" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        hola@getfrom.app
+    </a>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <a href="/" class="nav-logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22V8"/><path d="M12 8C12 8 8 4 8 2"/><path d="M12 8C12 8 16 4 16 2"/>
+                    <path d="M12 14C12 14 8 10 6 9"/><path d="M12 14C12 14 16 10 18 9"/>
+                </svg>
+                From
+            </a>
+            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Producto</h4>
+            <a href="index.html#features">Funciones</a>
+            <a href="pricing.html">Precios</a>
+            <a href="index.html#download">Descargar</a>
+        </div>
+        <div class="footer-col">
+            <h4>Soporte</h4>
+            <a href="support.html">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app">Contacto</a>
+            <a href="account.html">Mi cuenta</a>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="privacy.html">Privacidad</a>
+            <a href="terms.html">T&eacute;rminos</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 From. Hecho en Espa&ntilde;a. &mdash; <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>
+    </div>
+</footer>
+
+</body>
+</html>
