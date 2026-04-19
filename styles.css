@@ -46,6 +46,7 @@ img { max-width: 100%; height: auto; }
 @media (prefers-color-scheme: dark) {
     body { background: var(--bg-dark); color: var(--text-dark); }
     .card, .legal-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
+    .card h3, .privacy-card h3, .account-card h3, .support-card h3, .integration-item h3, .pricing-card h3 { color: var(--text-dark); }
     .nav { background: rgba(14,14,16,0.88); border-color: var(--border-dark); }
     .text-secondary, .hero p, .section-header p, .card p, .step p,
     .faq-item p, .cta p, .footer, .pricing-desc, .account-desc,
@@ -222,7 +223,7 @@ img { max-width: 100%; height: auto; }
     font-size: 18px;
     margin-bottom: 16px;
 }
-.card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .card p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; }
 
 /* ── Features grid ── */
@@ -337,7 +338,7 @@ img { max-width: 100%; height: auto; }
     padding: 28px;
 }
 .privacy-card .card-icon { margin: 0 auto 16px; }
-.privacy-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.privacy-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .privacy-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.55; }
 
 /* ── Pricing ── */
@@ -427,7 +428,7 @@ img { max-width: 100%; height: auto; }
     border-radius: 14px;
     padding: 28px;
 }
-.account-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.account-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .account-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.55; }
 .account-desc { font-size: 14px; color: var(--text-secondary); }
 
@@ -447,7 +448,7 @@ img { max-width: 100%; height: auto; }
     text-align: center;
 }
 .support-card .card-icon { margin: 0 auto 16px; }
-.support-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+.support-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .support-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.55; }
 
 /* ── Legal pages ── */
@@ -513,7 +514,7 @@ img { max-width: 100%; height: auto; }
     display: flex; align-items: center; justify-content: center;
     font-size: 20px;
 }
-.integration-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.integration-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
 .integration-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 
 /* ── Sync visual ── */
