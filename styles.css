@@ -10,7 +10,7 @@
     --bg: #FAFAFA;
     --bg-dark: #0e0e10;
     --text: #1a1a1a;
-    --text-secondary: #6b6b6b;
+    --text-secondary: #555555;
     --text-dark: #e8e8e8;
     --text-secondary-dark: #8b8b8b;
     --card-bg: #ffffff;
@@ -64,8 +64,11 @@ img { max-width: 100%; height: auto; }
     .account-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .support-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .legal-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
+    .nav-logo, .nav-logo:hover { color: var(--text-dark); }
     .nav-links a { color: var(--text-secondary-dark); }
     .mobile-menu-btn span { background: var(--text-dark); }
+    .section-header h2, .step h3, .faq-item h3, .cta h2, .page-hero h1,
+    .sync-node-label, .legal-body h2, .legal-body h3 { color: var(--text-dark); }
     .screenshot-placeholder { border-color: var(--border-dark); background: linear-gradient(135deg, rgba(74,144,217,0.1), rgba(74,144,217,0.03)); }
     .integration-item { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .sync-visual { background: var(--card-bg-dark); border-color: var(--border-dark); }
@@ -88,10 +91,10 @@ img { max-width: 100%; height: auto; }
     display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo {
-    font-size: 18px; font-weight: 700; color: inherit;
+    font-size: 18px; font-weight: 700; color: var(--text);
     text-decoration: none; display: flex; align-items: center; gap: 8px;
 }
-.nav-logo:hover { color: inherit; }
+.nav-logo:hover { color: var(--text); }
 .nav-links { display: flex; gap: 24px; align-items: center; }
 .nav-links a {
     font-size: 14px; color: var(--text-secondary);
@@ -195,7 +198,7 @@ img { max-width: 100%; height: auto; }
 .section-header { text-align: center; margin-bottom: 52px; }
 .section-header h2 {
     font-size: 32px; font-weight: 700;
-    margin-bottom: 12px; letter-spacing: -0.015em;
+    margin-bottom: 12px; letter-spacing: -0.015em; color: var(--text);
 }
 .section-header p {
     font-size: 16px; color: var(--text-secondary);
@@ -267,14 +270,14 @@ img { max-width: 100%; height: auto; }
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 16px;
 }
-.step h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.step h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
 .step p { font-size: 13px; color: var(--text-secondary); }
 
 /* ── FAQ ── */
 .faq { max-width: 700px; margin: 0 auto; }
 .faq-item { border-bottom: 1px solid var(--border); padding: 22px 0; }
 .faq-item:last-child { border-bottom: none; }
-.faq-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+.faq-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
 .faq-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 
 /* ── CTA ── */
@@ -284,7 +287,7 @@ img { max-width: 100%; height: auto; }
     max-width: 600px;
     margin: 0 auto;
 }
-.cta h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+.cta h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; color: var(--text); }
 .cta p { font-size: 16px; color: var(--text-secondary); margin-bottom: 28px; }
 
 /* ── Footer ── */
@@ -410,7 +413,7 @@ img { max-width: 100%; height: auto; }
 }
 .page-hero h1 {
     font-size: 36px; font-weight: 700;
-    margin-bottom: 12px; letter-spacing: -0.02em;
+    margin-bottom: 12px; letter-spacing: -0.02em; color: var(--text);
 }
 .page-hero p {
     font-size: 16px; color: var(--text-secondary);
@@ -543,7 +546,7 @@ img { max-width: 100%; height: auto; }
     margin: 0 auto 10px;
     font-size: 24px;
 }
-.sync-node-label { font-size: 13px; font-weight: 600; }
+.sync-node-label { font-size: 13px; font-weight: 600; color: var(--text); }
 .sync-arrow {
     font-size: 20px;
     color: var(--accent);
