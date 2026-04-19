@@ -1,0 +1,489 @@
+# From — Complete Product Documentation
+
+> Living document. Updated automatically with each development session.
+> Last update: 2026-04-19 (session 4)
+
+---
+
+## What is From
+
+**From** is a native macOS app that works as a personal second brain. It combines Markdown notes, task management, calendar views, autonomous AI agents, and iCloud sync — all in a local-first app where data is owned by the user and never leaves their device.
+
+**Tagline:** Your second brain. On your Mac. Yours alone.
+
+**Value proposition:**
+- **Local-first, radical privacy:** No mandatory servers, no telemetry, no lock-in. Notes are standard `.md` files that work with Obsidian, iA Writer, VS Code, or any text editor.
+- **Native macOS:** Built in Swift and SwiftUI. Native performance with deep system integration (Calendar, Reminders, iCloud Drive, Spotlight).
+- **Integrated AI:** Conversational assistant with full vault context. Autonomous agents that work on their own.
+- **Natural organization:** Flexible parent-child hierarchy without rigid folders. Areas with colors, customizable types, configurable views.
+
+**Target audience:**
+- People tired of cloud-dependent note apps
+- Users who prioritize privacy
+- Mac users who want native performance
+- Knowledge workers (projects, tasks, interconnected notes)
+- AI enthusiasts who want local RAG on their own data
+
+---
+
+## Technology stack
+
+| Component | Technology |
+|---|---|
+| macOS App | Swift 5 + SwiftUI |
+| Platform | macOS 14+ (Sonoma) |
+| Storage | `.md` files in iCloud Drive |
+| Search | SQLite FTS5 (full-text search + RAG) |
+| Optional backend | TypeScript + Bun + Hono + PostgreSQL |
+| Sync | CloudKit (iCloud) |
+| Calendar | EventKit (Apple Calendar + Reminders) |
+| AI | Multi-provider: Anthropic, OpenAI, Google |
+| Payments | LemonSqueezy |
+| Landing | Static HTML (getfrom.app, GitHub Pages) |
+
+---
+
+## Vault structure
+
+From works on a folder in iCloud Drive (the "vault") with this structure:
+
+```
+Centro/                         (vault root)
+├── Notes/                      (all user notes)
+├── Journal/                    (daily notes: YYYYMMDD.md)
+├── Areas/                      (areas/roots: main categories)
+├── Agents/                     (autonomous AI agents)
+├── Templates/                  (note templates)
+├── Files/                      (attachments)
+├── Collections/                (note collections)
+└── .from/                      (internal metadata)
+    ├── versions/               (version history)
+    ├── ai_instructions/        (permanent AI instructions per note)
+    └── activity.jsonl          (activity log)
+```
+
+Each note is a `.md` file with YAML frontmatter that defines its properties.
+
+---
+
+## First use — Onboarding
+
+### Step 1: Welcome screen
+When opening From for the first time, **VaultPickerView** appears — a 2-step wizard:
+1. **Philosophy:** Explains what From is and how it works (local-first, .md files)
+2. **Choose folder:** The user selects a folder in their Mac/iCloud Drive as the vault
+
+### Step 2: Create first Root
+After selecting the vault, From shows the Roots view (SpacesView) with an empty state that invites creating the first area:
+- Each Root has its own color
+- Notes belong to a Root
+- Roots give context to the AI
+
+### Step 3: Configure AI (optional)
+In Settings > AI, the user can:
+- Enable AI
+- Choose automatic mode (From subscription) or manual (own API key)
+- Connect with Claude, OpenAI, or Google
+
+### Step 4: Create profile (optional)
+In Settings > Profile or through **ProfileWizardView**, the user can create a profile that the AI will use as context to personalize responses.
+
+---
+
+## Main navigation
+
+The From interface has 3 main zones:
+
+### Left sidebar
+
+Fixed navigation sections:
+- **Day** — Current day timeline view
+- **Week** — Weekly view with 7 columns
+- **Month** — Monthly view with grid
+- **Year** — Annual view with weekly rows
+- **Tasks** — Dedicated task manager
+- **Notes** — Explorer for all notes
+- **Explore** — Cross-hierarchy collections and types
+- **Links** — URL organizer extracted from notes and manual links
+- **Files** — Attachment manager
+- **AI** — Chat with the AI assistant
+- **Agents** — Autonomous agent manager
+- **Settings** — App configuration
+
+Dynamic sections:
+- **Saved views** — User-created views (kanban, calendar, etc.)
+- **Favorites** — Notes marked as favorites, grouped by area with colors
+- **Recent** — Last 3 accessed notes
+
+### Central area (content)
+
+Changes based on the selected sidebar section. Can show:
+- A timeline view (day/week/month/year)
+- The task list
+- The note tree
+- An individual note editor
+- The AI chat
+- The agent panel
+- Settings
+- A saved view (kanban, calendar, etc.)
+
+### Status bar (footer)
+
+Always visible at the bottom:
+- **Agent indicator:** Shows how many agents are active/paused and when the next run is
+- **AI indicator:** Connection status, current model, token balance
+- **Model selector:** Change the active AI model
+- **Refresh button:** Manual reload of notes from disk
+
+### Header bar
+
+Above the central content:
+- **Title** of the current section or note
+- **Breadcrumb** navigation when editing a note (Area > Parent > Note)
+- **Quick action buttons:** New note, New task, Quick task, New event
+- **Manual agents dropdown:** Run agents without going to the agents section
+- **Global search**
+- **History buttons:** Back/Forward
+
+### Focus mode
+
+`Cmd+F` hides the sidebar and side panels for distraction-free editing. Toggles with smooth animation.
+
+---
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+|---|---|
+| Cmd+N | New note |
+| Cmd+T | New task |
+| Cmd+E | New event |
+| Cmd+R | Quick task |
+| Cmd+O | Spotlight search |
+| Cmd+F | Focus mode (hide/show panels) |
+| Cmd+Shift+M | Maintenance/Settings |
+
+Shortcuts are customizable by the user.
+
+---
+
+## Notes
+
+### Creating a note
+
+Ways to create a note:
+1. **Cmd+N** from anywhere
+2. **"+" button** in the header
+3. **"+" button** when hovering over a note in the tree (creates child note)
+4. **From the editor** of another note (+ button in breadcrumb, creates child note)
+5. **From a template** (template menu in the editor)
+
+### Note editor (NoteEditorView)
+
+The editor is the core of From. It consists of:
+
+#### Breadcrumb (top)
+- Shows the path: Area > Parent > ... > Current note
+- Each level is clickable for navigation
+- Editable title inline (click to rename)
+- + button to create child note
+- Controls (right): date, parent pill, task (circle), favorite (circle), publish (globe circle), Google Docs (circle)
+- Context menu (three dots): Export as Markdown, Export as PDF, Open in Finder, Delete note
+
+#### Type and collection bar
+- **Type:** Multi-select pills to assign types to the note (e.g. project, idea, resource, future). New types can be created on the fly.
+- **Collection (Col):** Assign the note to one or more collections. Option to create a filtered view from the collection.
+
+#### Task properties panel
+Appears when the note has type "active":
+- **Status:** Dropdown with configurable states (pending, in_progress, done, cancelled)
+- **Due date:** Date picker with or without time
+- **End date:** For notes with a time block
+- **Priority:** High, medium, low
+- **Quick task:** Toggle
+- **Recurrence:** Daily, weekly, monthly
+
+#### Markdown editor
+- Rich text editing in Markdown with CodeMirror 6
+- Formatting toolbar
+- Wikilinks: `[[Note name]]` to link notes
+- Task checkboxes: `- [ ] text`
+- Agent mentions
+- Template insertion
+- Autosave with 800ms debounce
+
+---
+
+### Project workspace (`type: project`)
+
+When a note has `type: project`, it opens in a special 3-column layout:
+
+#### Left column — Tasks / Notes / Refs
+
+**Tasks block (`ProjectTaskPanel`):**
+- Tasks stored in the `tasks:` frontmatter block
+- Create inline tasks (Enter confirms, Esc cancels)
+- Toggle completed with a click
+- Date pill with time if assigned
+- Progress bar in header
+
+**Notes block (`ProjectNotesPanel`):**
+- Direct child notes of the project
+- Create inline note with + button
+- Click → opens note in central editor
+- Content always injected into chat context
+
+**Context block (`RefsPicker`):**
+- External references: linked notes, collections, URLs, files, Google Docs
+- Frontmatter format `refs:` with prefixes: `col:`, `url:`, `file:`, `gdoc:`
+- URLs: content pre-loaded into chat context
+
+#### Central column — Editor
+- Markdown editor identical to a regular note
+- Project status bar: status, start date, end date, progress
+
+#### Right column — AI Chat
+- Chat with automatic context from the project
+- Context always includes: project body, tasks, child notes, refs, fetched URLs
+- Notes created by the AI → automatically become children of the project
+
+---
+
+## Tasks
+
+### What is a task in From
+
+In From, a task is a note with task properties enabled. Everything is a note. Assigning a type with `defaultActive: true` or manually marking `active: true` gives the note task properties.
+
+### Task properties
+
+| Property | Values | Description |
+|---|---|---|
+| Status | pending, in_progress, done, cancelled | Current task status |
+| Due date | Date with or without time | When it must be completed |
+| End date | Date with time | For time blocks |
+| Priority | high, medium, low | Urgency level |
+| Recurrence | daily, weekly, monthly, yearly | Automatic repetition |
+| Quick task | true/false | Whether it's a lightweight task |
+
+### Apple Calendar and Reminders sync
+
+- Notes with `event: true` and `due: DATE` sync bidirectionally with Apple Calendar
+- Tasks with `quick: true` sync with Apple Reminders
+- Recurrence is supported (daily, weekly, monthly, yearly)
+
+---
+
+## Timeline / Calendar
+
+From offers 4 time views that combine dated notes with Apple Calendar events:
+
+- **Day** — Hourly slots, tasks and events positioned at their time, side journal column
+- **Week** — 7 columns (Mon–Sun), undated task sidebar
+- **Month** — Classic monthly grid, click day for detail
+- **Year** — 12 monthly blocks, heatmap-style activity indicators
+
+---
+
+## Areas / Roots
+
+An Area (or Root) is the top-level category in From's hierarchy. Each area:
+- Has its own customizable color
+- Contains notes organized in a tree
+- Has a markdown context field that the AI uses to understand the scope
+- Stored as a `.md` file in the `Areas/` folder
+
+---
+
+## Configurable views
+
+From allows creating custom views on notes:
+
+- **Kanban** — Configurable columns, drag cards between columns
+- **List** — Note list with custom filters and sorting
+- **Calendar** — Notes positioned by date
+- **Cards** — Pinterest/Trello-style card view
+- **Focus** — One note at a time, distraction-free
+
+Views can also be embedded inline inside the note editor (inline kanban, list, tabs, calendar).
+
+---
+
+## Search
+
+- **Spotlight search (Cmd+O)** — Centered modal, instant search in title and content, area pills for filtering
+- **Global search** — Bar integrated into the header, real-time results grouped by type
+- **Engine** — SQLite FTS5 for full-text search, also used for RAG (AI searches for relevant context)
+
+---
+
+## AI Chat
+
+### Main chat view
+
+3-column interface:
+- **Left:** Conversation sidebar with search, linked note selector, + new conversation
+- **Center:** Chat with streaming, Markdown support, @mention support (`@agent`, `@/prompt`, `@note`)
+- **Right:** Linked note panel — editor synced live with chat context, AI can edit it directly
+
+### AI modes
+
+| Mode | Description | Requirements |
+|---|---|---|
+| Automatic | Uses From's server, managed tokens | Active subscription |
+| Manual | Uses user's own API key | Valid API key |
+| Claude OAuth | Uses user's Claude Pro/Max subscription | OAuth login |
+
+### Supported providers and models
+
+| Provider | Models | Tier |
+|---|---|---|
+| Google | Gemini 2.5 Flash | Fast |
+| OpenAI | GPT-4o Mini | Fast |
+| Anthropic | Claude Haiku 4.5 | Balanced |
+| OpenAI | GPT-4o | Powerful |
+| Anthropic | Claude Sonnet 4.6 | Powerful |
+| Google | Gemini 1.5 Pro | Balanced |
+
+---
+
+## AI Editor
+
+A special mode where the AI can directly edit the content of a note. The **AISessionBanner** provides controls to undo/redo AI changes, confirm, discard, or toggle the original view. Each note can also have permanent AI instructions stored in `.from/ai_instructions/`.
+
+---
+
+## Autonomous agents
+
+An agent is an automated task that the AI executes autonomously. Each agent has:
+- Instructions (with @mention support for notes, areas, journal, profile)
+- A schedule (manual, daily, weekly, monthly, on-open)
+- Allowed actions (read/create/update notes, fetch URLs, web search, read/update profile)
+- Pre-loaded context sources (profile, journal, all notes, specific area, specific note)
+
+Agents run up to 8 turns and log results in their own memory section. From includes 10 predefined templates.
+
+---
+
+## Links tab
+
+- Automatic URL extraction from all notes (markdown links + bare URLs)
+- Manual link management, persisted in `links.json` in the vault root
+- Per-link overrides: custom title, collections, hide — without modifying the note
+- Collapsible sidebar: All | Manual | Collections | By note
+- Links appear in Cmd+O and global search with a blue "Link" badge
+- `LinkService` with FTS5 SQLite table for description search
+
+---
+
+## Canvas
+
+An infinite visual canvas for diagrams and mind maps. Stored as a note with `canvas: true`. Supports text nodes, arrows, color palette, undo/redo, and export as image.
+
+---
+
+## Profile
+
+The profile is information about the user that the AI uses as context:
+- **profile.md** — Name, role, interests, etc.
+- **context.md** — Additional context and AI memory
+- **ProfileWizardView** — Guided wizard to create the profile step by step
+
+---
+
+## Sync and data
+
+- **iCloud Drive** — Notes are plain `.md` files, synced automatically across devices
+- **CloudKit** — Active change sync with push notifications and conflict resolution
+- **Backups** — Automatic daily backups in Application Support (max 10, configurable)
+- **Conflict resolution** — Most recent timestamp wins; conflicts shown in a banner for manual review
+
+---
+
+## Backend (from-server)
+
+Optional backend built with TypeScript, Bun, and Hono. Manages authentication, AI tokens, cloud agent execution, payments, and note publishing.
+
+**Main endpoints:** `/auth`, `/agents`, `/tokens`, `/webhooks/lemonsqueezy`, `/p/:slug`
+
+**Database:** PostgreSQL with Drizzle ORM. Tables: users, token_ledger, agent_runs, admin_api_keys, refresh_tokens, public_notes.
+
+**Security:** JWT (HS256), bcryptjs passwords, AES-encrypted API keys, CORS restricted to getfrom.app.
+
+---
+
+## Business model and pricing
+
+| Plan | Price | Includes |
+|---|---|---|
+| Subscription | $7/month | 10M monthly tokens (managed AI) |
+| License | $59 (one-time) | Permanent access (manual mode with own API key) |
+| Top-up | $5 | 5M additional tokens |
+
+Payments processed by LemonSqueezy (subscriptions, licenses, license validation, automatic user creation on purchase).
+
+---
+
+## Integrations
+
+- **Apple Calendar** — Read/create events, bidirectional sync
+- **Apple Reminders** — Read/create reminders, mark as completed
+- **Google Drive / Google Docs** — Multi-account, two-way note ↔ Doc sync, AI context
+- **Claude OAuth** — Login with Claude Pro/Max subscription via PKCE
+
+---
+
+## Glossary
+
+| Term | Meaning |
+|---|---|
+| Vault | Root folder containing all user content |
+| Root / Area | Top-level category (e.g. work, personal, projects) |
+| Note | .md file with frontmatter — basic unit of content |
+| Task | Note with task properties (status, date, priority) |
+| Quick task | Lightweight task without extensive content |
+| Agent | Automated task that AI executes autonomously |
+| Type | Customizable label to classify notes |
+| Collection | Cross-hierarchy grouping of notes |
+| Wikilink | Link between notes: `[[Note name]]` |
+| Canvas | Visual canvas for diagrams |
+| Frontmatter | YAML block at the start of each note with properties |
+| Parent | Parent note or area in the hierarchy |
+| View | Display configuration (kanban, calendar, list, etc.) |
+| Workshop | Sandbox for debugging agents and prompts |
+| RAG | Retrieval-Augmented Generation — AI searches for relevant context |
+| Token | Unit of measure for AI usage |
+| Slug | Short identifier for public notes |
+
+---
+
+## Changelog
+
+### 2026-04-19 (session 4) — Links tab
+- New **Links** tab between Explore and Files in the sidebar
+- Automatic URL extraction from all notes with cache by `modifiedAt`
+- Manual links addable from the tab; persisted in `links.json` at vault root
+- Per-link overrides: custom title, collections, hide
+- `LinkService` with FTS5 `links` table in SQLite
+
+### 2026-04-19 (session 4)
+- CodeMirror 6 editor — fix iteration: rendered tables, files as chips, images with persistent resize/align, clickable wikilinks, drag & drop, inline naming for tasks and child notes
+
+### 2026-04-19 (session 3)
+- Collections as workflow: dedicated tab with chat+editor, clickable Resources panel
+- Filters and grouping by collection in Notes tab
+- Vault files (PDFs, etc.) selectable in Session context
+
+### 2026-04-19 (session 2)
+- Strategic redesign: separation of projects / quick tasks / notes
+- Complete project workspace: task column, child notes, refs
+- `ProjectTaskPanel`, `ProjectNotesPanel`, `RefsPicker`
+- Project chat with automatic full context
+
+### 2026-04-18
+- Complete getfrom.app website deployed on GitHub Pages
+- Note editor migrated to WKWebView + CodeMirror 6 with Live Preview
+- Google Drive / Google Docs integration with multi-account support
+- Collections (`col:`) and configurable views implemented
+- Note publishing end-to-end with auto-sync
+- Document created

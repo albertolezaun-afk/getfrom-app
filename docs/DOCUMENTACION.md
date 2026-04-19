@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-18 (sesion 3)
+> Ultima actualizacion: 2026-04-19 (sesion 4)
 
 ---
 
@@ -39,7 +39,7 @@
 | Calendario | EventKit (Apple Calendar + Reminders) |
 | IA | Multi-proveedor: Anthropic, OpenAI, Google |
 | Pagos | LemonSqueezy |
-| Landing | HTML estatico (getfrom.app) |
+| Landing | HTML estatico (getfrom.app, GitHub Pages) |
 
 ---
 
@@ -103,6 +103,8 @@ Secciones fijas de navegacion:
 - **Ano** — Vista anual con filas semanales
 - **Tareas** — Gestor dedicado de tareas
 - **Notas** — Explorador de todas las notas
+- **Explorar** — Colecciones y tipos transversales
+- **Enlaces** — Organizador de URLs extraídas de notas y manuales
 - **Archivos** — Gestor de archivos adjuntos
 - **IA** — Chat con el asistente de IA
 - **Agentes** — Gestor de agentes autonomos
@@ -185,11 +187,11 @@ El editor es la pieza central de From. Se compone de:
 - Cada nivel es clickable para navegar
 - Titulo editable inline (click para renombrar)
 - Boton + para crear nota hija
-- Indicador de publicacion (icono globo si la nota es publica)
+- Controles (derecha): fecha, parent pill, tarea (circulo), favorito (circulo), publicar (globo circulo), Google Docs (circulo)
+  - Todos los iconos: circulos de 22x22 con fondo sutil, color activo/inactivo
 - Menu contextual (tres puntos):
   - Exportar como Markdown
   - Exportar como PDF
-  - Publicar / Despublicar nota
   - Abrir en Finder
   - Eliminar nota
 
@@ -221,6 +223,58 @@ Aparece cuando la nota tiene tipo "activa":
 - Color del area
 - Indicadores de estado (verde = activa, naranja = futuro)
 - Click para navegar entre notas
+- **Oculto en proyectos** (reemplazado por columna de tareas/notas/refs)
+
+---
+
+### Workspace de proyecto (`tipo: proyecto`)
+
+Cuando una nota tiene `tipo: proyecto`, se abre en un layout especial de 3 columnas:
+
+#### Columna izquierda — Tareas / Notas / Refs
+
+**Bloque Tareas (`ProjectTaskPanel`):**
+- Las tareas se almacenan en el bloque `tasks:` del frontmatter (no en el body)
+- Crear tarea inline (Enter confirma, Esc cancela)
+- Toggle completado con un clic
+- Pill de fecha con hora si se ha asignado
+- `DateTimePickerPopover` para elegir fecha+hora
+- Eliminar con context menu
+- Barra de progreso en el header
+
+**Bloque Notas (`ProjectNotesPanel`):**
+- Notas hijas directas del proyecto (parent = titulo del proyecto, sin `tipo: proyecto`)
+- Crear nota inline con el boton +
+- Click → abre la nota en el editor central
+- Fecha relativa de creacion (hoy, ayer, dd MMM)
+- Eliminar con context menu
+- Contenido siempre inyectado en el contexto del chat
+
+**Bloque Contexto (`RefsPicker`):**
+- Referencias externas del proyecto: notas vinculadas, colecciones, URLs, archivos, Google Docs
+- Formato en frontmatter `refs:` con prefijos: `col:`, `url:`, `file:`, `gdoc:`
+- Cada ref tiene icono de accion segun tipo (ojo, enlace externo, etc.)
+- Boton para insertar el nombre de la ref en el chat activo
+- URLs: contenido pre-cargado en el contexto del chat (fetch al construir el system prompt)
+
+#### Columna central — Editor
+- Editor Markdown identico al de una nota normal
+- Barra de estado del proyecto: estado, fecha inicio, fecha fin, progreso
+- Banner "Proyecto completado" con boton Reabrir cuando `isDone`
+
+#### Columna derecha — Chat IA
+- Mismo ancho que el editor (50/50 por defecto, ajustable)
+- Sin pills de "Contexto de sesion" (el contexto es automatico desde el proyecto)
+- Solo muestra instrucciones permanentes
+- Contexto del chat siempre incluye: body del proyecto, tareas, notas hijas, refs, URLs fetcheadas
+- Notas creadas por la IA → hijas automaticas del proyecto
+
+#### Identidad de proyecto
+- `isProject` = `tipos.contains("proyecto")` — especifico, no generico
+- `hasType` = tiene algun tipo (antiguo significado de isProject)
+- Frontmatter minimo: `tipo: proyecto, activa: true, status: in_progress`
+
+---
 
 #### Panel derecho (3 pestanas, ancho ajustable)
 
@@ -307,14 +361,13 @@ Las colecciones agrupan notas transversalmente (sin relacion jerarquica). Una no
 ### Publicar notas
 
 Cualquier nota se puede publicar como pagina web publica:
-1. Menu tres puntos > Publicar
+1. Boton de globo (junto a la estrella de favorito) — clic para publicar
 2. Se genera un slug corto de 8 caracteres
 3. La nota es accesible en `https://from-server-production.up.railway.app/p/SLUG`
 4. La URL se copia al portapapeles y se muestra alert con opcion de abrir en navegador
-5. **Auto-sync:** los cambios se sincronizan al servidor cada 30s (debounce, solo si cambio el contenido)
-6. Icono de globo verde en breadcrumb — clic para copiar enlace publico
-7. Menu tres puntos muestra: Copiar enlace publico / Despublicar
-8. Se puede despublicar en cualquier momento
+5. El boton se pone verde cuando la nota esta publicada
+6. **Auto-sync:** los cambios se sincronizan al servidor cada 30s (debounce, solo si cambio el contenido)
+7. Clic en el boton verde → despublica y destruye la URL
 
 ### Historial de versiones
 
@@ -1017,12 +1070,15 @@ LemonSqueezy gestiona:
 ### Google Drive y Google Docs
 - **Multi-cuenta:** Se pueden conectar multiples cuentas de Google simultaneamente
 - **Navegacion:** Explorador de Drive con carpetas, busqueda, selector de cuenta
+- **Icono sync por nota:** En la toolbar de cada nota, icono para vincular/gestionar Google Doc
+  - Sin vincular (gris): clic para crear Doc. Si hay >1 cuenta, popup para elegir cual
+  - Vinculado (verde): desplegable con Abrir Doc / Copiar enlace / Mover a carpeta / Desvincular
+- **Carpeta destino:** Configurable en Ajustes → Google Drive. Los docs nuevos se crean ahi
+- **Mover a carpeta:** Desde el desplegable de una nota vinculada, mover el doc a otra carpeta de Drive
 - **Sync bidireccional nota ↔ Google Doc:**
-  - Crear Google Doc desde una nota vinculada al chat (boton en header)
-  - Abrir Google Doc desde Drive → se crea nota local vinculada
   - **Push:** Al guardar una nota con `gdoc_id`, se actualiza el Doc automaticamente (debounce 3s)
   - **Pull:** Al abrir una nota con `gdoc_id`, se descarga el contenido si el Doc cambio
-  - Frontmatter: `gdoc_id` (ID del doc) + `gdoc_account` (email de la cuenta propietaria)
+  - Frontmatter: `gdoc_id` (ID del doc) + `gdoc_account` (email) + `gdoc_url` (enlace)
 - **Contexto IA:** Se puede anadir cualquier Google Doc como contexto del chat sin crear nota
 - **OAuth:** ASWebAuthenticationSession con scopes `drive.file` + `documents` + perfil
 - **Tokens:** Keychain por cuenta (`gdrive_access_{userId}`, `gdrive_refresh_{userId}`)
@@ -1094,6 +1150,46 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-19 (sesion 2)
+- Rediseño estrategico: separacion proyectos / tareas rapidas / notas
+- Workspace de proyecto completo: columna tareas (frontmatter `tasks:`), notas hijas, refs
+- `ProjectTaskPanel`, `ProjectNotesPanel`, `RefsPicker` (nueva vista de contexto)
+- Chat de proyecto: contexto automatico (body + tareas + notas hijas + refs + URLs pre-fetcheadas)
+- Pills de "Contexto de sesion" ocultas en proyectos
+- Boton insertar ref en el chat desde el panel de contexto
+- Icono Google Doc unificado a `g.circle.fill` en toda la app
+- `FromHeader` simplificado: solo "Nuevo proyecto" y "Tarea rapida"
+
+### 2026-04-19 (sesion 4)
+- Editor CodeMirror 6 — iteracion de fixes: tablas renderizadas, archivos como chips, imagenes con resize/align persistente, wikilinks clicables por posicion, drag & drop, inline naming para tareas y notas hijas con hint visual
+
+### 2026-04-19 (sesion 3)
+- Colecciones como flujo de trabajo: pestana dedicada con chat+editor, panel de Recursos clickeable
+- Filtros y agrupacion por coleccion en pestana Notas
+- Archivos del vault (PDFs, etc.) seleccionables en Contexto de sesion
+- Fix inyeccion contexto: colecciones persistentes tras clear/new, limites aumentados
+
+### 2026-04-18 (sesion 7)
+- Rediseño iconos toolbar: circulos 22x22 con fondo sutil para tarea, favorito, publicar, Google Docs
+- NoteControlsBar reordenado: fecha → parent → tarea → favorito
+- Componente controlButton() reutilizable con estados activo/inactivo
+
+### 2026-04-18 (sesion 6)
+- Boton de publicar movido del menu tres puntos a toggle junto a estrella de favorito
+- Fix bug "nota vacia" al publicar: usar bodyText directo en vez de roundtrip buildFullContent
+- Dominio corregido from.app → getfrom.app en servidor (CORS, footer, tokens), app Swift y docs
+
+### 2026-04-18 (sesion 5)
+- Web completa getfrom.app: landing, pricing, account, support, privacy (RGPD), terms
+- CSS compartido con dark mode y responsive
+- Desplegada en GitHub Pages (repo: albertolezaun-afk/getfrom-app)
+- DNS configurados en PiensaSolutions: 4 registros A + CNAME www
+- HTTPS automatico con Let's Encrypt
+- SettingsView.swift: enlaces a soporte, privacidad y terminos en seccion Cuenta
+- Corregidos links de compra y cuenta a getfrom.app/pricing.html y account.html
+- DOCUMENTACION.md incluida en repo bajo docs/
+- Pendiente: conectar URLs de checkout con LemonSqueezy cuando aprueben cuenta
+
 ### 2026-04-18 (sesion 4)
 - Integracion completa Google Drive y Google Docs con soporte multi-cuenta
 - GoogleDriveService: OAuth multi-cuenta, API Drive/Docs, sync bidireccional
@@ -1103,6 +1199,18 @@ LemonSqueezy gestiona:
 - Google Docs como contexto IA en el chat (ContextElement + InlineChatContextItem)
 - Seccion Google Drive en Ajustes: lista de cuentas, anadir/eliminar, cuenta activa
 - Frontmatter: `gdoc_id` + `gdoc_account` para vincular nota con doc y cuenta
+
+### 2026-04-19 (sesion 4) — Pestaña Enlaces
+- Nueva pestaña **Enlaces** entre Explorar y Archivos en el sidebar
+- Extraccion automatica de URLs de todas las notas (markdown links + bare URLs) con cache por `modifiedAt`
+- Enlaces manuales añadibles desde la pestaña; persistidos en `enlaces.json` en la raiz del vault (iCloud sync)
+- Overrides por enlace extraido: titulo personalizado, colecciones, ocultar — sin modificar la nota
+- Sidebar colapsable: Todos | Manuales | Colecciones (por area) | Por nota (por area)
+- Toolbar: filtro area, ordenacion, buscador local, boton Añadir enlace
+- Fila de enlace: favicon, dominio, descripcion editable inline (Enter guarda), pills Copiar/Abrir
+- `AddLinkSheet`: auto-paste del portapapeles, selector de colecciones con FlowLayout
+- Los enlaces aparecen en Cmd+O y busqueda global con badge "Enlace" azul; seleccionar abre la URL
+- `LinkService` (@Observable) con tabla FTS5 `links` en SQLite para busqueda de descripciones
 
 ### 2026-04-18 (sesion 3)
 - Sistema de colecciones (`col:`) — agrupacion transversal de notas, ColPicker en UI, `#col` en chat
