@@ -59,6 +59,7 @@ img { max-width: 100%; height: auto; }
     .privacy-card { background: rgba(74,144,217,0.06); border-color: rgba(74,144,217,0.15); }
     .pricing-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .pricing-card.featured { border-color: var(--accent); }
+    .pricing-price { color: var(--text-dark); }
     .pricing-feature { color: var(--text-secondary-dark); }
     .account-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .support-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
@@ -375,7 +376,7 @@ img { max-width: 100%; height: auto; }
 .pricing-desc { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; }
 .pricing-price {
     font-size: 40px; font-weight: 700; margin-bottom: 4px;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.02em; color: var(--text);
 }
 .pricing-price span { font-size: 16px; font-weight: 500; color: var(--text-secondary); }
 .pricing-period { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
