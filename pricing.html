@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="i18n.js"></script>
 </head>
-<body>
+<body data-page="pricing">
 
 <!-- Nav -->
 <nav class="nav">
@@ -27,21 +28,22 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
-            <a href="index.html#features">Funciones</a>
-            <a href="index.html#sync">Sync</a>
-            <a href="index.html#ai">IA</a>
-            <a href="pricing.html">Precios</a>
-            <a href="support.html">Soporte</a>
-            <a href="index.html#download" class="btn-nav">Descargar</a>
+            <a href="index.html#features" data-i18n="nav.features">Funciones</a>
+            <a href="index.html#sync" data-i18n="nav.sync">Sync</a>
+            <a href="index.html#ai" data-i18n="nav.ai">IA</a>
+            <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
+            <a href="support.html" data-i18n="nav.support">Soporte</a>
+            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>
 </nav>
 
 <!-- Hero -->
 <div class="page-hero">
-    <span class="hero-badge">Precios</span>
-    <h1>Simple y transparente</h1>
-    <p>Paga una vez y usa From para siempre conectando tu propia IA.<br>O suscr&iacute;bete y ten la IA incluida sin configurar nada.</p>
+    <span class="hero-badge" data-i18n="pricing.hero_badge">Precios</span>
+    <h1 data-i18n="pricing.hero_title">Simple y transparente</h1>
+    <p data-i18n-html="pricing.hero_subtitle">Paga una vez y usa From para siempre conectando tu propia IA.<br>O suscríbete y ten la IA incluida sin configurar nada.</p>
 </div>
 
 <!-- Pricing cards -->
@@ -49,38 +51,38 @@
     <div class="pricing-grid">
         <!-- Perpetual -->
         <div class="pricing-card">
-            <h3>Licencia perpetua</h3>
-            <p class="pricing-desc">Para quienes quieren From para siempre</p>
+            <h3 data-i18n="pricing.perpetual_title">Licencia perpetua</h3>
+            <p class="pricing-desc" data-i18n="pricing.perpetual_desc">Para quienes quieren From para siempre</p>
             <div class="pricing-price">$59 <span>USD</span></div>
-            <p class="pricing-period">Pago &uacute;nico. Para siempre.</p>
+            <p class="pricing-period" data-i18n="pricing.perpetual_period">Pago único. Para siempre.</p>
             <ul class="pricing-features">
-                <li class="pricing-feature">App completa sin l&iacute;mite de tiempo</li>
-                <li class="pricing-feature">Notas, tareas, vistas y timeline</li>
-                <li class="pricing-feature">Integraci&oacute;n Apple Calendar y Recordatorios</li>
-                <li class="pricing-feature">Google Drive y Google Docs</li>
-                <li class="pricing-feature">Historial de versiones y backups</li>
-                <li class="pricing-feature">Agentes aut&oacute;nomos</li>
-                <li class="pricing-feature">IA con tu propia API key (Anthropic, OpenAI, Google)</li>
-                <li class="pricing-feature">Actualizaciones incluidas</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f1">App completa sin límite de tiempo</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f2">Notas, tareas, vistas y timeline</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f3">Integración Apple Calendar y Recordatorios</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f4">Google Drive y Google Docs</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f5">Historial de versiones y backups</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f6">Agentes autónomos</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f7">IA con tu propia API key (Anthropic, OpenAI, Google)</li>
+                <li class="pricing-feature" data-i18n="pricing.perpetual_f8">Actualizaciones incluidas</li>
             </ul>
-            <a href="#" class="btn-secondary">Comprar licencia</a>
+            <a href="#" class="btn-secondary" data-i18n="pricing.perpetual_btn">Comprar licencia</a>
         </div>
 
         <!-- Subscription -->
         <div class="pricing-card featured">
-            <h3>Suscripci&oacute;n</h3>
-            <p class="pricing-desc">Todo incluido con IA gestionada</p>
+            <h3 data-i18n="pricing.sub_title">Suscripción</h3>
+            <p class="pricing-desc" data-i18n="pricing.sub_desc">Todo incluido con IA gestionada</p>
             <div class="pricing-price">&euro;7 <span>/mes</span></div>
-            <p class="pricing-period">Cancela cuando quieras</p>
+            <p class="pricing-period" data-i18n="pricing.sub_period">Cancela cuando quieras</p>
             <ul class="pricing-features">
-                <li class="pricing-feature">Todo lo de la licencia perpetua</li>
-                <li class="pricing-feature">10 millones de tokens IA/mes incluidos</li>
-                <li class="pricing-feature">IA gestionada: sin API key, sin configuraci&oacute;n</li>
-                <li class="pricing-feature">Modelos de &uacute;ltima generaci&oacute;n</li>
-                <li class="pricing-feature">Agentes con ejecuci&oacute;n autom&aacute;tica en la nube</li>
-                <li class="pricing-feature">Soporte prioritario</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f1">Todo lo de la licencia perpetua</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f2">10 millones de tokens IA/mes incluidos</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f3">IA gestionada: sin API key, sin configuración</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f4">Modelos de última generación</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f5">Agentes con ejecución automática en la nube</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f6">Soporte prioritario</li>
             </ul>
-            <a href="#" class="btn-primary">Suscribirse</a>
+            <a href="#" class="btn-primary" data-i18n="pricing.sub_btn">Suscribirse</a>
         </div>
 
     </div>
@@ -90,64 +92,64 @@
 <div class="section-alt">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <h2>Comparativa de planes</h2>
+            <h2 data-i18n="pricing.comparison_title">Comparativa de planes</h2>
         </div>
         <table class="comparison-table">
             <thead>
                 <tr>
-                    <th>Funci&oacute;n</th>
-                    <th>Licencia perpetua</th>
-                    <th>Suscripci&oacute;n</th>
+                    <th data-i18n="pricing.comp_feature_col">Función</th>
+                    <th data-i18n="pricing.comp_perpetual_col">Licencia perpetua</th>
+                    <th data-i18n="pricing.comp_sub_col">Suscripción</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>Notas, tareas, timeline</td>
+                    <td data-i18n="pricing.comp_row1">Notas, tareas, timeline</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>Vistas (kanban, calendario, lista, tarjetas)</td>
+                    <td data-i18n="pricing.comp_row2">Vistas (kanban, calendario, lista, tarjetas)</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>Apple Calendar y Recordatorios</td>
+                    <td data-i18n="pricing.comp_row3">Apple Calendar y Recordatorios</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>Google Drive y Docs</td>
+                    <td data-i18n="pricing.comp_row4">Google Drive y Docs</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>Agentes aut&oacute;nomos</td>
+                    <td data-i18n="pricing.comp_row5">Agentes autónomos</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>Historial de versiones</td>
+                    <td data-i18n="pricing.comp_row6">Historial de versiones</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>IA con API key propia</td>
+                    <td data-i18n="pricing.comp_row7">IA con API key propia</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>Conectar suscripci&oacute;n de Claude</td>
+                    <td data-i18n="pricing.comp_row8">Conectar suscripción de Claude</td>
                     <td>&check;</td>
                     <td>&check;</td>
                 </tr>
                 <tr>
-                    <td>IA gestionada (sin API key)</td>
+                    <td data-i18n="pricing.comp_row9">IA gestionada (sin API key)</td>
                     <td>&mdash;</td>
-                    <td>&check; 10M tokens/mes</td>
+                    <td data-i18n="pricing.comp_row9_sub">&check; 10M tokens/mes</td>
                 </tr>
                 <tr>
-                    <td>Soporte prioritario</td>
+                    <td data-i18n="pricing.comp_row10">Soporte prioritario</td>
                     <td>&mdash;</td>
                     <td>&check;</td>
                 </tr>
@@ -159,30 +161,30 @@
 <!-- API key mode explanation -->
 <section class="section">
     <div class="section-header">
-        <h2>Tres formas de usar la IA</h2>
-        <p>T&uacute; eliges c&oacute;mo quieres que funcione la inteligencia artificial en From.</p>
+        <h2 data-i18n="pricing.ai_modes_title">Tres formas de usar la IA</h2>
+        <p data-i18n="pricing.ai_modes_subtitle">Tú eliges cómo quieres que funcione la inteligencia artificial en From.</p>
     </div>
     <div class="features-grid" style="max-width: 900px;">
         <div class="card">
             <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.18V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 3 15.6V15a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1.51 1.08 1.65 1.65 0 0 0 1.82-.33"/></svg>
             </div>
-            <h3>Autom&aacute;tico (Suscripci&oacute;n)</h3>
-            <p>Sin configurar nada. From gestiona las API keys y los modelos por ti. Solo suscr&iacute;bete y empieza a usar la IA con tokens incluidos.</p>
+            <h3 data-i18n="pricing.mode_auto_title">Automático (Suscripción)</h3>
+            <p data-i18n="pricing.mode_auto_body">Sin configurar nada. From gestiona las API keys y los modelos por ti. Solo suscríbete y empieza a usar la IA con tokens incluidos.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
-            <h3>Manual (API key propia)</h3>
-            <p>Introduce tu API key de Anthropic, OpenAI o Google. Control total sobre el proveedor, modelo y costes. Funciona con la licencia perpetua.</p>
+            <h3 data-i18n="pricing.mode_manual_title">Manual (API key propia)</h3>
+            <p data-i18n="pricing.mode_manual_body">Introduce tu API key de Anthropic, OpenAI o Google. Control total sobre el proveedor, modelo y costes. Funciona con la licencia perpetua.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(88,86,214,0.1); color: var(--indigo);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
-            <h3>Claude OAuth</h3>
-            <p>Conecta tu suscripci&oacute;n de Claude Pro o Max directamente. Usa tu cuota de Claude sin API key, sin coste extra.</p>
+            <h3 data-i18n="pricing.mode_oauth_title">Claude OAuth</h3>
+            <p data-i18n="pricing.mode_oauth_body">Conecta tu suscripción de Claude Pro o Max directamente. Usa tu cuota de Claude sin API key, sin coste extra.</p>
         </div>
     </div>
 </section>
@@ -191,28 +193,28 @@
 <section class="section-alt">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <h2>Preguntas sobre precios</h2>
+            <h2 data-i18n="pricing.faq_title">Preguntas sobre precios</h2>
         </div>
         <div class="faq">
             <div class="faq-item">
-                <h3>&iquest;Puedo usar From sin pagar?</h3>
-                <p>Puedes descargar From y usarlo con tu propia API key sin ning&uacute;n pago. La compra de licencia o suscripci&oacute;n desbloquea funciones adicionales y/o IA gestionada.</p>
+                <h3 data-i18n="pricing.faq1_q">¿Puedo usar From sin pagar?</h3>
+                <p data-i18n="pricing.faq1_a">Puedes descargar From y usarlo con tu propia API key sin ningún pago. La compra de licencia o suscripción desbloquea funciones adicionales y/o IA gestionada.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;La licencia perpetua incluye actualizaciones?</h3>
-                <p>S&iacute;. Todas las actualizaciones est&aacute;n incluidas. Paga una vez, usa From para siempre con todas las mejoras futuras.</p>
+                <h3 data-i18n="pricing.faq2_q">¿La licencia perpetua incluye actualizaciones?</h3>
+                <p data-i18n="pricing.faq2_a">Sí. Todas las actualizaciones están incluidas. Paga una vez, usa From para siempre con todas las mejoras futuras.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Qu&eacute; pasa si cancelo la suscripci&oacute;n?</h3>
-                <p>Sigues usando From con todas sus funciones. Solo pierdes el acceso a la IA gestionada y los tokens incluidos. Puedes seguir usando la IA con tu propia API key.</p>
+                <h3 data-i18n="pricing.faq3_q">¿Qué pasa si cancelo la suscripción?</h3>
+                <p data-i18n="pricing.faq3_a">Sigues usando From con todas sus funciones. Solo pierdes el acceso a la IA gestionada y los tokens incluidos. Puedes seguir usando la IA con tu propia API key.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Puedo cambiar de plan?</h3>
-                <p>S&iacute;. Puedes pasar de licencia perpetua a suscripci&oacute;n o viceversa en cualquier momento desde tu cuenta.</p>
+                <h3 data-i18n="pricing.faq4_q">¿Puedo cambiar de plan?</h3>
+                <p data-i18n="pricing.faq4_a">Sí. Puedes pasar de licencia perpetua a suscripción o viceversa en cualquier momento desde tu cuenta.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Qu&eacute; son los tokens?</h3>
-                <p>Los tokens son la unidad de medida de la IA. Cada pregunta al chat, edici&oacute;n con IA o ejecuci&oacute;n de agente consume tokens. 10M de tokens al mes es suficiente para un uso intensivo.</p>
+                <h3 data-i18n="pricing.faq5_q">¿Qué son los tokens?</h3>
+                <p data-i18n="pricing.faq5_a">Los tokens son la unidad de medida de la IA. Cada pregunta al chat, edición con IA o ejecución de agente consume tokens. 10M de tokens al mes es suficiente para un uso intensivo.</p>
             </div>
         </div>
     </section>
@@ -220,11 +222,11 @@
 
 <!-- CTA -->
 <section class="cta">
-    <h2>Empieza hoy</h2>
-    <p>Descarga From gratis y decide despu&eacute;s qu&eacute; plan se adapta a ti.</p>
+    <h2 data-i18n="pricing.cta_title">Empieza hoy</h2>
+    <p data-i18n="pricing.cta_body">Descarga From gratis y decide después qué plan se adapta a ti.</p>
     <a href="index.html#download" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Descargar para macOS
+        <span data-i18n="pricing.cta_btn">Descargar para macOS</span>
     </a>
 </section>
 
@@ -239,24 +241,24 @@
                 </svg>
                 From
             </a>
-            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+            <p data-i18n="footer.tagline">Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
         </div>
         <div class="footer-col">
-            <h4>Producto</h4>
-            <a href="index.html#features">Funciones</a>
-            <a href="pricing.html">Precios</a>
-            <a href="index.html#download">Descargar</a>
+            <h4 data-i18n="footer.col_product">Producto</h4>
+            <a href="index.html#features" data-i18n="footer.link_features">Funciones</a>
+            <a href="pricing.html" data-i18n="footer.link_pricing">Precios</a>
+            <a href="index.html#download" data-i18n="footer.link_download">Descargar</a>
         </div>
         <div class="footer-col">
-            <h4>Soporte</h4>
-            <a href="support.html">Centro de ayuda</a>
-            <a href="mailto:hola@getfrom.app">Contacto</a>
-            <a href="account.html">Mi cuenta</a>
+            <h4 data-i18n="footer.col_support">Soporte</h4>
+            <a href="support.html" data-i18n="footer.link_help">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app" data-i18n="footer.link_contact">Contacto</a>
+            <a href="account.html" data-i18n="footer.link_account">Mi cuenta</a>
         </div>
         <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="privacy.html">Privacidad</a>
-            <a href="terms.html">T&eacute;rminos</a>
+            <h4 data-i18n="footer.col_legal">Legal</h4>
+            <a href="privacy.html" data-i18n="footer.link_privacy">Privacidad</a>
+            <a href="terms.html" data-i18n="footer.link_terms">Términos</a>
         </div>
     </div>
     <div class="footer-bottom">

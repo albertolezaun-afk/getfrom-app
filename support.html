@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="i18n.js"></script>
 </head>
-<body>
+<body data-page="support">
 
 <!-- Nav -->
 <nav class="nav">
@@ -27,20 +28,21 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
-            <a href="index.html#features">Funciones</a>
-            <a href="index.html#sync">Sync</a>
-            <a href="index.html#ai">IA</a>
-            <a href="pricing.html">Precios</a>
-            <a href="support.html">Soporte</a>
-            <a href="index.html#download" class="btn-nav">Descargar</a>
+            <a href="index.html#features" data-i18n="nav.features">Funciones</a>
+            <a href="index.html#sync" data-i18n="nav.sync">Sync</a>
+            <a href="index.html#ai" data-i18n="nav.ai">IA</a>
+            <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
+            <a href="support.html" data-i18n="nav.support">Soporte</a>
+            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>
 </nav>
 
 <!-- Hero -->
 <div class="page-hero">
-    <h1>Centro de ayuda</h1>
-    <p>&iquest;Necesitas ayuda con From? Aqu&iacute; encontrar&aacute;s respuestas a las preguntas m&aacute;s frecuentes y formas de contactarnos.</p>
+    <h1 data-i18n="support.hero_title">Centro de ayuda</h1>
+    <p data-i18n="support.hero_subtitle">¿Necesitas ayuda con From? Aquí encontrarás respuestas a las preguntas más frecuentes y formas de contactarnos.</p>
 </div>
 
 <!-- Contact options -->
@@ -50,24 +52,24 @@
             <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             </div>
-            <h3>Email</h3>
-            <p>Escr&iacute;benos directamente y te responderemos lo antes posible.</p>
+            <h3 data-i18n="support.email_title">Email</h3>
+            <p data-i18n="support.email_body">Escríbenos directamente y te responderemos lo antes posible.</p>
             <a href="mailto:hola@getfrom.app" class="btn-primary btn-small">hola@getfrom.app</a>
         </div>
         <div class="support-card">
             <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
-            <h3>Desde la app</h3>
-            <p>En From, ve a Ajustes &rarr; Soporte para enviar comentarios o reportar problemas directamente.</p>
+            <h3 data-i18n="support.inapp_title">Desde la app</h3>
+            <p data-i18n="support.inapp_body">En From, ve a Ajustes → Soporte para enviar comentarios o reportar problemas directamente.</p>
         </div>
         <div class="support-card">
             <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             </div>
-            <h3>FAQ</h3>
-            <p>Consulta las preguntas frecuentes m&aacute;s abajo. Probablemente tu duda ya est&eacute; resuelta.</p>
-            <a href="#faq" class="btn-secondary btn-small">Ver FAQ</a>
+            <h3 data-i18n="support.faq_card_title">FAQ</h3>
+            <p data-i18n="support.faq_card_body">Consulta las preguntas frecuentes más abajo. Probablemente tu duda ya esté resuelta.</p>
+            <a href="#faq" class="btn-secondary btn-small" data-i18n="support.faq_card_btn">Ver FAQ</a>
         </div>
     </div>
 </section>
@@ -76,70 +78,66 @@
 <div class="section-alt" id="faq">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <h2>Preguntas frecuentes</h2>
+            <h2 data-i18n="support.faq_section_title">Preguntas frecuentes</h2>
         </div>
 
         <div class="faq">
             <!-- Getting started -->
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo instalo From?</h3>
-                <p>Descarga el archivo .dmg desde nuestra web, &aacute;brelo y arrastra From a tu carpeta de Aplicaciones. No necesitas instalador ni crear una cuenta para empezar.</p>
+                <h3 data-i18n="support.faq1_q">¿Cómo instalo From?</h3>
+                <p data-i18n="support.faq1_a">Descarga el archivo .dmg desde nuestra web, ábrelo y arrastra From a tu carpeta de Aplicaciones. No necesitas instalador ni crear una cuenta para empezar.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;D&oacute;nde se guardan mis notas?</h3>
-                <p>En una carpeta de tu Mac. Por defecto, From crea un espacio en iCloud Drive, pero puedes elegir cualquier carpeta. Tus notas son archivos .md est&aacute;ndar que puedes abrir con cualquier editor.</p>
+                <h3 data-i18n="support.faq2_q">¿Dónde se guardan mis notas?</h3>
+                <p data-i18n="support.faq2_a">En una carpeta de tu Mac. Por defecto, From crea un espacio en iCloud Drive, pero puedes elegir cualquier carpeta. Tus notas son archivos .md estándar que puedes abrir con cualquier editor.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Puedo usar una carpeta de Obsidian existente?</h3>
-                <p>S&iacute;. Puedes apuntar From a cualquier carpeta existente con archivos Markdown. From leer&aacute; la estructura y te permitir&aacute; trabajar con esas notas.</p>
+                <h3 data-i18n="support.faq3_q">¿Puedo usar una carpeta de Obsidian existente?</h3>
+                <p data-i18n="support.faq3_a">Sí. Puedes apuntar From a cualquier carpeta existente con archivos Markdown. From leerá la estructura y te permitirá trabajar con esas notas.</p>
             </div>
 
             <!-- Sync -->
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo funciona la sincronizaci&oacute;n?</h3>
-                <p>From usa iCloud Drive. Si tu espacio est&aacute; en iCloud (opci&oacute;n por defecto), las notas se sincronizan autom&aacute;ticamente entre todos tus Macs. No hay que configurar nada extra.</p>
+                <h3 data-i18n="support.faq4_q">¿Cómo funciona la sincronización?</h3>
+                <p data-i18n="support.faq4_a">From usa iCloud Drive. Si tu espacio está en iCloud (opción por defecto), las notas se sincronizan automáticamente entre todos tus Macs. No hay que configurar nada extra.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Puedo acceder a mis notas desde iPhone?</h3>
-                <p>Tus notas en iCloud Drive son accesibles desde la app Archivos de iOS, o con cualquier editor Markdown para iPhone. La app nativa de From para iOS est&aacute; en desarrollo.</p>
+                <h3 data-i18n="support.faq5_q">¿Puedo acceder a mis notas desde iPhone?</h3>
+                <p data-i18n="support.faq5_a">Tus notas en iCloud Drive son accesibles desde la app Archivos de iOS, o con cualquier editor Markdown para iPhone. La app nativa de From para iOS está en desarrollo.</p>
             </div>
 
             <!-- AI -->
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo configuro la IA?</h3>
-                <p>Ve a Ajustes &rarr; IA. Elige entre modo autom&aacute;tico (suscripci&oacute;n), manual (tu propia API key) o Claude OAuth (tu suscripci&oacute;n de Claude). En modo manual, pega tu API key y elige el modelo.</p>
+                <h3 data-i18n="support.faq6_q">¿Cómo configuro la IA?</h3>
+                <p data-i18n="support.faq6_a">Ve a Ajustes → IA. Elige entre modo automático (suscripción), manual (tu propia API key) o Claude OAuth (tu suscripción de Claude). En modo manual, pega tu API key y elige el modelo.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Mis notas se env&iacute;an a un servidor?</h3>
-                <p>No. From indexa tus notas localmente. Cuando usas la IA, solo el fragmento relevante se env&iacute;a a la API del proveedor (Anthropic, OpenAI o Google) para procesar tu consulta. Nada se almacena en servidores externos.</p>
+                <h3 data-i18n="support.faq7_q">¿Mis notas se envían a un servidor?</h3>
+                <p data-i18n="support.faq7_a">No. From indexa tus notas localmente. Cuando usas la IA, solo el fragmento relevante se envía a la API del proveedor (Anthropic, OpenAI o Google) para procesar tu consulta. Nada se almacena en servidores externos.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Qu&eacute; proveedores de IA soporta From?</h3>
-                <p>Anthropic (Claude), OpenAI (GPT) y Google (Gemini). Puedes cambiar de proveedor en cualquier momento desde Ajustes &rarr; IA.</p>
+                <h3 data-i18n="support.faq8_q">¿Qué proveedores de IA soporta From?</h3>
+                <p data-i18n="support.faq8_a">Anthropic (Claude), OpenAI (GPT) y Google (Gemini). Puedes cambiar de proveedor en cualquier momento desde Ajustes → IA.</p>
             </div>
 
             <!-- Integrations -->
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo conecto Apple Calendar?</h3>
-                <p>From pide permiso de acceso a Calendar cuando lo activas en Ajustes &rarr; Integraciones. Una vez concedido, tus eventos aparecen autom&aacute;ticamente en el timeline.</p>
+                <h3 data-i18n="support.faq9_q">¿Cómo conecto Apple Calendar?</h3>
+                <p data-i18n="support.faq9_a">From pide permiso de acceso a Calendar cuando lo activas en Ajustes → Integraciones. Una vez concedido, tus eventos aparecen automáticamente en el timeline.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo conecto Google Drive?</h3>
-                <p>Ve a Ajustes &rarr; Google. Haz clic en &ldquo;Conectar cuenta&rdquo; y sigue el proceso de autorizaci&oacute;n de Google. Puedes conectar m&uacute;ltiples cuentas.</p>
+                <h3 data-i18n="support.faq10_q">¿Cómo conecto Google Drive?</h3>
+                <p data-i18n="support.faq10_a">Ve a Ajustes → Google. Haz clic en "Conectar cuenta" y sigue el proceso de autorización de Google. Puedes conectar múltiples cuentas.</p>
             </div>
 
             <!-- Account -->
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo cancelo mi suscripci&oacute;n?</h3>
-                <p>Puedes cancelar en cualquier momento desde <a href="account.html">tu cuenta</a> o directamente en la app en Ajustes &rarr; Cuenta. La cancelaci&oacute;n es inmediata y no se cobra m&aacute;s.</p>
+                <h3 data-i18n="support.faq11_q">¿Cómo cancelo mi suscripción?</h3>
+                <p data-i18n-html="support.faq11_a">Puedes cancelar en cualquier momento desde <a href="account.html">tu cuenta</a> o directamente en la app en Ajustes → Cuenta. La cancelación es inmediata y no se cobra más.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;C&oacute;mo elimino mi cuenta?</h3>
-                <p>Env&iacute;a un email a <a href="mailto:hola@getfrom.app?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta">hola@getfrom.app</a> con el asunto &ldquo;Solicitud de eliminaci&oacute;n de cuenta&rdquo;. Eliminaremos todos los datos asociados en nuestro servidor. Tus notas locales no se ven afectadas.</p>
-            </div>
-            <div class="faq-item">
-                <h3>&iquest;Qu&eacute; pasa si dejo de usar From?</h3>
-                <p>Nada. Tus notas son archivos .md en tu ordenador. Siguen ah&iacute;, legibles con cualquier editor de texto. No hay formato propietario, no hay dependencia, no hay lock-in.</p>
+                <h3 data-i18n="support.faq12_q">¿Cómo elimino mi cuenta?</h3>
+                <p data-i18n-html="support.faq12_a">Envía un email a <a href="mailto:hola@getfrom.app?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta">hola@getfrom.app</a> con el asunto "Solicitud de eliminación de cuenta". Eliminaremos todos los datos asociados en nuestro servidor. Tus notas locales no se ven afectadas.</p>
             </div>
         </div>
     </section>
@@ -147,8 +145,8 @@
 
 <!-- CTA -->
 <section class="cta">
-    <h2>&iquest;No encuentras lo que buscas?</h2>
-    <p>Escr&iacute;benos y te ayudaremos personalmente.</p>
+    <h2 data-i18n="support.cta_title">¿No encuentras lo que buscas?</h2>
+    <p data-i18n="support.cta_body">Escríbenos y te ayudaremos personalmente.</p>
     <a href="mailto:hola@getfrom.app" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         hola@getfrom.app
@@ -166,24 +164,24 @@
                 </svg>
                 From
             </a>
-            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+            <p data-i18n="footer.tagline">Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
         </div>
         <div class="footer-col">
-            <h4>Producto</h4>
-            <a href="index.html#features">Funciones</a>
-            <a href="pricing.html">Precios</a>
-            <a href="index.html#download">Descargar</a>
+            <h4 data-i18n="footer.col_product">Producto</h4>
+            <a href="index.html#features" data-i18n="footer.link_features">Funciones</a>
+            <a href="pricing.html" data-i18n="footer.link_pricing">Precios</a>
+            <a href="index.html#download" data-i18n="footer.link_download">Descargar</a>
         </div>
         <div class="footer-col">
-            <h4>Soporte</h4>
-            <a href="support.html">Centro de ayuda</a>
-            <a href="mailto:hola@getfrom.app">Contacto</a>
-            <a href="account.html">Mi cuenta</a>
+            <h4 data-i18n="footer.col_support">Soporte</h4>
+            <a href="support.html" data-i18n="footer.link_help">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app" data-i18n="footer.link_contact">Contacto</a>
+            <a href="account.html" data-i18n="footer.link_account">Mi cuenta</a>
         </div>
         <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="privacy.html">Privacidad</a>
-            <a href="terms.html">T&eacute;rminos</a>
+            <h4 data-i18n="footer.col_legal">Legal</h4>
+            <a href="privacy.html" data-i18n="footer.link_privacy">Privacidad</a>
+            <a href="terms.html" data-i18n="footer.link_terms">Términos</a>
         </div>
     </div>
     <div class="footer-bottom">

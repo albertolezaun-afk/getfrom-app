@@ -15,8 +15,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="i18n.js"></script>
 </head>
-<body>
+<body data-page="index">
 
 <!-- Nav -->
 <nav class="nav">
@@ -32,65 +33,66 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
-            <a href="#features">Funciones</a>
-            <a href="#sync">Sync</a>
-            <a href="#ai">IA</a>
-            <a href="pricing.html">Precios</a>
-            <a href="support.html">Soporte</a>
-            <a href="#download" class="btn-nav">Descargar</a>
+            <a href="#features" data-i18n="nav.features">Funciones</a>
+            <a href="#sync" data-i18n="nav.sync">Sync</a>
+            <a href="#ai" data-i18n="nav.ai">IA</a>
+            <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
+            <a href="support.html" data-i18n="nav.support">Soporte</a>
+            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <a href="#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
-    <span class="hero-badge">macOS nativo &middot; Local-first &middot; Markdown</span>
-    <h1>Tus notas son tuyas.<br><span>From las hace productivas.</span></h1>
-    <p>Archivos Markdown en tu Mac, sincronizados por iCloud, organizados como t&uacute; quieras. From a&ntilde;ade tareas, vistas, IA y automatizaci&oacute;n sin tocar tu propiedad sobre los datos.</p>
+    <span class="hero-badge" data-i18n="index.hero_badge">macOS nativo · Local-first · Markdown</span>
+    <h1 data-i18n-html="index.hero_title">Tus notas son tuyas.<br><span>From las hace productivas.</span></h1>
+    <p data-i18n="index.hero_subtitle">Archivos Markdown en tu Mac, sincronizados por iCloud, organizados como tú quieras. From añade tareas, vistas, IA y automatización sin tocar tu propiedad sobre los datos.</p>
     <div class="hero-actions">
         <a href="#download" class="btn-primary">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Descargar para Mac
+            <span data-i18n="index.hero_cta_primary">Descargar para Mac</span>
         </a>
-        <a href="#how-it-works" class="btn-secondary">C&oacute;mo funciona</a>
+        <a href="#how-it-works" class="btn-secondary" data-i18n="index.hero_cta_secondary">Cómo funciona</a>
     </div>
 </section>
 
 <!-- Screenshot -->
 <div class="screenshot">
     <div class="screenshot-placeholder">
-        <span>Captura de From (pr&oacute;ximamente)</span>
+        <span data-i18n="index.screenshot_placeholder">Captura de From (próximamente)</span>
     </div>
 </div>
 
 <!-- Ownership message -->
 <section class="section" id="how-it-works">
     <div class="section-header">
-        <span class="section-label">Filosof&iacute;a</span>
-        <h2>Tus notas no deber&iacute;an pertenecer a una app</h2>
-        <p>La mayor&iacute;a de apps de productividad guardan tus datos en sus servidores, en formatos propietarios. Si la app cierra, tus notas desaparecen. From funciona al rev&eacute;s.</p>
+        <span class="section-label" data-i18n="index.philosophy_label">Filosofía</span>
+        <h2 data-i18n="index.philosophy_title">Tus notas no deberían pertenecer a una app</h2>
+        <p data-i18n="index.philosophy_subtitle">La mayoría de apps de productividad guardan tus datos en sus servidores, en formatos propietarios. Si la app cierra, tus notas desaparecen. From funciona al revés.</p>
     </div>
     <div class="features-grid" style="max-width: 900px;">
         <div class="card">
             <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
             </div>
-            <h3>Archivos .md est&aacute;ndar</h3>
-            <p>Cada nota es un archivo Markdown en tu disco. Puedes abrirlo con VS Code, Obsidian, iA Writer o cualquier editor de texto. Ning&uacute;n formato propietario.</p>
+            <h3 data-i18n="index.card_md_title">Archivos .md estándar</h3>
+            <p data-i18n="index.card_md_body">Cada nota es un archivo Markdown en tu disco. Puedes abrirlo con VS Code, Obsidian, iA Writer o cualquier editor de texto. Ningún formato propietario.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
             </div>
-            <h3>En tu carpeta, no en la nube</h3>
-            <p>Tus datos viven en una carpeta de tu Mac (por defecto en iCloud Drive). From lee esa carpeta. Si desinstalas From, tus notas siguen ah&iacute;.</p>
+            <h3 data-i18n="index.card_folder_title">En tu carpeta, no en la nube</h3>
+            <p data-i18n="index.card_folder_body">Tus datos viven en una carpeta de tu Mac (por defecto en iCloud Drive). From lee esa carpeta. Si desinstalas From, tus notas siguen ahí.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(175,82,222,0.1); color: var(--purple);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
             </div>
-            <h3>From es la capa, no el contenedor</h3>
-            <p>From a&ntilde;ade productividad &mdash; vistas, tareas, IA, automatizaci&oacute;n &mdash; sobre tus archivos. Es una capa inteligente, no una prisi&oacute;n para tus datos.</p>
+            <h3 data-i18n="index.card_layer_title">From es la capa, no el contenedor</h3>
+            <p data-i18n="index.card_layer_body">From añade productividad — vistas, tareas, IA, automatización — sobre tus archivos. Es una capa inteligente, no una prisión para tus datos.</p>
         </div>
     </div>
 </section>
@@ -99,73 +101,73 @@
 <div class="section-alt" id="features">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <span class="section-label">Funciones</span>
-            <h2>Todo lo que necesitas para organizar tu vida</h2>
-            <p>Notas, tareas, proyectos, calendario, vistas configurables y un asistente de IA que conoce tu contexto.</p>
+            <span class="section-label" data-i18n="index.features_label">Funciones</span>
+            <h2 data-i18n="index.features_title">Todo lo que necesitas para organizar tu vida</h2>
+            <p data-i18n="index.features_subtitle">Notas, tareas, proyectos, calendario, vistas configurables y un asistente de IA que conoce tu contexto.</p>
         </div>
         <div class="features-grid">
             <div class="card">
                 <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
-                <h3>Editor Markdown visual</h3>
-                <p>Un editor rico que oculta la sintaxis y muestra el resultado. Wikilinks entre notas, adjuntos, im&aacute;genes y formato sin complicaciones.</p>
+                <h3 data-i18n="index.feat_editor_title">Editor Markdown visual</h3>
+                <p data-i18n="index.feat_editor_body">Un editor rico que oculta la sintaxis y muestra el resultado. Wikilinks entre notas, adjuntos, imágenes y formato sin complicaciones.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
                 </div>
-                <h3>Tareas integradas</h3>
-                <p>Las tareas son notas con fecha, prioridad y estado. Crea, completa y organiza sin salir de tu flujo. Drag &amp; drop en el timeline.</p>
+                <h3 data-i18n="index.feat_tasks_title">Tareas integradas</h3>
+                <p data-i18n="index.feat_tasks_body">Las tareas son notas con fecha, prioridad y estado. Crea, completa y organiza sin salir de tu flujo. Drag &amp; drop en el timeline.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(175,82,222,0.1); color: var(--purple);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 </div>
-                <h3>Timeline: d&iacute;a, semana, mes, a&ntilde;o</h3>
-                <p>Visualiza tareas, eventos de Apple Calendar y recordatorios en una sola vista temporal. Arrastra para reprogramar.</p>
+                <h3 data-i18n="index.feat_timeline_title">Timeline: día, semana, mes, año</h3>
+                <p data-i18n="index.feat_timeline_body">Visualiza tareas, eventos de Apple Calendar y recordatorios en una sola vista temporal. Arrastra para reprogramar.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 </div>
-                <h3>Jerarqu&iacute;a flexible</h3>
-                <p>&Aacute;reas, proyectos y notas hijas. Sin carpetas r&iacute;gidas: cada nota sabe de d&oacute;nde viene. Organiza como piensas, no como te imponen.</p>
+                <h3 data-i18n="index.feat_hierarchy_title">Jerarquía flexible</h3>
+                <p data-i18n="index.feat_hierarchy_body">Áreas, proyectos y notas hijas. Sin carpetas rígidas: cada nota sabe de dónde viene. Organiza como piensas, no como te imponen.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(88,86,214,0.1); color: var(--indigo);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
                 </div>
-                <h3>Vistas configurables</h3>
-                <p>Kanban, calendario, lista, tarjetas y focus. Configura vistas por proyecto, filtra y combina. Cada proyecto se ve como t&uacute; necesitas.</p>
+                <h3 data-i18n="index.feat_views_title">Vistas configurables</h3>
+                <p data-i18n="index.feat_views_body">Kanban, calendario, lista, tarjetas y focus. Configura vistas por proyecto, filtra y combina. Cada proyecto se ve como tú necesitas.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(0,122,255,0.1); color: var(--blue);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                 </div>
-                <h3>macOS 100% nativo</h3>
-                <p>Swift y SwiftUI. Rendimiento real, integraci&oacute;n con el sistema, atajos de teclado nativos. Se siente como parte de tu Mac.</p>
+                <h3 data-i18n="index.feat_native_title">macOS 100% nativo</h3>
+                <p data-i18n="index.feat_native_body">Swift y SwiftUI. Rendimiento real, integración con el sistema, atajos de teclado nativos. Se siente como parte de tu Mac.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(90,200,250,0.1); color: var(--cyan);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 </div>
-                <h3>Colecciones transversales</h3>
-                <p>Agrupa notas de distintos proyectos en colecciones. Crea vistas cruzadas sin mover archivos de sitio.</p>
+                <h3 data-i18n="index.feat_collections_title">Colecciones transversales</h3>
+                <p data-i18n="index.feat_collections_body">Agrupa notas de distintos proyectos en colecciones. Crea vistas cruzadas sin mover archivos de sitio.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(255,45,85,0.1); color: var(--pink);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                 </div>
-                <h3>Canvas visual</h3>
-                <p>Lienzo infinito para diagramas, mapas mentales y brainstorming. Conecta ideas visualmente sin l&iacute;mites.</p>
+                <h3 data-i18n="index.feat_canvas_title">Canvas visual</h3>
+                <p data-i18n="index.feat_canvas_body">Lienzo infinito para diagramas, mapas mentales y brainstorming. Conecta ideas visualmente sin límites.</p>
             </div>
             <div class="card">
                 <div class="card-icon" style="background: rgba(255,59,48,0.1); color: var(--red);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
                 </div>
-                <h3>Historial de versiones</h3>
-                <p>Cada cambio se guarda autom&aacute;ticamente. Viaja en el tiempo a cualquier versi&oacute;n anterior de tus notas con un clic.</p>
+                <h3 data-i18n="index.feat_history_title">Historial de versiones</h3>
+                <p data-i18n="index.feat_history_body">Cada cambio se guarda automáticamente. Viaja en el tiempo a cualquier versión anterior de tus notas con un clic.</p>
             </div>
         </div>
     </section>
@@ -174,9 +176,9 @@
 <!-- Sync -->
 <section class="section" id="sync">
     <div class="section-header">
-        <span class="section-label">Sincronizaci&oacute;n</span>
-        <h2>Tus notas, en todos tus dispositivos</h2>
-        <p>From usa iCloud Drive para sincronizar autom&aacute;ticamente entre tus dispositivos Apple. Sin configuraci&oacute;n, sin cuentas extra.</p>
+        <span class="section-label" data-i18n="index.sync_label">Sincronización</span>
+        <h2 data-i18n="index.sync_title">Tus notas, en todos tus dispositivos</h2>
+        <p data-i18n="index.sync_subtitle">From usa iCloud Drive para sincronizar automáticamente entre tus dispositivos Apple. Sin configuración, sin cuentas extra.</p>
     </div>
 
     <div class="sync-visual">
@@ -184,21 +186,21 @@
             <div class="sync-node-icon" style="background: rgba(0,122,255,0.1); color: var(--blue);">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <div class="sync-node-label">Mac</div>
+            <div class="sync-node-label" data-i18n="index.sync_mac">Mac</div>
         </div>
         <div class="sync-arrow">&harr;</div>
         <div class="sync-node">
             <div class="sync-node-icon" style="background: rgba(90,200,250,0.1); color: var(--cyan);">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
             </div>
-            <div class="sync-node-label">iCloud Drive</div>
+            <div class="sync-node-label" data-i18n="index.sync_icloud">iCloud Drive</div>
         </div>
         <div class="sync-arrow">&harr;</div>
         <div class="sync-node">
             <div class="sync-node-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
             </div>
-            <div class="sync-node-label">Otros Macs</div>
+            <div class="sync-node-label" data-i18n="index.sync_macs">Otros Macs</div>
         </div>
     </div>
 
@@ -207,22 +209,22 @@
             <div class="card-icon" style="background: rgba(90,200,250,0.1); color: var(--cyan);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
             </div>
-            <h3>iCloud Drive nativo</h3>
-            <p>Tu espacio de From es una carpeta en iCloud Drive. Se sincroniza autom&aacute;ticamente entre todos tus Macs sin que tengas que hacer nada.</p>
+            <h3 data-i18n="index.sync_icloud_title">iCloud Drive nativo</h3>
+            <p data-i18n="index.sync_icloud_body">Tu espacio de From es una carpeta en iCloud Drive. Se sincroniza automáticamente entre todos tus Macs sin que tengas que hacer nada.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(66,133,244,0.1); color: #4285F4;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13,2 13,9 20,9"/></svg>
             </div>
-            <h3>Google Drive y Docs</h3>
-            <p>Conecta m&uacute;ltiples cuentas de Google. Vincula notas a Google Docs con sincronizaci&oacute;n bidireccional autom&aacute;tica. Tus docs de Google como contexto para la IA.</p>
+            <h3 data-i18n="index.sync_gdrive_title">Google Drive y Docs</h3>
+            <p data-i18n="index.sync_gdrive_body">Conecta múltiples cuentas de Google. Vincula notas a Google Docs con sincronización bidireccional automática. Tus docs de Google como contexto para la IA.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
             </div>
-            <h3>Backup autom&aacute;tico</h3>
-            <p>Backups diarios autom&aacute;ticos de todo tu espacio. Restaura cualquier nota a su versi&oacute;n anterior con un clic.</p>
+            <h3 data-i18n="index.sync_backup_title">Backup automático</h3>
+            <p data-i18n="index.sync_backup_body">Backups diarios automáticos de todo tu espacio. Restaura cualquier nota a su versión anterior con un clic.</p>
         </div>
     </div>
 </section>
@@ -231,9 +233,9 @@
 <div class="section-alt" id="integrations">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <span class="section-label">Integraciones</span>
-            <h2>Conectado a lo que ya usas</h2>
-            <p>From se integra nativamente con las apps de Apple y Google que ya forman parte de tu d&iacute;a a d&iacute;a.</p>
+            <span class="section-label" data-i18n="index.integrations_label">Integraciones</span>
+            <h2 data-i18n="index.integrations_title">Conectado a lo que ya usas</h2>
+            <p data-i18n="index.integrations_subtitle">From se integra nativamente con las apps de Apple y Google que ya forman parte de tu día a día.</p>
         </div>
         <div class="integrations-grid">
             <div class="integration-item">
@@ -241,8 +243,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                 </div>
                 <div>
-                    <h3>Apple Calendar</h3>
-                    <p>Tus eventos aparecen en el timeline de From. Crea eventos desde notas. Sincronizaci&oacute;n bidireccional.</p>
+                    <h3 data-i18n="index.int_calendar_title">Apple Calendar</h3>
+                    <p data-i18n="index.int_calendar_body">Tus eventos aparecen en el timeline de From. Crea eventos desde notas. Sincronización bidireccional.</p>
                 </div>
             </div>
             <div class="integration-item">
@@ -250,8 +252,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
                 </div>
                 <div>
-                    <h3>Apple Recordatorios</h3>
-                    <p>Las tareas de From se sincronizan con Recordatorios de Apple. Completa desde cualquier dispositivo.</p>
+                    <h3 data-i18n="index.int_reminders_title">Apple Recordatorios</h3>
+                    <p data-i18n="index.int_reminders_body">Las tareas de From se sincronizan con Recordatorios de Apple. Completa desde cualquier dispositivo.</p>
                 </div>
             </div>
             <div class="integration-item">
@@ -259,8 +261,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12H2"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
                 </div>
                 <div>
-                    <h3>Google Drive</h3>
-                    <p>Navega, busca y vincula archivos de Drive. Multi-cuenta. Accede a tus carpetas sin salir de From.</p>
+                    <h3 data-i18n="index.int_gdrive_title">Google Drive</h3>
+                    <p data-i18n="index.int_gdrive_body">Navega, busca y vincula archivos de Drive. Multi-cuenta. Accede a tus carpetas sin salir de From.</p>
                 </div>
             </div>
             <div class="integration-item">
@@ -268,8 +270,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                 </div>
                 <div>
-                    <h3>Google Docs</h3>
-                    <p>Vincula notas a Google Docs. Edita en un lado y se sincroniza al otro. Auto-sync al guardar.</p>
+                    <h3 data-i18n="index.int_gdocs_title">Google Docs</h3>
+                    <p data-i18n="index.int_gdocs_body">Vincula notas a Google Docs. Edita en un lado y se sincroniza al otro. Auto-sync al guardar.</p>
                 </div>
             </div>
             <div class="integration-item">
@@ -277,8 +279,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
                 </div>
                 <div>
-                    <h3>iCloud Drive</h3>
-                    <p>Almacenamiento principal. Tus notas se sincronizan entre todos tus Macs autom&aacute;ticamente.</p>
+                    <h3 data-i18n="index.int_icloud_title">iCloud Drive</h3>
+                    <p data-i18n="index.int_icloud_body">Almacenamiento principal. Tus notas se sincronizan entre todos tus Macs automáticamente.</p>
                 </div>
             </div>
             <div class="integration-item">
@@ -286,8 +288,8 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </div>
                 <div>
-                    <h3>Claude, GPT y Gemini</h3>
-                    <p>Elige tu proveedor de IA preferido. Usa tu propia API key o la IA gestionada de From con tokens incluidos.</p>
+                    <h3 data-i18n="index.int_aimodels_title">Claude, GPT y Gemini</h3>
+                    <p data-i18n="index.int_aimodels_body">Elige tu proveedor de IA preferido. Usa tu propia API key o la IA gestionada de From con tokens incluidos.</p>
                 </div>
             </div>
         </div>
@@ -297,38 +299,38 @@
 <!-- AI -->
 <section class="section" id="ai">
     <div class="section-header">
-        <span class="section-label">Inteligencia Artificial</span>
-        <h2>Una IA que conoce tu contexto</h2>
-        <p>No es un chatbot gen&eacute;rico. Es un asistente que ha le&iacute;do tus notas, entiende tus proyectos y trabaja con tu informaci&oacute;n real.</p>
+        <span class="section-label" data-i18n="index.ai_label">Inteligencia Artificial</span>
+        <h2 data-i18n="index.ai_title">Una IA que conoce tu contexto</h2>
+        <p data-i18n="index.ai_subtitle">No es un chatbot genérico. Es un asistente que ha leído tus notas, entiende tus proyectos y trabaja con tu información real.</p>
     </div>
     <div class="features-grid" style="max-width: 900px;">
         <div class="card">
             <div class="card-icon" style="background: rgba(88,86,214,0.1); color: var(--indigo);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
-            <h3>Chat contextual</h3>
-            <p>Pregunta sobre tus notas, resume proyectos, busca informaci&oacute;n. La IA recupera los fragmentos relevantes de tu espacio con b&uacute;squeda sem&aacute;ntica.</p>
+            <h3 data-i18n="index.ai_chat_title">Chat contextual</h3>
+            <p data-i18n="index.ai_chat_body">Pregunta sobre tus notas, resume proyectos, busca información. La IA recupera los fragmentos relevantes de tu espacio con búsqueda semántica.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
             </div>
-            <h3>Editor IA</h3>
-            <p>La IA edita tus notas directamente. Revisa los cambios, conf&iacute;rmalos o desh&aacute;zlos. Como un copiloto para tu escritura.</p>
+            <h3 data-i18n="index.ai_editor_title">Editor IA</h3>
+            <p data-i18n="index.ai_editor_body">La IA edita tus notas directamente. Revisa los cambios, confírmalos o deshazlos. Como un copiloto para tu escritura.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(255,45,85,0.1); color: var(--pink);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </div>
-            <h3>Agentes aut&oacute;nomos</h3>
-            <p>Crea agentes con lenguaje natural. Se ejecutan autom&aacute;ticamente: diario, semanal, al abrir la app. Leen, crean y actualizan notas por ti.</p>
+            <h3 data-i18n="index.ai_agents_title">Agentes autónomos</h3>
+            <p data-i18n="index.ai_agents_body">Crea agentes con lenguaje natural. Se ejecutan automáticamente: diario, semanal, al abrir la app. Leen, crean y actualizan notas por ti.</p>
         </div>
         <div class="card">
             <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
-            <h3>Privacidad real</h3>
-            <p>Solo el fragmento relevante viaja a la API de IA. Nada se almacena en servidores. Puedes usar tu propia API key para control total.</p>
+            <h3 data-i18n="index.ai_privacy_title">Privacidad real</h3>
+            <p data-i18n="index.ai_privacy_body">Solo el fragmento relevante viaja a la API de IA. Nada se almacena en servidores. Puedes usar tu propia API key para control total.</p>
         </div>
     </div>
 </section>
@@ -337,31 +339,31 @@
 <div class="section-alt" id="privacy">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <span class="section-label">Privacidad</span>
-            <h2>Privacidad radical</h2>
-            <p>No es marketing. Es la arquitectura. From no puede acceder a tus datos aunque quisiera.</p>
+            <span class="section-label" data-i18n="index.privacy_label">Privacidad</span>
+            <h2 data-i18n="index.privacy_title">Privacidad radical</h2>
+            <p data-i18n="index.privacy_subtitle">No es marketing. Es la arquitectura. From no puede acceder a tus datos aunque quisiera.</p>
         </div>
         <div class="privacy-grid">
             <div class="privacy-card">
                 <div class="card-icon" style="background: rgba(74,144,217,0.15); color: var(--accent); margin: 0 auto 16px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 </div>
-                <h3>Sin servidores propios</h3>
-                <p>Tus archivos viven en tu Mac y en tu iCloud privado. From no tiene backend que almacene tus datos.</p>
+                <h3 data-i18n="index.priv_noserver_title">Sin servidores propios</h3>
+                <p data-i18n="index.priv_noserver_body">Tus archivos viven en tu Mac y en tu iCloud privado. From no tiene backend que almacene tus datos.</p>
             </div>
             <div class="privacy-card">
                 <div class="card-icon" style="background: rgba(74,144,217,0.15); color: var(--accent); margin: 0 auto 16px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 </div>
-                <h3>Cero telemetr&iacute;a</h3>
-                <p>No rastreamos uso, no enviamos anal&iacute;ticas, no recopilamos datos de comportamiento. Cero.</p>
+                <h3 data-i18n="index.priv_notelemetry_title">Cero telemetría</h3>
+                <p data-i18n="index.priv_notelemetry_body">No rastreamos uso, no enviamos analíticas, no recopilamos datos de comportamiento. Cero.</p>
             </div>
             <div class="privacy-card">
                 <div class="card-icon" style="background: rgba(74,144,217,0.15); color: var(--accent); margin: 0 auto 16px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 </div>
-                <h3>Sin lock-in</h3>
-                <p>Archivos Markdown est&aacute;ndar. Si dejas From, tus notas siguen funcionando en cualquier editor del planeta.</p>
+                <h3 data-i18n="index.priv_nolockin_title">Sin lock-in</h3>
+                <p data-i18n="index.priv_nolockin_body">Archivos Markdown estándar. Si dejas From, tus notas siguen funcionando en cualquier editor del planeta.</p>
             </div>
         </div>
     </section>
@@ -370,23 +372,23 @@
 <!-- How it works -->
 <section class="section">
     <div class="section-header">
-        <h2>Empieza en 30 segundos</h2>
+        <h2 data-i18n="index.steps_title">Empieza en 30 segundos</h2>
     </div>
     <div class="steps">
         <div class="step">
             <div class="step-number">1</div>
-            <h3>Descarga From</h3>
-            <p>Abre el .dmg y arrastra From a Aplicaciones. Sin instalador, sin cuenta obligatoria.</p>
+            <h3 data-i18n="index.step1_title">Descarga From</h3>
+            <p data-i18n="index.step1_body">Abre el .dmg y arrastra From a Aplicaciones. Sin instalador, sin cuenta obligatoria.</p>
         </div>
         <div class="step">
             <div class="step-number">2</div>
-            <h3>Elige tu carpeta</h3>
-            <p>From crea una carpeta en iCloud Drive por defecto. O elige cualquier carpeta que ya tengas.</p>
+            <h3 data-i18n="index.step2_title">Elige tu carpeta</h3>
+            <p data-i18n="index.step2_body">From crea una carpeta en iCloud Drive por defecto. O elige cualquier carpeta que ya tengas.</p>
         </div>
         <div class="step">
             <div class="step-number">3</div>
-            <h3>Empieza a trabajar</h3>
-            <p>Crea notas, organiza proyectos, programa tareas. La IA ya conoce tu contexto desde el minuto uno.</p>
+            <h3 data-i18n="index.step3_title">Empieza a trabajar</h3>
+            <p data-i18n="index.step3_body">Crea notas, organiza proyectos, programa tareas. La IA ya conoce tu contexto desde el minuto uno.</p>
         </div>
     </div>
 </section>
@@ -395,57 +397,57 @@
 <div class="section-alt">
     <section class="section text-center" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <h2>Simple y justo</h2>
-            <p>Licencia perpetua para usar From para siempre. Suscripci&oacute;n opcional solo si quieres IA gestionada sin configurar API keys.</p>
+            <h2 data-i18n="index.pricing_teaser_title">Simple y justo</h2>
+            <p data-i18n="index.pricing_teaser_body">Licencia perpetua para usar From para siempre. Suscripción opcional solo si quieres IA gestionada sin configurar API keys.</p>
         </div>
-        <a href="pricing.html" class="btn-primary">Ver precios</a>
+        <a href="pricing.html" class="btn-primary" data-i18n="index.pricing_teaser_cta">Ver precios</a>
     </section>
 </div>
 
 <!-- FAQ -->
 <section class="section" id="faq">
     <div class="section-header">
-        <h2>Preguntas frecuentes</h2>
+        <h2 data-i18n="index.faq_title">Preguntas frecuentes</h2>
     </div>
     <div class="faq">
         <div class="faq-item">
-            <h3>&iquest;Necesito Obsidian para usar From?</h3>
-            <p>No. From es completamente independiente. Usa archivos Markdown est&aacute;ndar, as&iacute; que puedes abrir las mismas notas con Obsidian, iA Writer o cualquier editor si quieres, pero no es necesario.</p>
+            <h3 data-i18n="index.faq1_q">¿Necesito Obsidian para usar From?</h3>
+            <p data-i18n="index.faq1_a">No. From es completamente independiente. Usa archivos Markdown estándar, así que puedes abrir las mismas notas con Obsidian, iA Writer o cualquier editor si quieres, pero no es necesario.</p>
         </div>
         <div class="faq-item">
-            <h3>&iquest;C&oacute;mo funciona la IA?</h3>
-            <p>From indexa tus notas localmente. Cuando preguntas algo, recupera los fragmentos relevantes y los env&iacute;a a la API de IA. Solo el fragmento necesario viaja &mdash; nada se almacena en servidores externos. Puedes elegir entre Claude, GPT o Gemini.</p>
+            <h3 data-i18n="index.faq2_q">¿Cómo funciona la IA?</h3>
+            <p data-i18n="index.faq2_a">From indexa tus notas localmente. Cuando preguntas algo, recupera los fragmentos relevantes y los envía a la API de IA. Solo el fragmento necesario viaja — nada se almacena en servidores externos. Puedes elegir entre Claude, GPT o Gemini.</p>
         </div>
         <div class="faq-item">
-            <h3>&iquest;Puedo sincronizar entre dispositivos?</h3>
-            <p>S&iacute;. Si usas iCloud Drive (opci&oacute;n por defecto), tus notas se sincronizan autom&aacute;ticamente entre todos tus Macs. Tambi&eacute;n puedes vincular notas a Google Docs para colaborar.</p>
+            <h3 data-i18n="index.faq3_q">¿Puedo sincronizar entre dispositivos?</h3>
+            <p data-i18n="index.faq3_a">Sí. Si usas iCloud Drive (opción por defecto), tus notas se sincronizan automáticamente entre todos tus Macs. También puedes vincular notas a Google Docs para colaborar.</p>
         </div>
         <div class="faq-item">
-            <h3>&iquest;Funciona en iPhone o iPad?</h3>
-            <p>De momento From es solo para macOS. Tus notas en iCloud son accesibles desde cualquier editor de texto en iOS. La app nativa para iOS est&aacute; en desarrollo.</p>
+            <h3 data-i18n="index.faq4_q">¿Funciona en iPhone o iPad?</h3>
+            <p data-i18n="index.faq4_a">De momento From es solo para macOS. Tus notas en iCloud son accesibles desde cualquier editor de texto en iOS. La app nativa para iOS está en desarrollo.</p>
         </div>
         <div class="faq-item">
-            <h3>&iquest;Qu&eacute; pasa si dejo de usar From?</h3>
-            <p>Nada. Tus notas son archivos .md en tu ordenador. Siguen ah&iacute;, legibles con cualquier editor de texto. No hay formato propietario ni dependencia alguna.</p>
+            <h3 data-i18n="index.faq5_q">¿Qué pasa si dejo de usar From?</h3>
+            <p data-i18n="index.faq5_a">Nada. Tus notas son archivos .md en tu ordenador. Siguen ahí, legibles con cualquier editor de texto. No hay formato propietario ni dependencia alguna.</p>
         </div>
         <div class="faq-item">
-            <h3>&iquest;Necesito una API key para la IA?</h3>
-            <p>No necesariamente. Puedes usar la IA gestionada de From (con suscripci&oacute;n) o aportar tu propia API key de Anthropic, OpenAI o Google. Tambi&eacute;n puedes conectar tu suscripci&oacute;n de Claude directamente.</p>
+            <h3 data-i18n="index.faq6_q">¿Necesito una API key para la IA?</h3>
+            <p data-i18n="index.faq6_a">No necesariamente. Puedes usar la IA gestionada de From (con suscripción) o aportar tu propia API key de Anthropic, OpenAI o Google. También puedes conectar tu suscripción de Claude directamente.</p>
         </div>
         <div class="faq-item">
-            <h3>&iquest;Mis datos est&aacute;n seguros?</h3>
-            <p>Tus notas nunca salen de tu Mac ni de tu iCloud privado. From no tiene servidores que almacenen tus datos. No hay telemetr&iacute;a, no hay anal&iacute;ticas, no hay tracking.</p>
+            <h3 data-i18n="index.faq7_q">¿Mis datos están seguros?</h3>
+            <p data-i18n="index.faq7_a">Tus notas nunca salen de tu Mac ni de tu iCloud privado. From no tiene servidores que almacenen tus datos. No hay telemetría, no hay analíticas, no hay tracking.</p>
         </div>
     </div>
 </section>
 
 <!-- CTA -->
 <section class="cta" id="download">
-    <h2>Tu segundo cerebro te est&aacute; esperando</h2>
-    <p>Descarga From y empieza a organizar tus notas, tareas y proyectos. Sin cuenta, sin tarjeta, sin compromiso.</p>
+    <h2 data-i18n="index.cta_title">Tu segundo cerebro te está esperando</h2>
+    <p data-i18n="index.cta_body">Descarga From y empieza a organizar tus notas, tareas y proyectos. Sin cuenta, sin tarjeta, sin compromiso.</p>
     <a href="#" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Descargar para macOS
+        <span data-i18n="index.cta_btn">Descargar para macOS</span>
     </a>
 </section>
 
@@ -460,24 +462,24 @@
                 </svg>
                 From
             </a>
-            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+            <p data-i18n="footer.tagline">Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
         </div>
         <div class="footer-col">
-            <h4>Producto</h4>
-            <a href="#features">Funciones</a>
-            <a href="pricing.html">Precios</a>
-            <a href="#download">Descargar</a>
+            <h4 data-i18n="footer.col_product">Producto</h4>
+            <a href="#features" data-i18n="footer.link_features">Funciones</a>
+            <a href="pricing.html" data-i18n="footer.link_pricing">Precios</a>
+            <a href="#download" data-i18n="footer.link_download">Descargar</a>
         </div>
         <div class="footer-col">
-            <h4>Soporte</h4>
-            <a href="support.html">Centro de ayuda</a>
-            <a href="mailto:hola@getfrom.app">Contacto</a>
-            <a href="account.html">Mi cuenta</a>
+            <h4 data-i18n="footer.col_support">Soporte</h4>
+            <a href="support.html" data-i18n="footer.link_help">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app" data-i18n="footer.link_contact">Contacto</a>
+            <a href="account.html" data-i18n="footer.link_account">Mi cuenta</a>
         </div>
         <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="privacy.html">Privacidad</a>
-            <a href="terms.html">T&eacute;rminos</a>
+            <h4 data-i18n="footer.col_legal">Legal</h4>
+            <a href="privacy.html" data-i18n="footer.link_privacy">Privacidad</a>
+            <a href="terms.html" data-i18n="footer.link_terms">Términos</a>
         </div>
     </div>
     <div class="footer-bottom">

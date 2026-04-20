@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&eacute;rminos de Servicio — From</title>
+    <title>Términos de Servicio — From</title>
     <meta name="description" content="Términos y condiciones de uso de From. Licencia, suscripción, responsabilidades y garantías.">
     <link rel="icon" type="image/svg+xml" href="icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="i18n.js"></script>
 </head>
-<body>
+<body data-page="terms">
 
 <!-- Nav -->
 <nav class="nav">
@@ -27,138 +28,139 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
-            <a href="index.html#features">Funciones</a>
-            <a href="pricing.html">Precios</a>
-            <a href="support.html">Soporte</a>
-            <a href="index.html#download" class="btn-nav">Descargar</a>
+            <a href="index.html#features" data-i18n="nav.features">Funciones</a>
+            <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
+            <a href="support.html" data-i18n="nav.support">Soporte</a>
+            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>
 </nav>
 
 <!-- Hero -->
 <div class="page-hero">
-    <h1>T&eacute;rminos de Servicio</h1>
-    <p>Condiciones de uso de la aplicaci&oacute;n From y sus servicios asociados.</p>
+    <h1 data-i18n="terms.hero_title">Términos de Servicio</h1>
+    <p data-i18n="terms.hero_subtitle">Condiciones de uso de la aplicación From y sus servicios asociados.</p>
 </div>
 
 <!-- Legal content -->
 <div class="legal-body">
-    <p class="legal-updated">&Uacute;ltima actualizaci&oacute;n: 18 de abril de 2026</p>
+    <p class="legal-updated">Última actualización: 18 de abril de 2026</p>
 
-    <h2>1. Aceptaci&oacute;n de los t&eacute;rminos</h2>
-    <p>Al descargar, instalar o utilizar From (&ldquo;la Aplicaci&oacute;n&rdquo;), aceptas estos T&eacute;rminos de Servicio (&ldquo;T&eacute;rminos&rdquo;). Si no est&aacute;s de acuerdo, no utilices la Aplicaci&oacute;n.</p>
-    <p>From es desarrollado y operado por Alberto Lezaun (&ldquo;nosotros&rdquo;, &ldquo;nuestro&rdquo;), con domicilio en Espa&ntilde;a.</p>
+    <h2>1. Aceptación de los términos</h2>
+    <p>Al descargar, instalar o utilizar From (&ldquo;la Aplicación&rdquo;), aceptas estos Términos de Servicio (&ldquo;Términos&rdquo;). Si no estás de acuerdo, no utilices la Aplicación.</p>
+    <p>From es desarrollado y operado por Alberto Lezaun (&ldquo;nosotros&rdquo;, &ldquo;nuestro&rdquo;), con domicilio en España.</p>
 
-    <h2>2. Descripci&oacute;n del servicio</h2>
-    <p>From es una aplicaci&oacute;n nativa para macOS que permite organizar notas, tareas y proyectos. La Aplicaci&oacute;n funciona de forma local en tu dispositivo, almacenando tus datos como archivos Markdown en la ubicaci&oacute;n que t&uacute; elijas.</p>
-    <p>Opcionalmente, From ofrece servicios en l&iacute;nea que incluyen:</p>
+    <h2>2. Descripción del servicio</h2>
+    <p>From es una aplicación nativa para macOS que permite organizar notas, tareas y proyectos. La Aplicación funciona de forma local en tu dispositivo, almacenando tus datos como archivos Markdown en la ubicación que tú elijas.</p>
+    <p>Opcionalmente, From ofrece servicios en línea que incluyen:</p>
     <ul>
-        <li>IA gestionada con tokens incluidos (requiere suscripci&oacute;n).</li>
-        <li>Publicaci&oacute;n de notas con URL p&uacute;blica.</li>
-        <li>Ejecuci&oacute;n remota de agentes aut&oacute;nomos.</li>
+        <li>IA gestionada con tokens incluidos (requiere suscripción).</li>
+        <li>Publicación de notas con URL pública.</li>
+        <li>Ejecución remota de agentes autónomos.</li>
     </ul>
 
     <h2>3. Propiedad de los datos</h2>
     <p><strong>Tus datos son tuyos. Siempre.</strong></p>
     <ul>
         <li>Tus notas, tareas y archivos son tu propiedad exclusiva.</li>
-        <li>From no adquiere ning&uacute;n derecho sobre tu contenido.</li>
-        <li>Tus datos se almacenan como archivos Markdown est&aacute;ndar en tu dispositivo y/o tu cuenta de iCloud.</li>
+        <li>From no adquiere ningún derecho sobre tu contenido.</li>
+        <li>Tus datos se almacenan como archivos Markdown estándar en tu dispositivo y/o tu cuenta de iCloud.</li>
         <li>Si desinstalas From, tus archivos permanecen intactos y accesibles con cualquier editor de texto.</li>
     </ul>
 
     <h2>4. Cuenta de usuario</h2>
-    <p>La creaci&oacute;n de cuenta es opcional y solo necesaria para:</p>
+    <p>La creación de cuenta es opcional y solo necesaria para:</p>
     <ul>
-        <li>Acceder a la IA gestionada (modo autom&aacute;tico).</li>
+        <li>Acceder a la IA gestionada (modo automático).</li>
         <li>Gestionar suscripciones y tokens.</li>
         <li>Publicar notas.</li>
     </ul>
-    <p>Eres responsable de mantener la seguridad de tu cuenta y contrase&ntilde;a. No compartas tus credenciales con terceros.</p>
+    <p>Eres responsable de mantener la seguridad de tu cuenta y contraseña. No compartas tus credenciales con terceros.</p>
 
     <h2>5. Licencia perpetua</h2>
-    <p>La licencia perpetua te otorga un derecho no exclusivo, no transferible y permanente de uso de la Aplicaci&oacute;n en su versi&oacute;n actual y futuras actualizaciones. La licencia es para uso personal y se vincula a tu cuenta.</p>
+    <p>La licencia perpetua te otorga un derecho no exclusivo, no transferible y permanente de uso de la Aplicación en su versión actual y futuras actualizaciones. La licencia es para uso personal y se vincula a tu cuenta.</p>
     <ul>
         <li>Puedes instalar From en todos tus dispositivos personales.</li>
-        <li>No puedes redistribuir, sublicenciar ni revender la Aplicaci&oacute;n.</li>
-        <li>No puedes descompilar, realizar ingenier&iacute;a inversa ni modificar la Aplicaci&oacute;n.</li>
+        <li>No puedes redistribuir, sublicenciar ni revender la Aplicación.</li>
+        <li>No puedes descompilar, realizar ingeniería inversa ni modificar la Aplicación.</li>
     </ul>
 
-    <h2>6. Suscripci&oacute;n</h2>
-    <p>La suscripci&oacute;n mensual proporciona acceso a la IA gestionada con tokens incluidos.</p>
+    <h2>6. Suscripción</h2>
+    <p>La suscripción mensual proporciona acceso a la IA gestionada con tokens incluidos.</p>
     <ul>
-        <li><strong>Facturaci&oacute;n:</strong> Mensual, procesada por LemonSqueezy.</li>
-        <li><strong>Cancelaci&oacute;n:</strong> Puedes cancelar en cualquier momento. La cancelaci&oacute;n surte efecto al final del per&iacute;odo de facturaci&oacute;n actual.</li>
-        <li><strong>Reembolsos:</strong> No se realizan reembolsos parciales de per&iacute;odos de suscripci&oacute;n. Puedes solicitar un reembolso dentro de los primeros 14 d&iacute;as si no has consumido tokens (derecho de desistimiento seg&uacute;n legislaci&oacute;n europea).</li>
-        <li><strong>Tokens:</strong> Los tokens incluidos en la suscripci&oacute;n se renuevan cada mes. Los tokens no consumidos no se acumulan.</li>
-        <li><strong>Tokens extra:</strong> Los tokens comprados como recarga no caducan mientras la suscripci&oacute;n est&eacute; activa.</li>
+        <li><strong>Facturación:</strong> Mensual, procesada por LemonSqueezy.</li>
+        <li><strong>Cancelación:</strong> Puedes cancelar en cualquier momento. La cancelación surte efecto al final del período de facturación actual.</li>
+        <li><strong>Reembolsos:</strong> No se realizan reembolsos parciales de períodos de suscripción. Puedes solicitar un reembolso dentro de los primeros 14 días si no has consumido tokens (derecho de desistimiento según legislación europea).</li>
+        <li><strong>Tokens:</strong> Los tokens incluidos en la suscripción se renuevan cada mes. Los tokens no consumidos no se acumulan.</li>
+        <li><strong>Tokens extra:</strong> Los tokens comprados como recarga no caducan mientras la suscripción esté activa.</li>
     </ul>
 
     <h2>7. Uso aceptable</h2>
     <p>Al usar From y sus servicios, te comprometes a no:</p>
     <ul>
-        <li>Usar la IA para generar contenido il&iacute;cito, da&ntilde;ino o que viole derechos de terceros.</li>
+        <li>Usar la IA para generar contenido ilícito, dañino o que viole derechos de terceros.</li>
         <li>Intentar acceder de forma no autorizada a los servidores o sistemas de From.</li>
-        <li>Usar la Aplicaci&oacute;n de forma que perjudique su funcionamiento o el de otros usuarios.</li>
+        <li>Usar la Aplicación de forma que perjudique su funcionamiento o el de otros usuarios.</li>
         <li>Publicar notas con contenido ilegal, difamatorio o que viole derechos de propiedad intelectual.</li>
-        <li>Eludir l&iacute;mites de tokens o mecanismos de autenticaci&oacute;n.</li>
+        <li>Eludir límites de tokens o mecanismos de autenticación.</li>
     </ul>
 
     <h2>8. Integraciones de terceros</h2>
     <p>From se integra con servicios de terceros:</p>
     <ul>
-        <li><strong>Proveedores de IA:</strong> Anthropic (Claude), OpenAI (GPT), Google (Gemini). El uso de estos servicios se rige por sus respectivos t&eacute;rminos.</li>
-        <li><strong>Google Drive y Docs:</strong> La integraci&oacute;n usa OAuth 2.0. El acceso se rige por los t&eacute;rminos de Google.</li>
+        <li><strong>Proveedores de IA:</strong> Anthropic (Claude), OpenAI (GPT), Google (Gemini). El uso de estos servicios se rige por sus respectivos términos.</li>
+        <li><strong>Google Drive y Docs:</strong> La integración usa OAuth 2.0. El acceso se rige por los términos de Google.</li>
         <li><strong>Apple Calendar y Recordatorios:</strong> Acceso mediante EventKit de Apple, sujeto a los permisos que concedas.</li>
-        <li><strong>LemonSqueezy:</strong> Procesamiento de pagos sujeto a sus t&eacute;rminos de servicio.</li>
-        <li><strong>iCloud Drive:</strong> Sincronizaci&oacute;n gestionada por Apple, sujeta a los t&eacute;rminos de iCloud.</li>
+        <li><strong>LemonSqueezy:</strong> Procesamiento de pagos sujeto a sus términos de servicio.</li>
+        <li><strong>iCloud Drive:</strong> Sincronización gestionada por Apple, sujeta a los términos de iCloud.</li>
     </ul>
-    <p>No somos responsables de la disponibilidad, cambios o pol&iacute;ticas de estos servicios de terceros.</p>
+    <p>No somos responsables de la disponibilidad, cambios o políticas de estos servicios de terceros.</p>
 
-    <h2>9. Publicaci&oacute;n de notas</h2>
+    <h2>9. Publicación de notas</h2>
     <p>Al publicar una nota:</p>
     <ul>
-        <li>El contenido se almacena en nuestro servidor y es accesible p&uacute;blicamente mediante una URL &uacute;nica.</li>
+        <li>El contenido se almacena en nuestro servidor y es accesible públicamente mediante una URL única.</li>
         <li>Eres responsable del contenido que publicas.</li>
-        <li>Nos reservamos el derecho de eliminar contenido que viole estos T&eacute;rminos o la legislaci&oacute;n aplicable.</li>
+        <li>Nos reservamos el derecho de eliminar contenido que viole estos Términos o la legislación aplicable.</li>
         <li>Puedes despublicar cualquier nota en cualquier momento, lo que elimina el contenido de nuestro servidor.</li>
     </ul>
 
     <h2>10. Propiedad intelectual</h2>
-    <p>La Aplicaci&oacute;n, su c&oacute;digo, dise&ntilde;o, marca y documentaci&oacute;n son propiedad de Alberto Lezaun y est&aacute;n protegidos por leyes de propiedad intelectual.</p>
-    <p>La licencia de uso no otorga derechos de propiedad intelectual sobre la Aplicaci&oacute;n.</p>
+    <p>La Aplicación, su código, diseño, marca y documentación son propiedad de Alberto Lezaun y están protegidos por leyes de propiedad intelectual.</p>
+    <p>La licencia de uso no otorga derechos de propiedad intelectual sobre la Aplicación.</p>
 
-    <h2>11. Limitaci&oacute;n de responsabilidad</h2>
+    <h2>11. Limitación de responsabilidad</h2>
     <p>From se proporciona &ldquo;tal cual&rdquo; (&ldquo;as is&rdquo;). En la medida permitida por la ley:</p>
     <ul>
-        <li>No garantizamos que la Aplicaci&oacute;n est&eacute; libre de errores o interrupciones.</li>
-        <li>No somos responsables de la p&eacute;rdida de datos causada por fallos del dispositivo, iCloud o servicios de terceros.</li>
-        <li>No somos responsables del contenido generado por la IA ni de las acciones de los agentes aut&oacute;nomos.</li>
+        <li>No garantizamos que la Aplicación esté libre de errores o interrupciones.</li>
+        <li>No somos responsables de la pérdida de datos causada por fallos del dispositivo, iCloud o servicios de terceros.</li>
+        <li>No somos responsables del contenido generado por la IA ni de las acciones de los agentes autónomos.</li>
         <li>Nuestra responsabilidad total se limita al importe pagado por el usuario en los 12 meses anteriores al incidente.</li>
     </ul>
-    <p>Recomendamos mantener copias de seguridad de tus datos. From incluye funci&oacute;n de backup autom&aacute;tico para facilitar esto.</p>
+    <p>Recomendamos mantener copias de seguridad de tus datos. From incluye función de backup automático para facilitar esto.</p>
 
     <h2>12. Disponibilidad del servicio</h2>
-    <p>Los servicios en l&iacute;nea (IA gestionada, publicaci&oacute;n, ejecuci&oacute;n remota de agentes) pueden experimentar interrupciones por mantenimiento o causas t&eacute;cnicas. La funcionalidad local de la Aplicaci&oacute;n no depende de nuestros servidores.</p>
+    <p>Los servicios en línea (IA gestionada, publicación, ejecución remota de agentes) pueden experimentar interrupciones por mantenimiento o causas técnicas. La funcionalidad local de la Aplicación no depende de nuestros servidores.</p>
 
     <h2>13. Modificaciones</h2>
-    <p>Podemos modificar estos T&eacute;rminos. Los cambios significativos se notificar&aacute;n con al menos 30 d&iacute;as de antelaci&oacute;n por email. El uso continuado de la Aplicaci&oacute;n tras la notificaci&oacute;n implica la aceptaci&oacute;n de los nuevos t&eacute;rminos.</p>
+    <p>Podemos modificar estos Términos. Los cambios significativos se notificarán con al menos 30 días de antelación por email. El uso continuado de la Aplicación tras la notificación implica la aceptación de los nuevos términos.</p>
 
-    <h2>14. Terminaci&oacute;n</h2>
+    <h2>14. Terminación</h2>
     <ul>
-        <li>Puedes dejar de usar From en cualquier momento desinstalando la Aplicaci&oacute;n. Tus archivos permanecer&aacute;n en tu dispositivo.</li>
-        <li>Podemos suspender o cancelar tu acceso a los servicios en l&iacute;nea si violas estos T&eacute;rminos, previa notificaci&oacute;n.</li>
-        <li>En caso de cierre del servicio, notificaremos con al menos 90 d&iacute;as de antelaci&oacute;n para que puedas exportar tus datos (aunque tus notas ya son archivos locales est&aacute;ndar).</li>
+        <li>Puedes dejar de usar From en cualquier momento desinstalando la Aplicación. Tus archivos permanecerán en tu dispositivo.</li>
+        <li>Podemos suspender o cancelar tu acceso a los servicios en línea si violas estos Términos, previa notificación.</li>
+        <li>En caso de cierre del servicio, notificaremos con al menos 90 días de antelación para que puedas exportar tus datos (aunque tus notas ya son archivos locales estándar).</li>
     </ul>
 
     <h2>15. Derecho de desistimiento</h2>
-    <p>De acuerdo con la legislaci&oacute;n europea de consumo, tienes derecho a desistir de la compra dentro de los 14 d&iacute;as naturales siguientes a la adquisici&oacute;n, siempre que no hayas consumido tokens de IA gestionada. Para ejercer este derecho, contacta con <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>.</p>
+    <p>De acuerdo con la legislación europea de consumo, tienes derecho a desistir de la compra dentro de los 14 días naturales siguientes a la adquisición, siempre que no hayas consumido tokens de IA gestionada. Para ejercer este derecho, contacta con <a href="mailto:hola@getfrom.app">hola@getfrom.app</a>.</p>
 
-    <h2>16. Legislaci&oacute;n aplicable</h2>
-    <p>Estos T&eacute;rminos se rigen por la legislaci&oacute;n espa&ntilde;ola y la normativa de la Uni&oacute;n Europea. Cualquier disputa se someter&aacute; a los juzgados y tribunales competentes en Espa&ntilde;a, sin perjuicio de los derechos que correspondan al consumidor seg&uacute;n su pa&iacute;s de residencia.</p>
+    <h2>16. Legislación aplicable</h2>
+    <p>Estos Términos se rigen por la legislación española y la normativa de la Unión Europea. Cualquier disputa se someterá a los juzgados y tribunales competentes en España, sin perjuicio de los derechos que correspondan al consumidor según su país de residencia.</p>
 
     <h2>17. Contacto</h2>
-    <p>Para cualquier cuesti&oacute;n sobre estos T&eacute;rminos:</p>
+    <p>Para cualquier cuestión sobre estos Términos:</p>
     <ul>
         <li><strong>Email:</strong> <a href="mailto:hola@getfrom.app">hola@getfrom.app</a></li>
         <li><strong>Web:</strong> <a href="https://getfrom.app">getfrom.app</a></li>
@@ -176,24 +178,24 @@
                 </svg>
                 From
             </a>
-            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+            <p data-i18n="footer.tagline">Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
         </div>
         <div class="footer-col">
-            <h4>Producto</h4>
-            <a href="index.html#features">Funciones</a>
-            <a href="pricing.html">Precios</a>
-            <a href="index.html#download">Descargar</a>
+            <h4 data-i18n="footer.col_product">Producto</h4>
+            <a href="index.html#features" data-i18n="footer.link_features">Funciones</a>
+            <a href="pricing.html" data-i18n="footer.link_pricing">Precios</a>
+            <a href="index.html#download" data-i18n="footer.link_download">Descargar</a>
         </div>
         <div class="footer-col">
-            <h4>Soporte</h4>
-            <a href="support.html">Centro de ayuda</a>
-            <a href="mailto:hola@getfrom.app">Contacto</a>
-            <a href="account.html">Mi cuenta</a>
+            <h4 data-i18n="footer.col_support">Soporte</h4>
+            <a href="support.html" data-i18n="footer.link_help">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app" data-i18n="footer.link_contact">Contacto</a>
+            <a href="account.html" data-i18n="footer.link_account">Mi cuenta</a>
         </div>
         <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="privacy.html">Privacidad</a>
-            <a href="terms.html">T&eacute;rminos</a>
+            <h4 data-i18n="footer.col_legal">Legal</h4>
+            <a href="privacy.html" data-i18n="footer.link_privacy">Privacidad</a>
+            <a href="terms.html" data-i18n="footer.link_terms">Términos</a>
         </div>
     </div>
     <div class="footer-bottom">

@@ -10,8 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="i18n.js"></script>
 </head>
-<body>
+<body data-page="account">
 
 <!-- Nav -->
 <nav class="nav">
@@ -27,20 +28,21 @@
             <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
-            <a href="index.html#features">Funciones</a>
-            <a href="index.html#sync">Sync</a>
-            <a href="index.html#ai">IA</a>
-            <a href="pricing.html">Precios</a>
-            <a href="support.html">Soporte</a>
-            <a href="index.html#download" class="btn-nav">Descargar</a>
+            <a href="index.html#features" data-i18n="nav.features">Funciones</a>
+            <a href="index.html#sync" data-i18n="nav.sync">Sync</a>
+            <a href="index.html#ai" data-i18n="nav.ai">IA</a>
+            <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
+            <a href="support.html" data-i18n="nav.support">Soporte</a>
+            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>
 </nav>
 
 <!-- Hero -->
 <div class="page-hero">
-    <h1>Gestiona tu cuenta</h1>
-    <p>Administra tu suscripci&oacute;n, facturaci&oacute;n y configuraci&oacute;n de From desde aqu&iacute; o directamente desde la app.</p>
+    <h1 data-i18n="account.hero_title">Gestiona tu cuenta</h1>
+    <p data-i18n="account.hero_subtitle">Administra tu suscripción, facturación y configuración de From desde aquí o directamente desde la app.</p>
 </div>
 
 <!-- Account sections -->
@@ -52,9 +54,9 @@
             <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
-            <h3>Suscripci&oacute;n</h3>
-            <p>Gestiona tu plan, cambia de suscripci&oacute;n mensual a anual, o cancela en cualquier momento.</p>
-            <a href="#" class="btn-secondary btn-small" id="manage-subscription">Gestionar suscripci&oacute;n</a>
+            <h3 data-i18n="account.sub_title">Suscripción</h3>
+            <p data-i18n="account.sub_body">Gestiona tu plan, cambia de suscripción mensual a anual, o cancela en cualquier momento.</p>
+            <a href="#" class="btn-secondary btn-small" id="manage-subscription" data-i18n="account.sub_btn">Gestionar suscripción</a>
         </div>
 
         <!-- Billing -->
@@ -62,9 +64,9 @@
             <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
-            <h3>Facturaci&oacute;n</h3>
-            <p>Consulta tu historial de pagos, descarga facturas y actualiza tu m&eacute;todo de pago.</p>
-            <a href="#" class="btn-secondary btn-small" id="manage-billing">Ver facturas</a>
+            <h3 data-i18n="account.billing_title">Facturación</h3>
+            <p data-i18n="account.billing_body">Consulta tu historial de pagos, descarga facturas y actualiza tu método de pago.</p>
+            <a href="#" class="btn-secondary btn-small" id="manage-billing" data-i18n="account.billing_btn">Ver facturas</a>
         </div>
 
         <!-- Tokens -->
@@ -72,9 +74,9 @@
             <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
             </div>
-            <h3>Tokens de IA</h3>
-            <p>Consulta tu balance de tokens desde la app en Ajustes &rarr; IA. Compra tokens adicionales cuando lo necesites.</p>
-            <a href="#" class="btn-secondary btn-small">Comprar tokens</a>
+            <h3 data-i18n="account.tokens_title">Tokens de IA</h3>
+            <p data-i18n="account.tokens_body">Consulta tu balance de tokens desde la app en Ajustes → IA. Compra tokens adicionales cuando lo necesites.</p>
+            <a href="#" class="btn-secondary btn-small" data-i18n="account.tokens_btn">Comprar tokens</a>
         </div>
 
         <!-- License -->
@@ -82,9 +84,9 @@
             <div class="card-icon" style="background: rgba(88,86,214,0.1); color: var(--indigo);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
-            <h3>Licencia</h3>
-            <p>Activa tu licencia perpetua desde la app en Ajustes &rarr; Cuenta. Introduce el c&oacute;digo que recibiste por email.</p>
-            <a href="pricing.html" class="btn-secondary btn-small">Ver planes</a>
+            <h3 data-i18n="account.license_title">Licencia</h3>
+            <p data-i18n="account.license_body">Activa tu licencia perpetua desde la app en Ajustes → Cuenta. Introduce el código que recibiste por email.</p>
+            <a href="pricing.html" class="btn-secondary btn-small" data-i18n="account.license_btn">Ver planes</a>
         </div>
 
         <!-- API Keys -->
@@ -92,9 +94,9 @@
             <div class="card-icon" style="background: rgba(175,82,222,0.1); color: var(--purple);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
             </div>
-            <h3>API Keys</h3>
-            <p>Configura tus API keys de Anthropic, OpenAI o Google en la app: Ajustes &rarr; IA &rarr; Modo manual.</p>
-            <p class="account-desc" style="margin-top: 8px; font-size: 13px;">Las API keys se almacenan solo en tu Mac, nunca en nuestros servidores.</p>
+            <h3 data-i18n="account.apikeys_title">API Keys</h3>
+            <p data-i18n="account.apikeys_body">Configura tus API keys de Anthropic, OpenAI o Google en la app: Ajustes → IA → Modo manual.</p>
+            <p class="account-desc" style="margin-top: 8px; font-size: 13px;" data-i18n="account.apikeys_note">Las API keys se almacenan solo en tu Mac, nunca en nuestros servidores.</p>
         </div>
 
         <!-- Delete account -->
@@ -102,9 +104,9 @@
             <div class="card-icon" style="background: rgba(255,59,48,0.1); color: var(--red);">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
             </div>
-            <h3>Eliminar cuenta</h3>
-            <p>Elimina tu cuenta y todos los datos asociados en nuestro servidor. Tus notas locales no se ven afectadas &mdash; siguen siendo archivos en tu Mac.</p>
-            <a href="mailto:hola@getfrom.app?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta" class="btn-danger btn-small">Solicitar eliminaci&oacute;n</a>
+            <h3 data-i18n="account.delete_title">Eliminar cuenta</h3>
+            <p data-i18n="account.delete_body">Elimina tu cuenta y todos los datos asociados en nuestro servidor. Tus notas locales no se ven afectadas — siguen siendo archivos en tu Mac.</p>
+            <a href="mailto:hola@getfrom.app?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta" class="btn-danger btn-small" data-i18n="account.delete_btn">Solicitar eliminación</a>
         </div>
 
     </div>
@@ -114,24 +116,24 @@
 <div class="section-alt">
     <section class="section" style="padding-top: 0; padding-bottom: 0;">
         <div class="section-header">
-            <h2>Informaci&oacute;n importante</h2>
+            <h2 data-i18n="account.info_title">Información importante</h2>
         </div>
         <div class="faq" style="max-width: 700px; margin: 0 auto;">
             <div class="faq-item">
-                <h3>Tu cuenta y tus notas son cosas diferentes</h3>
-                <p>Tu cuenta de From gestiona la suscripci&oacute;n, tokens y acceso a la IA gestionada. Tus notas son archivos Markdown en tu Mac. Eliminar tu cuenta <strong>no</strong> elimina tus notas &mdash; esos archivos siguen siendo tuyos, en tu disco.</p>
+                <h3 data-i18n="account.info1_q">Tu cuenta y tus notas son cosas diferentes</h3>
+                <p data-i18n-html="account.info1_a">Tu cuenta de From gestiona la suscripción, tokens y acceso a la IA gestionada. Tus notas son archivos Markdown en tu Mac. Eliminar tu cuenta <strong>no</strong> elimina tus notas — esos archivos siguen siendo tuyos, en tu disco.</p>
             </div>
             <div class="faq-item">
-                <h3>Gesti&oacute;n desde la app</h3>
-                <p>La mayor&iacute;a de opciones de cuenta est&aacute;n disponibles directamente en From: Ajustes &rarr; Cuenta. Desde ah&iacute; puedes ver tu plan, balance de tokens, activar licencias y configurar API keys.</p>
+                <h3 data-i18n="account.info2_q">Gestión desde la app</h3>
+                <p data-i18n="account.info2_a">La mayoría de opciones de cuenta están disponibles directamente en From: Ajustes → Cuenta. Desde ahí puedes ver tu plan, balance de tokens, activar licencias y configurar API keys.</p>
             </div>
             <div class="faq-item">
-                <h3>Pagos procesados por LemonSqueezy</h3>
-                <p>Los pagos se procesan de forma segura a trav&eacute;s de LemonSqueezy. No almacenamos datos de tarjeta. Puedes gestionar tu m&eacute;todo de pago desde el portal del cliente.</p>
+                <h3 data-i18n="account.info3_q">Pagos procesados por LemonSqueezy</h3>
+                <p data-i18n="account.info3_a">Los pagos se procesan de forma segura a través de LemonSqueezy. No almacenamos datos de tarjeta. Puedes gestionar tu método de pago desde el portal del cliente.</p>
             </div>
             <div class="faq-item">
-                <h3>&iquest;Problemas con tu cuenta?</h3>
-                <p>Escr&iacute;benos a <a href="mailto:hola@getfrom.app">hola@getfrom.app</a> y te ayudaremos lo antes posible.</p>
+                <h3 data-i18n="account.info4_q">¿Problemas con tu cuenta?</h3>
+                <p data-i18n-html="account.info4_a">Escríbenos a <a href="mailto:hola@getfrom.app">hola@getfrom.app</a> y te ayudaremos lo antes posible.</p>
             </div>
         </div>
     </section>
@@ -148,24 +150,24 @@
                 </svg>
                 From
             </a>
-            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+            <p data-i18n="footer.tagline">Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
         </div>
         <div class="footer-col">
-            <h4>Producto</h4>
-            <a href="index.html#features">Funciones</a>
-            <a href="pricing.html">Precios</a>
-            <a href="index.html#download">Descargar</a>
+            <h4 data-i18n="footer.col_product">Producto</h4>
+            <a href="index.html#features" data-i18n="footer.link_features">Funciones</a>
+            <a href="pricing.html" data-i18n="footer.link_pricing">Precios</a>
+            <a href="index.html#download" data-i18n="footer.link_download">Descargar</a>
         </div>
         <div class="footer-col">
-            <h4>Soporte</h4>
-            <a href="support.html">Centro de ayuda</a>
-            <a href="mailto:hola@getfrom.app">Contacto</a>
-            <a href="account.html">Mi cuenta</a>
+            <h4 data-i18n="footer.col_support">Soporte</h4>
+            <a href="support.html" data-i18n="footer.link_help">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app" data-i18n="footer.link_contact">Contacto</a>
+            <a href="account.html" data-i18n="footer.link_account">Mi cuenta</a>
         </div>
         <div class="footer-col">
-            <h4>Legal</h4>
-            <a href="privacy.html">Privacidad</a>
-            <a href="terms.html">T&eacute;rminos</a>
+            <h4 data-i18n="footer.col_legal">Legal</h4>
+            <a href="privacy.html" data-i18n="footer.link_privacy">Privacidad</a>
+            <a href="terms.html" data-i18n="footer.link_terms">Términos</a>
         </div>
     </div>
     <div class="footer-bottom">
