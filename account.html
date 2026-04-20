@@ -10,7 +10,55 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="i18n.js"></script>
+    <style>
+        .account-page { max-width: 560px; margin: 0 auto; padding: 40px 24px 80px; }
+        .account-card { background: var(--card-bg,#fff); border: 1px solid var(--border,#e5e5e5); border-radius: 14px; padding: 24px; margin-bottom: 16px; }
+        .account-card h3 { font-size: 15px; font-weight: 600; margin: 0 0 4px; }
+        .account-card p  { font-size: 14px; color: #666; margin: 0 0 16px; line-height: 1.5; }
+        .field-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+        .field-group label { font-size: 13px; font-weight: 500; color: #444; }
+        .field-group input { border: 1px solid #ddd; border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit; width: 100%; box-sizing: border-box; outline: none; transition: border-color .15s; }
+        .field-group input:focus { border-color: #007AFF; }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; border: none; cursor: pointer; font-family: inherit; transition: opacity .15s; text-decoration: none; }
+        .btn:disabled { opacity: .5; cursor: not-allowed; }
+        .btn-primary   { background: #007AFF; color: #fff; }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-danger    { background: #FF3B30; color: #fff; }
+        .btn-full      { width: 100%; justify-content: center; }
+        .btn-small     { padding: 6px 14px; font-size: 13px; }
+        .tabs { display: flex; gap: 4px; background: #f0f0f0; padding: 4px; border-radius: 10px; margin-bottom: 16px; }
+        .tab { flex: 1; padding: 7px; border-radius: 7px; border: none; background: transparent; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; color: #666; transition: all .15s; }
+        .tab.active { background: #fff; color: #000; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+        .status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge-green  { background: rgba(52,199,89,.12);  color: #28a745; }
+        .badge-orange { background: rgba(255,149,0,.12);  color: #d97706; }
+        .badge-red    { background: rgba(255,59,48,.12);  color: #dc2626; }
+        .badge-gray   { background: rgba(0,0,0,.06);      color: #666; }
+        .info-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+        .info-row:last-child { border-bottom: none; }
+        .info-row .lbl { color: #666; }
+        .info-row .val { font-weight: 500; }
+        .error-msg   { background: rgba(255,59,48,.08); color: #dc2626; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
+        .success-msg { background: rgba(52,199,89,.08);  color: #28a745; border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 12px; }
+        .separator { display: flex; align-items: center; gap: 12px; margin: 14px 0; color: #aaa; font-size: 13px; }
+        .separator::before, .separator::after { content: ''; flex: 1; height: 1px; background: #eee; }
+        #auth-section, #dashboard-section { display: none; }
+        #auth-section.visible, #dashboard-section.visible { display: block; }
+        .page-hero { padding: 60px 24px 24px; text-align: center; }
+        .page-hero h1 { font-size: 32px; font-weight: 800; margin: 0 0 8px; }
+        .page-hero p  { font-size: 16px; color: #666; margin: 0; }
+        @media (prefers-color-scheme: dark) {
+            .account-card { background: #1c1c1e; border-color: #333; }
+            .account-card p { color: #999; }
+            .field-group input { background: #2c2c2e; border-color: #444; color: #fff; }
+            .field-group label { color: #aaa; }
+            .btn-secondary { background: #2c2c2e; color: #eee; }
+            .tabs { background: #2c2c2e; }
+            .tab.active { background: #3a3a3c; color: #fff; }
+            .info-row { border-color: #2c2c2e; }
+            .info-row .lbl { color: #888; }
+        }
+    </style>
 </head>
 <body data-page="account">
 
@@ -24,119 +72,127 @@
             </svg>
             From
         </a>
-        <button class="mobile-menu-btn" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu">
-            <span></span><span></span><span></span>
-        </button>
         <div class="nav-links">
-            <a href="index.html#features" data-i18n="nav.features">Funciones</a>
-            <a href="index.html#sync" data-i18n="nav.sync">Sync</a>
-            <a href="index.html#ai" data-i18n="nav.ai">IA</a>
-            <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
-            <a href="support.html" data-i18n="nav.support">Soporte</a>
-            <select class="lang-select" id="lang-select" onchange="setLang(this.value)" aria-label="Language"><option value="es">Español</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="zh">中文</option><option value="ja">日本語</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ko">한국어</option></select>
-            <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
+            <a href="pricing.html">Precios</a>
+            <a href="support.html">Soporte</a>
+            <a href="index.html#download" class="btn-nav">Descargar</a>
         </div>
     </div>
 </nav>
 
-<!-- Hero -->
 <div class="page-hero">
-    <h1 data-i18n="account.hero_title">Gestiona tu cuenta</h1>
-    <p data-i18n="account.hero_subtitle">Administra tu suscripción, facturación y configuración de From desde aquí o directamente desde la app.</p>
+    <h1>Mi cuenta</h1>
+    <p>Gestiona tu suscripción, tokens y configuración de From.</p>
 </div>
 
-<!-- Account sections -->
-<section class="section" style="padding-top: 0;">
-    <div class="account-grid">
+<div class="account-page">
 
-        <!-- Subscription -->
+    <!-- ── LOGIN / REGISTRO ─────────────────────────────────────── -->
+    <div id="auth-section">
         <div class="account-card">
-            <div class="card-icon" style="background: rgba(74,144,217,0.1); color: var(--accent);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <h3>Accede a tu cuenta</h3>
+            <p>Inicia sesión para gestionar tu plan, tokens y configuración.</p>
+
+            <div class="tabs">
+                <button class="tab active" id="tab-login" onclick="switchTab('login')">Iniciar sesión</button>
+                <button class="tab" id="tab-register" onclick="switchTab('register')">Crear cuenta</button>
             </div>
-            <h3 data-i18n="account.sub_title">Suscripción</h3>
-            <p data-i18n="account.sub_body">Gestiona tu plan, cambia de suscripción mensual a anual, o cancela en cualquier momento.</p>
-            <a href="#" class="btn-secondary btn-small" id="manage-subscription" data-i18n="account.sub_btn">Gestionar suscripción</a>
+
+            <div id="auth-error"   class="error-msg"   style="display:none"></div>
+            <div id="auth-success" class="success-msg" style="display:none"></div>
+
+            <div class="field-group">
+                <label>Email</label>
+                <input type="email" id="login-email" placeholder="tu@email.com" autocomplete="email">
+            </div>
+            <div class="field-group" id="pw-group">
+                <label>Contraseña</label>
+                <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+            </div>
+
+            <button class="btn btn-primary btn-full" id="auth-btn" onclick="submitAuth()" style="margin-bottom:10px">
+                Iniciar sesión
+            </button>
+            <button class="btn btn-secondary btn-full" id="forgot-btn" onclick="forgotPassword()">
+                ¿Olvidaste la contraseña?
+            </button>
+        </div>
+    </div>
+
+    <!-- ── DASHBOARD ────────────────────────────────────────────── -->
+    <div id="dashboard-section">
+
+        <!-- Cabecera -->
+        <div class="account-card">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+                <div style="width:44px;height:44px;border-radius:50%;background:rgba(0,122,255,.1);display:flex;align-items:center;justify-content:center;font-size:22px">👤</div>
+                <div style="flex:1;min-width:0">
+                    <div style="font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="user-email"></div>
+                    <div style="font-size:13px;color:#666;margin-top:2px" id="plan-label"></div>
+                </div>
+                <button class="btn btn-secondary btn-small" onclick="logout()">Salir</button>
+            </div>
+
+            <div class="info-row">
+                <span class="lbl">Suscripción</span>
+                <span id="sub-badge"></span>
+            </div>
+            <div class="info-row" id="renews-row" style="display:none">
+                <span class="lbl">Próxima renovación</span>
+                <span class="val" id="renews-val"></span>
+            </div>
+            <div class="info-row" id="license-row" style="display:none">
+                <span class="lbl">Licencia</span>
+                <span id="license-badge"></span>
+            </div>
+            <div class="info-row" id="tokens-row" style="display:none">
+                <span class="lbl">Tokens disponibles</span>
+                <span class="val" id="tokens-val"></span>
+            </div>
         </div>
 
-        <!-- Billing -->
+        <!-- Facturación -->
         <div class="account-card">
-            <div class="card-icon" style="background: rgba(52,199,89,0.1); color: var(--green);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            <h3>Facturación y plan</h3>
+            <p>Gestiona facturas y método de pago. Para cancelar la suscripción usa el botón de abajo.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <a href="https://app.lemonsqueezy.com/billing" target="_blank" class="btn btn-secondary">Ver facturas ↗</a>
+                <button class="btn btn-danger btn-small" id="cancel-btn" onclick="cancelSubscription()" style="display:none">
+                    Cancelar suscripción
+                </button>
             </div>
-            <h3 data-i18n="account.billing_title">Facturación</h3>
-            <p data-i18n="account.billing_body">Consulta tu historial de pagos, descarga facturas y actualiza tu método de pago.</p>
-            <a href="#" class="btn-secondary btn-small" id="manage-billing" data-i18n="account.billing_btn">Ver facturas</a>
+            <div id="cancel-error" class="error-msg" style="display:none;margin-top:12px;margin-bottom:0"></div>
         </div>
 
-        <!-- Tokens -->
-        <div class="account-card">
-            <div class="card-icon" style="background: rgba(255,149,0,0.1); color: var(--orange);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <!-- Cambiar contraseña -->
+        <div class="account-card" id="pw-change-card">
+            <h3>Cambiar contraseña</h3>
+            <div id="pw-error"   class="error-msg"   style="display:none"></div>
+            <div id="pw-success" class="success-msg" style="display:none"></div>
+            <div class="field-group">
+                <label>Contraseña actual</label>
+                <input type="password" id="cur-pw" placeholder="••••••••" autocomplete="current-password">
             </div>
-            <h3 data-i18n="account.tokens_title">Tokens de IA</h3>
-            <p data-i18n="account.tokens_body">Consulta tu balance de tokens desde la app en Ajustes → IA. Compra tokens adicionales cuando lo necesites.</p>
-            <a href="#" class="btn-secondary btn-small" data-i18n="account.tokens_btn">Comprar tokens</a>
+            <div class="field-group">
+                <label>Nueva contraseña</label>
+                <input type="password" id="new-pw" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+            </div>
+            <div class="field-group">
+                <label>Confirmar nueva contraseña</label>
+                <input type="password" id="confirm-pw" placeholder="Repite la contraseña" autocomplete="new-password">
+            </div>
+            <button class="btn btn-primary" onclick="changePassword()">Guardar contraseña</button>
         </div>
 
-        <!-- License -->
+        <!-- Eliminar cuenta -->
         <div class="account-card">
-            <div class="card-icon" style="background: rgba(88,86,214,0.1); color: var(--indigo);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <h3 data-i18n="account.license_title">Licencia</h3>
-            <p data-i18n="account.license_body">Activa tu licencia perpetua desde la app en Ajustes → Cuenta. Introduce el código que recibiste por email.</p>
-            <a href="pricing.html" class="btn-secondary btn-small" data-i18n="account.license_btn">Ver planes</a>
-        </div>
-
-        <!-- API Keys -->
-        <div class="account-card">
-            <div class="card-icon" style="background: rgba(175,82,222,0.1); color: var(--purple);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-            </div>
-            <h3 data-i18n="account.apikeys_title">API Keys</h3>
-            <p data-i18n="account.apikeys_body">Configura tus API keys de Anthropic, OpenAI o Google en la app: Ajustes → IA → Modo manual.</p>
-            <p class="account-desc" style="margin-top: 8px; font-size: 13px;" data-i18n="account.apikeys_note">Las API keys se almacenan solo en tu Mac, nunca en nuestros servidores.</p>
-        </div>
-
-        <!-- Delete account -->
-        <div class="account-card">
-            <div class="card-icon" style="background: rgba(255,59,48,0.1); color: var(--red);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-            </div>
-            <h3 data-i18n="account.delete_title">Eliminar cuenta</h3>
-            <p data-i18n="account.delete_body">Elimina tu cuenta y todos los datos asociados en nuestro servidor. Tus notas locales no se ven afectadas — siguen siendo archivos en tu Mac.</p>
-            <a href="mailto:hola@getfrom.app?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta" class="btn-danger btn-small" data-i18n="account.delete_btn">Solicitar eliminación</a>
+            <h3>Eliminar cuenta</h3>
+            <p>Elimina tu cuenta y todos los datos del servidor. Tus notas son archivos locales en tu Mac y no se ven afectadas.</p>
+            <div id="delete-error" class="error-msg" style="display:none"></div>
+            <button class="btn btn-danger btn-small" onclick="confirmDelete()">Eliminar mi cuenta</button>
         </div>
 
     </div>
-</section>
-
-<!-- Info section -->
-<div class="section-alt">
-    <section class="section" style="padding-top: 0; padding-bottom: 0;">
-        <div class="section-header">
-            <h2 data-i18n="account.info_title">Información importante</h2>
-        </div>
-        <div class="faq" style="max-width: 700px; margin: 0 auto;">
-            <div class="faq-item">
-                <h3 data-i18n="account.info1_q">Tu cuenta y tus notas son cosas diferentes</h3>
-                <p data-i18n-html="account.info1_a">Tu cuenta de From gestiona la suscripción, tokens y acceso a la IA gestionada. Tus notas son archivos Markdown en tu Mac. Eliminar tu cuenta <strong>no</strong> elimina tus notas — esos archivos siguen siendo tuyos, en tu disco.</p>
-            </div>
-            <div class="faq-item">
-                <h3 data-i18n="account.info2_q">Gestión desde la app</h3>
-                <p data-i18n="account.info2_a">La mayoría de opciones de cuenta están disponibles directamente en From: Ajustes → Cuenta. Desde ahí puedes ver tu plan, balance de tokens, activar licencias y configurar API keys.</p>
-            </div>
-            <div class="faq-item">
-                <h3 data-i18n="account.info3_q">Pagos procesados por LemonSqueezy</h3>
-                <p data-i18n="account.info3_a">Los pagos se procesan de forma segura a través de LemonSqueezy. No almacenamos datos de tarjeta. Puedes gestionar tu método de pago desde el portal del cliente.</p>
-            </div>
-            <div class="faq-item">
-                <h3 data-i18n="account.info4_q">¿Problemas con tu cuenta?</h3>
-                <p data-i18n-html="account.info4_a">Escríbenos a <a href="mailto:hola@getfrom.app">hola@getfrom.app</a> y te ayudaremos lo antes posible.</p>
-            </div>
-        </div>
-    </section>
 </div>
 
 <!-- Footer -->
@@ -150,24 +206,17 @@
                 </svg>
                 From
             </a>
-            <p data-i18n="footer.tagline">Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
+            <p>Tu segundo cerebro. En tu Mac. Solo tuyo.</p>
         </div>
         <div class="footer-col">
-            <h4 data-i18n="footer.col_product">Producto</h4>
-            <a href="index.html#features" data-i18n="footer.link_features">Funciones</a>
-            <a href="pricing.html" data-i18n="footer.link_pricing">Precios</a>
-            <a href="index.html#download" data-i18n="footer.link_download">Descargar</a>
+            <h4>Soporte</h4>
+            <a href="support.html">Centro de ayuda</a>
+            <a href="mailto:hola@getfrom.app">Contacto</a>
         </div>
         <div class="footer-col">
-            <h4 data-i18n="footer.col_support">Soporte</h4>
-            <a href="support.html" data-i18n="footer.link_help">Centro de ayuda</a>
-            <a href="mailto:hola@getfrom.app" data-i18n="footer.link_contact">Contacto</a>
-            <a href="account.html" data-i18n="footer.link_account">Mi cuenta</a>
-        </div>
-        <div class="footer-col">
-            <h4 data-i18n="footer.col_legal">Legal</h4>
-            <a href="privacy.html" data-i18n="footer.link_privacy">Privacidad</a>
-            <a href="terms.html" data-i18n="footer.link_terms">Términos</a>
+            <h4>Legal</h4>
+            <a href="privacy.html">Privacidad</a>
+            <a href="terms.html">Términos</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -175,5 +224,209 @@
     </div>
 </footer>
 
+<script>
+const API = "https://from-server-production.up.railway.app"
+let me = null
+
+// ── Storage ────────────────────────────────────────────────────────────────
+const getAT  = () => localStorage.getItem("from_at")
+const getRT  = () => localStorage.getItem("from_rt")
+const saveTokens = (at, rt) => { localStorage.setItem("from_at", at); if (rt) localStorage.setItem("from_rt", rt) }
+const clearTokens = () => { localStorage.removeItem("from_at"); localStorage.removeItem("from_rt") }
+
+// ── Fetch con refresh automático ───────────────────────────────────────────
+async function req(path, opts = {}) {
+    const res = await fetch(API + path, {
+        ...opts,
+        headers: { "Content-Type": "application/json", ...(getAT() ? { "Authorization": `Bearer ${getAT()}` } : {}), ...(opts.headers ?? {}) },
+    })
+    if (res.status === 401) {
+        const rt = getRT()
+        if (rt) {
+            const rr = await fetch(API + "/auth/refresh", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ refreshToken: rt }) })
+            if (rr.ok) { const d = await rr.json(); saveTokens(d.accessToken, d.refreshToken); return req(path, opts) }
+        }
+        clearTokens(); showAuth(); throw new Error("expired")
+    }
+    return res
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+async function init() {
+    if (getAT() || getRT()) {
+        try {
+            const r = await req("/auth/me")
+            if (r.ok) { const d = await r.json(); me = d.user; showDashboard(); return }
+        } catch {}
+    }
+    showAuth()
+}
+
+// ── Vistas ─────────────────────────────────────────────────────────────────
+function showAuth() {
+    document.getElementById("auth-section").classList.add("visible")
+    document.getElementById("dashboard-section").classList.remove("visible")
+}
+function showDashboard() {
+    document.getElementById("auth-section").classList.remove("visible")
+    document.getElementById("dashboard-section").classList.add("visible")
+    render()
+}
+
+function render() {
+    document.getElementById("user-email").textContent = me.email
+
+    const planMap = {
+        active: "Plan Suscripción · IA integrada",
+    }
+    let plan = "Modo gratuito"
+    if (me.subscriptionStatus === "active") plan = "Plan Suscripción · IA integrada"
+    else if (me.licenseStatus === "active") plan = "Licencia completa · API key"
+    document.getElementById("plan-label").textContent = plan
+
+    const sMap = { active: ["Activa","badge-green"], cancelled: ["Cancelada","badge-orange"], past_due: ["Pago pendiente","badge-red"] }
+    const [sl, sc] = sMap[me.subscriptionStatus] ?? ["Sin suscripción","badge-gray"]
+    document.getElementById("sub-badge").innerHTML = `<span class="status-badge ${sc}">${sl}</span>`
+
+    if (me.subscriptionRenewsAt && me.subscriptionStatus === "active") {
+        const d = new Date(me.subscriptionRenewsAt).toLocaleDateString("es-ES", { day:"numeric", month:"long", year:"numeric" })
+        document.getElementById("renews-row").style.display = "flex"
+        document.getElementById("renews-val").textContent = d
+    }
+
+    if (me.licenseStatus) {
+        document.getElementById("license-row").style.display = "flex"
+        const lm = { active:["Activa","badge-green"], inactive:["Inactiva","badge-gray"], expired:["Expirada","badge-red"] }
+        const [ll, lc] = lm[me.licenseStatus] ?? [me.licenseStatus, "badge-gray"]
+        document.getElementById("license-badge").innerHTML = `<span class="status-badge ${lc}">${ll}</span>`
+    }
+
+    if (me.subscriptionStatus === "active" && me.tokensBalance != null) {
+        document.getElementById("tokens-row").style.display = "flex"
+        document.getElementById("tokens-val").textContent = (me.tokensBalance / 1e6).toFixed(2) + "M tokens"
+    }
+
+    if (me.subscriptionStatus === "active") {
+        document.getElementById("cancel-btn").style.display = "inline-flex"
+    }
+}
+
+// ── Auth ───────────────────────────────────────────────────────────────────
+let tab = "login"
+function switchTab(t) {
+    tab = t
+    document.getElementById("tab-login").classList.toggle("active", t === "login")
+    document.getElementById("tab-register").classList.toggle("active", t === "register")
+    document.getElementById("auth-btn").textContent = t === "login" ? "Iniciar sesión" : "Crear cuenta"
+    document.getElementById("forgot-btn").style.display = t === "login" ? "flex" : "none"
+    hideAuthMsgs()
+}
+
+async function submitAuth() {
+    const email = document.getElementById("login-email").value.trim()
+    const pw    = document.getElementById("login-password").value
+    if (!email || !pw) return
+    hideAuthMsgs()
+    const btn = document.getElementById("auth-btn")
+    btn.disabled = true
+    try {
+        const r = await fetch(API + (tab === "login" ? "/auth/login" : "/auth/register"), {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password: pw }),
+        })
+        const d = await r.json()
+        if (!r.ok) { showAuthError(d.error ?? "Error"); return }
+        saveTokens(d.accessToken, d.refreshToken)
+        me = d.user; showDashboard()
+    } catch { showAuthError("Error de conexión") }
+    finally { btn.disabled = false }
+}
+
+async function forgotPassword() {
+    const email = document.getElementById("login-email").value.trim()
+    if (!email) { showAuthError("Introduce tu email primero"); return }
+    hideAuthMsgs()
+    try {
+        await fetch(API + "/auth/forgot-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) })
+        showAuthSuccess("Si ese email tiene cuenta, recibirás un enlace para restablecer la contraseña.")
+    } catch { showAuthError("Error de conexión") }
+}
+
+function logout() {
+    if (!confirm("¿Cerrar sesión?")) return
+    const rt = getRT()
+    if (rt) req("/auth/logout", { method: "POST", body: JSON.stringify({ refreshToken: rt }) }).catch(() => {})
+    clearTokens(); me = null; showAuth()
+}
+
+// ── Cambiar contraseña ─────────────────────────────────────────────────────
+async function changePassword() {
+    const cur = document.getElementById("cur-pw").value
+    const np  = document.getElementById("new-pw").value
+    const cp  = document.getElementById("confirm-pw").value
+    hidePwMsgs()
+    if (!cur || !np || !cp) { showPwError("Rellena todos los campos"); return }
+    if (np !== cp) { showPwError("Las contraseñas no coinciden"); return }
+    if (np.length < 8) { showPwError("Mínimo 8 caracteres"); return }
+    try {
+        const r = await req("/auth/me", { method: "PUT", body: JSON.stringify({ currentPassword: cur, newPassword: np }) })
+        const d = await r.json()
+        if (!r.ok) { showPwError(d.error ?? "Error"); return }
+        document.getElementById("pw-success").textContent = "Contraseña actualizada."
+        document.getElementById("pw-success").style.display = "block"
+        document.getElementById("cur-pw").value = document.getElementById("new-pw").value = document.getElementById("confirm-pw").value = ""
+    } catch { showPwError("Error de conexión") }
+}
+
+// ── Cancelar suscripción ───────────────────────────────────────────────────
+async function cancelSubscription() {
+    if (!confirm("¿Cancelar suscripción? Perderás el acceso a la IA y al sync al final del período.")) return
+    document.getElementById("cancel-error").style.display = "none"
+    try {
+        const r = await req("/auth/subscription/cancel", { method: "POST" })
+        const d = await r.json()
+        if (d.billingPortalUrl) { window.open(d.billingPortalUrl, "_blank"); return }
+        if (!r.ok || d.ok === false) {
+            document.getElementById("cancel-error").textContent = d.error ?? "Error"
+            document.getElementById("cancel-error").style.display = "block"
+            return
+        }
+        me.subscriptionStatus = "cancelled"; render()
+    } catch {
+        document.getElementById("cancel-error").textContent = "Error de conexión"
+        document.getElementById("cancel-error").style.display = "block"
+    }
+}
+
+// ── Eliminar cuenta ────────────────────────────────────────────────────────
+async function confirmDelete() {
+    const c = prompt('Escribe "ELIMINAR" para confirmar.')
+    if (c !== "ELIMINAR") return
+    document.getElementById("delete-error").style.display = "none"
+    try {
+        const r = await req("/auth/account", { method: "DELETE" })
+        if (!r.ok) { const d = await r.json(); document.getElementById("delete-error").textContent = d.error ?? "Error"; document.getElementById("delete-error").style.display = "block"; return }
+        clearTokens()
+        alert("Cuenta eliminada. Tus notas locales siguen en tu Mac.")
+        showAuth()
+    } catch {
+        document.getElementById("delete-error").textContent = "Error de conexión"
+        document.getElementById("delete-error").style.display = "block"
+    }
+}
+
+// ── UI helpers ─────────────────────────────────────────────────────────────
+function showAuthError(m)   { const e = document.getElementById("auth-error");   e.textContent = m; e.style.display = "block" }
+function showAuthSuccess(m) { const e = document.getElementById("auth-success"); e.textContent = m; e.style.display = "block" }
+function hideAuthMsgs()     { document.getElementById("auth-error").style.display = "none"; document.getElementById("auth-success").style.display = "none" }
+function showPwError(m)     { const e = document.getElementById("pw-error"); e.textContent = m; e.style.display = "block" }
+function hidePwMsgs()       { document.getElementById("pw-error").style.display = "none"; document.getElementById("pw-success").style.display = "none" }
+
+document.addEventListener("keydown", e => {
+    if (e.key === "Enter" && document.getElementById("auth-section").classList.contains("visible")) submitAuth()
+})
+
+init()
+</script>
 </body>
 </html>
