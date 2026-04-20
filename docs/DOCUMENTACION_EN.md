@@ -51,7 +51,7 @@ From works on a folder in iCloud Drive (the "vault") with this structure:
 Centro/                         (vault root)
 ├── Notes/                      (all user notes)
 ├── Journal/                    (daily notes: YYYYMMDD.md)
-├── Areas/                      (areas/roots: main categories)
+├── Raices/                      (areas/roots: main categories)
 ├── Agents/                     (autonomous AI agents)
 ├── Templates/                  (note templates)
 ├── Files/                      (attachments)
@@ -291,7 +291,7 @@ An Area (or Root) is the top-level category in From's hierarchy. Each area:
 - Has its own customizable color
 - Contains notes organized in a tree
 - Has a markdown context field that the AI uses to understand the scope
-- Stored as a `.md` file in the `Areas/` folder
+- Stored as a `.md` file in the `Raices/` folder
 
 ---
 

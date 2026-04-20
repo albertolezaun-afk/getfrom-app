@@ -15,7 +15,7 @@
 - **Local-first, privacidad radical:** Sin servidores obligatorios, sin telemetria, sin lock-in. Las notas son archivos `.md` estandar que funcionan con Obsidian, iA Writer, VS Code o cualquier editor de texto.
 - **Nativo macOS:** Construido en Swift y SwiftUI. Rendimiento nativo, integracion con el sistema (Calendar, Reminders, iCloud Drive, Spotlight).
 - **IA integrada:** Asistente conversacional con contexto completo del vault. Agentes autonomos que trabajan solos.
-- **Organizacion natural:** Jerarquia parent-child flexible sin carpetas rigidas. Areas con colores, tipos personalizables, vistas configurables.
+- **Organizacion natural:** Jerarquia parent-child flexible sin carpetas rigidas. Raices con colores, tipos personalizables, vistas configurables.
 
 **Publico objetivo:**
 - Personas cansadas de apps de notas dependientes de la nube
@@ -51,7 +51,7 @@ From trabaja sobre una carpeta en iCloud Drive (el "vault") con esta estructura:
 Centro/                         (vault raiz)
 ├── Notas/                      (todas las notas del usuario)
 ├── Diario/                     (notas diarias: YYYYMMDD.md)
-├── Areas/                      (areas/raices: categorias principales)
+├── Raices/                      (raices/raices: categorias principales)
 ├── Agentes/                    (agentes autonomos IA)
 ├── Plantillas/                 (plantillas de notas)
 ├── Archivos/                   (archivos adjuntos)
@@ -74,7 +74,7 @@ Al abrir From por primera vez, aparece **VaultPickerView**, un wizard de 2 pasos
 2. **Elegir carpeta:** El usuario selecciona una carpeta en su Mac/iCloud Drive como vault
 
 ### Paso 2: Crear primera Raiz
-Tras seleccionar el vault, From muestra la vista de Raices (SpacesView) con un estado vacio que invita a crear la primera area. Se explica:
+Tras seleccionar el vault, From muestra la vista de Raices (SpacesView) con un estado vacio que invita a crear la primera raiz. Se explica:
 - Cada Raiz tiene su propio color
 - Las notas pertenecen a una Raiz
 - Las Raices dan contexto a la IA
@@ -112,7 +112,7 @@ Secciones fijas de navegacion:
 
 Secciones dinamicas:
 - **Vistas guardadas** — Vistas personalizadas del usuario (kanban, calendario, etc.)
-- **Favoritos** — Notas marcadas como favoritas, agrupadas por area con colores
+- **Favoritos** — Notas marcadas como favoritas, agrupadas por raiz con colores
 - **Recientes** — Las ultimas 3 notas accedidas
 
 ### Zona central (contenido)
@@ -139,7 +139,7 @@ Siempre visible en la parte inferior:
 
 Encima del contenido central:
 - **Titulo** de la seccion o nota actual
-- **Breadcrumb** de navegacion al editar una nota (Area > Padre > Nota)
+- **Breadcrumb** de navegacion al editar una nota (Raiz > Padre > Nota)
 - **Botones de accion rapida:** Nueva nota, Nueva tarea, Tarea rapida, Nuevo evento
 - **Dropdown de agentes manuales:** Para ejecutar agentes sin ir a la seccion
 - **Busqueda global**
@@ -183,7 +183,7 @@ Formas de crear una nota:
 El editor es la pieza central de From. Se compone de:
 
 #### Breadcrumb (parte superior)
-- Muestra la ruta: Area > Padre > ... > Nota actual
+- Muestra la ruta: Raiz > Padre > ... > Nota actual
 - Cada nivel es clickable para navegar
 - Titulo editable inline (click para renombrar)
 - Boton + para crear nota hija
@@ -218,9 +218,9 @@ Aparece cuando la nota tiene tipo "activa":
 - Autoguardado con debounce de 800ms
 
 #### Panel izquierdo (arbol, colapsable)
-- Vista jerarquica de notas bajo el area actual
+- Vista jerarquica de notas bajo el raiz actual
 - Nodos expandibles/colapsables
-- Color del area
+- Color del raiz
 - Indicadores de estado (verde = activa, naranja = futuro)
 - Click para navegar entre notas
 - **Oculto en proyectos** (reemplazado por columna de tareas/notas/refs)
@@ -333,15 +333,15 @@ gdoc_account: email@gmail.com
 
 ### Jerarquia parent-child
 
-El sistema usa un unico campo `parent:` para definir la jerarquia. No hay campo `area:`.
+El sistema usa un unico campo `parent:` para definir la jerarquia. No hay campo `raiz:`.
 
 - El `parent:` es siempre el padre directo inmediato
-- El area se resuelve subiendo la cadena de padres hasta encontrar un archivo en `Areas/`
+- El raiz se resuelve subiendo la cadena de padres hasta encontrar un archivo en `Raices/`
 - Una nota puede estar a cualquier profundidad
 
 Ejemplo:
 ```
-Areas/coding.md                         (area raiz, sin parent)
+Raices/coding.md                         (raiz raiz, sin parent)
   └─ Notas/From — Nota principal.md     (parent: coding)
       └─ Notas/From — Plugin.md         (parent: From — Nota principal)
           └─ Notas/From — Plugin API.md  (parent: From — Plugin)
@@ -392,13 +392,13 @@ Panel dividido en 2 columnas:
 **Columna izquierda (320px) — Lista de tareas:**
 
 Filtros disponibles:
-- **Por area:** Pills de colores, click para filtrar por area
+- **Por raiz:** Pills de colores, click para filtrar por raiz
 - **Por estado:** Pills con 3 estados (ninguno/incluir/excluir)
 - **Por padre:** Filtro por nota padre
 - **Completadas:** Toggle para mostrar/ocultar tareas completadas
 - **Con fecha:** Pill que muestra cuantas tareas tienen fecha
 
-Las tareas se agrupan por Area > Padre. Dentro de cada grupo, se ordenan por fecha limite (mas cercana primero). Cada fila muestra:
+Las tareas se agrupan por Raiz > Padre. Dentro de cada grupo, se ordenan por fecha limite (mas cercana primero). Cada fila muestra:
 - Indicador de estado (circulo lleno/vacio)
 - Titulo
 - Hover: boton propiedades, favorito, eliminar
@@ -465,38 +465,38 @@ From ofrece 4 vistas temporales que combinan notas con fecha y eventos de Apple 
 
 ---
 
-## Areas / Raices
+## Raices / Raices
 
-### Que es un Area
+### Que es un Raiz
 
-Un Area (o Raiz) es la categoria de nivel superior en la jerarquia de From. Cada area:
+Un Raiz (o Raiz) es la categoria de nivel superior en la jerarquia de From. Cada raiz:
 - Tiene su propio color personalizable
 - Contiene notas organizadas en arbol
 - Tiene un campo de contexto en markdown que la IA usa para entender el ambito
-- Se almacena como archivo `.md` en la carpeta `Areas/`
+- Se almacena como archivo `.md` en la carpeta `Raices/`
 
 ### Vista de Raices (SpacesView)
 
-**Grid de areas:**
+**Grid de raices:**
 - Tarjetas responsivas (240-420px)
 - Cada tarjeta muestra: icono de color, nombre, numero de notas, tareas activas
 - Click abre la vista detalle
 
-**Vista detalle de area:**
+**Vista detalle de raiz:**
 - **Propiedades:** Nombre editable, selector de color, campo de contexto (markdown para IA), boton eliminar
-- **Panel izquierdo:** Arbol jerarquico de notas del area
+- **Panel izquierdo:** Arbol jerarquico de notas del raiz
 - **Panel derecho:** Editor de la nota seleccionada
 
-### Crear un area
+### Crear un raiz
 1. Click en "Crear mi primera Raiz" (estado vacio) o boton + en la vista de raices
 2. Asignar nombre y color
 3. Escribir contexto opcional (la IA lo usara)
 
-### Renombrar un area
-Al renombrar un area, From actualiza automaticamente el campo `parent:` de todas las notas hijas.
+### Renombrar un raiz
+Al renombrar un raiz, From actualiza automaticamente el campo `parent:` de todas las notas hijas.
 
-### Eliminar un area
-Al eliminar un area, las notas hijas se "huerfanan" (no se eliminan, simplemente pierden su parent).
+### Eliminar un raiz
+Al eliminar un raiz, las notas hijas se "huerfanan" (no se eliminan, simplemente pierden su parent).
 
 ---
 
@@ -542,7 +542,7 @@ Se crean desde el editor y filtran las notas hijas de la nota actual.
 ### Busqueda Spotlight (Cmd+O)
 - Modal centrado estilo Spotlight de macOS (480x520px)
 - Busqueda instantanea en titulo y contenido
-- Pills de area para filtrar rapidamente
+- Pills de raiz para filtrar rapidamente
 - Resultados clickables para navegar directamente
 
 ### Busqueda global (GlobalSearchPanel)
@@ -617,7 +617,7 @@ El sistema selecciona automaticamente el modelo mas barato con API key activa se
 
 Cuando se abre la pestana Chat en el panel derecho del editor, el chat tiene contexto automatico de:
 - Contenido completo de la nota actual
-- Cadena de ancestors (area > padre > nota)
+- Cadena de ancestors (raiz > padre > nota)
 - Busqueda RAG para contexto relevante del vault
 
 ---
@@ -718,7 +718,7 @@ Un agente es una tarea automatizada que la IA ejecuta de forma autonoma. Cada ag
 - `@hoy` — Nota del diario de hoy
 - `@perfil` — Perfil del usuario
 - `@diario` — Ultimas entradas del diario
-- `@Area` — Un area especifica
+- `@Raiz` — Un raiz especifica
 - `@Nota` — Una nota especifica
 
 **Acciones permitidas:**
@@ -730,7 +730,7 @@ Un agente es una tarea automatizada que la IA ejecuta de forma autonoma. Cada ag
 | crear nota | Crear notas nuevas |
 | fetch_url | Descargar y parsear contenido web |
 | buscar web | Buscar en internet |
-| leer area | Leer contenido de un area |
+| leer raiz | Leer contenido de un raiz |
 | leer perfil | Leer perfil y contexto del usuario |
 | actualizar perfil | Modificar el perfil |
 
@@ -742,7 +742,7 @@ Un agente es una tarea automatizada que la IA ejecuta de forma autonoma. Cada ag
 | Hoy | Nota del diario de hoy |
 | Diario (N) | Ultimas N entradas del diario |
 | Todas las notas | Indice de todas las notas |
-| Area X | Todas las notas de un area |
+| Raiz X | Todas las notas de un raiz |
 | Nota X | Una nota especifica |
 | Nota X + hijas | Una nota y todas sus descendientes |
 
@@ -961,7 +961,7 @@ Cuando iCloud detecta un conflicto:
 - Se ejecutan 10 minutos despues de abrir la app (para no interferir con iCloud sync)
 - Frecuencia: diaria (si han pasado mas de 24h desde el ultimo)
 - Ubicacion: Application Support (no en el vault)
-- Incluyen: Notas, Areas, Diario, Plantillas, Agentes, Archivos
+- Incluyen: Notas, Raices, Diario, Plantillas, Agentes, Archivos
 - Retencion: maximo 10 backups (configurable)
 
 ---
@@ -1101,7 +1101,7 @@ LemonSqueezy gestiona:
 | Termino | Significado |
 |---|---|
 | Vault | Carpeta raiz que contiene todo el contenido del usuario |
-| Raiz / Area | Categoria de nivel superior (ej: trabajo, personal, proyectos) |
+| Raiz / Raiz | Categoria de nivel superior (ej: trabajo, personal, proyectos) |
 | Nota | Archivo .md con frontmatter — unidad basica de contenido |
 | Tarea | Nota con propiedades de tarea (estado, fecha, prioridad) |
 | Tarea rapida | Tarea ligera sin contenido extenso |
@@ -1111,7 +1111,7 @@ LemonSqueezy gestiona:
 | Wikilink | Enlace entre notas: `[[Nombre de nota]]` |
 | Pizarra | Canvas visual para diagramas |
 | Frontmatter | Bloque YAML al inicio de cada nota con propiedades |
-| Parent | Nota o area padre en la jerarquia |
+| Parent | Nota o raiz padre en la jerarquia |
 | Vista | Configuracion de visualizacion (kanban, calendario, lista, etc.) |
 | Taller | Sandbox para depurar agentes y prompts |
 | RAG | Retrieval-Augmented Generation — la IA busca contexto relevante |
@@ -1133,7 +1133,7 @@ LemonSqueezy gestiona:
 | ClaudeAuthService | OAuth PKCE para Claude |
 | ProfileService | Perfil del usuario + contexto + resumen automatico |
 | AgentService | Carga, scheduling y ejecucion de agentes |
-| AreaService | Areas con colores + contexto |
+| RaizService | Raices con colores + contexto |
 | ViewService | Vistas configurables (kanban, etc.) |
 | FileService | Archivos adjuntos con metadata sidecar |
 | BackupService | Snapshots del vault |
@@ -1216,8 +1216,8 @@ LemonSqueezy gestiona:
 - Extraccion automatica de URLs de todas las notas (markdown links + bare URLs) con cache por `modifiedAt`
 - Enlaces manuales añadibles desde la pestaña; persistidos en `enlaces.json` en la raiz del vault (iCloud sync)
 - Overrides por enlace extraido: titulo personalizado, colecciones, ocultar — sin modificar la nota
-- Sidebar colapsable: Todos | Manuales | Colecciones (por area) | Por nota (por area)
-- Toolbar: filtro area, ordenacion, buscador local, boton Añadir enlace
+- Sidebar colapsable: Todos | Manuales | Colecciones (por raiz) | Por nota (por raiz)
+- Toolbar: filtro raiz, ordenacion, buscador local, boton Añadir enlace
 - Fila de enlace: favicon, dominio, descripcion editable inline (Enter guarda), pills Copiar/Abrir
 - `AddLinkSheet`: auto-paste del portapapeles, selector de colecciones con FlowLayout
 - Los enlaces aparecen en Cmd+O y busqueda global con badge "Enlace" azul; seleccionar abre la URL
