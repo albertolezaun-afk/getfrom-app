@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-19 (session 4)
+> Last update: 2026-04-20 (web session)
 
 ---
 
@@ -416,9 +416,11 @@ Optional backend built with TypeScript, Bun, and Hono. Manages authentication, A
 
 | Plan | Price | Includes |
 |---|---|---|
-| Subscription | $7/month | 10M monthly tokens (managed AI) |
-| License | $59 (one-time) | Permanent access (manual mode with own API key) |
-| Top-up | $5 | 5M additional tokens |
+| Free | $0 | All app features without AI |
+| License | $59 (one-time) | Full app + AI with own API key (Anthropic/OpenAI/Google) or Claude OAuth |
+| Subscription | $7/month | Full app + managed AI (10M tokens/month, no API key needed) |
+
+**Important:** License and subscription are exclusive AI modes. Subscription = managed AI only (From handles API keys). License = bring your own API key or Claude OAuth. Modes cannot be mixed.
 
 Payments processed by LemonSqueezy (subscriptions, licenses, license validation, automatic user creation on purchase).
 
@@ -458,6 +460,15 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 ---
 
 ## Changelog
+
+### 2026-04-20 (web session)
+- Website getfrom.app: full i18n system with 9 languages (ES, EN, FR, DE, ZH, JA, PT, IT, KO)
+- Automatic browser language detection, localStorage persistence
+- Language `<select>` dropdown in nav on all pages (replaces EN/ES toggle)
+- Pricing content fixes: plans are exclusive modes (subscription = managed AI, license = own API key)
+- App is free without AI; FAQ and comparison table updated to reflect this accurately
+- Contrast fix: comparison table text now has explicit color in dark mode
+- All changes pushed to GitHub (albertolezaun-afk/getfrom-app)
 
 ### 2026-04-19 (session 4) — Links tab
 - New **Links** tab between Explore and Files in the sidebar

@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-19 (sesion 4)
+> Ultima actualizacion: 2026-04-20 (sesion web)
 
 ---
 
@@ -1041,9 +1041,11 @@ PostgreSQL con Drizzle ORM. Tablas:
 
 | Plan | Precio | Incluye |
 |---|---|---|
-| Suscripcion | 7 euros/mes | 10M tokens mensuales (IA gestionada) |
-| Licencia | 59 USD (unico pago) | Acceso permanente (modo manual con API key propia) |
-| Top-up | 5 euros | 5M tokens adicionales |
+| Gratis | 0 | Todas las funciones de la app sin IA |
+| Licencia | 59 USD (unico pago) | App completa + IA con API key propia (Anthropic/OpenAI/Google) o Claude OAuth |
+| Suscripcion | 7 euros/mes | App completa + IA gestionada (10M tokens/mes, sin API key) |
+
+**Importante:** La suscripcion y la licencia son modos excluyentes. Con suscripcion se usa solo IA gestionada (From gestiona las API keys). Con licencia se usa solo la propia API key o Claude OAuth. No se pueden mezclar modos.
 
 ### Procesador de pagos
 
@@ -1149,6 +1151,15 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
+
+### 2026-04-20 (sesion web)
+- Web getfrom.app: sistema i18n con 9 idiomas (ES, EN, FR, DE, ZH, JA, PT, IT, KO)
+- Deteccion automatica por idioma del navegador, persistencia en localStorage
+- Selector de idioma `<select>` en el nav de todas las paginas (reemplaza toggle ES/EN)
+- Correcciones de contenido en pricing: planes son excluyentes (suscripcion = IA gestionada, licencia = API key propia)
+- App es gratuita sin IA; FAQ y tabla comparativa actualizadas para reflejar esto correctamente
+- Fix contraste: texto de la tabla comparativa en dark mode ahora tiene color explicito
+- Todos los cambios pusheados a GitHub (albertolezaun-afk/getfrom-app)
 
 ### 2026-04-19 (sesion 2)
 - Rediseño estrategico: separacion proyectos / tareas rapidas / notas
