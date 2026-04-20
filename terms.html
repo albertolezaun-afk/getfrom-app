@@ -31,7 +31,7 @@
             <a href="index.html#features" data-i18n="nav.features">Funciones</a>
             <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
             <a href="support.html" data-i18n="nav.support">Soporte</a>
-            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <select class="lang-select" id="lang-select" onchange="setLang(this.value)" aria-label="Language"><option value="es">Español</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="zh">中文</option><option value="ja">日本語</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ko">한국어</option></select>
             <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>

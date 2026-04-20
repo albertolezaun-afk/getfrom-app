@@ -33,7 +33,7 @@
             <a href="index.html#ai" data-i18n="nav.ai">IA</a>
             <a href="pricing.html" data-i18n="nav.pricing">Precios</a>
             <a href="support.html" data-i18n="nav.support">Soporte</a>
-            <button class="btn-lang" onclick="toggleLang()" id="lang-btn">EN</button>
+            <select class="lang-select" id="lang-select" onchange="setLang(this.value)" aria-label="Language"><option value="es">Español</option><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="zh">中文</option><option value="ja">日本語</option><option value="pt">Português</option><option value="it">Italiano</option><option value="ko">한국어</option></select>
             <a href="index.html#download" class="btn-nav" data-i18n="nav.download">Descargar</a>
         </div>
     </div>
@@ -75,7 +75,7 @@
             <div class="pricing-price">&euro;7 <span>/mes</span></div>
             <p class="pricing-period" data-i18n="pricing.sub_period">Cancela cuando quieras</p>
             <ul class="pricing-features">
-                <li class="pricing-feature" data-i18n="pricing.sub_f1">Todo lo de la licencia perpetua</li>
+                <li class="pricing-feature" data-i18n="pricing.sub_f1">Todas las funciones de la app incluidas</li>
                 <li class="pricing-feature" data-i18n="pricing.sub_f2">10 millones de tokens IA/mes incluidos</li>
                 <li class="pricing-feature" data-i18n="pricing.sub_f3">IA gestionada: sin API key, sin configuración</li>
                 <li class="pricing-feature" data-i18n="pricing.sub_f4">Modelos de última generación</li>
@@ -136,12 +136,12 @@
                 <tr>
                     <td data-i18n="pricing.comp_row7">IA con API key propia</td>
                     <td>&check;</td>
-                    <td>&check;</td>
+                    <td>&mdash;</td>
                 </tr>
                 <tr>
                     <td data-i18n="pricing.comp_row8">Conectar suscripción de Claude</td>
                     <td>&check;</td>
-                    <td>&check;</td>
+                    <td>&mdash;</td>
                 </tr>
                 <tr>
                     <td data-i18n="pricing.comp_row9">IA gestionada (sin API key)</td>
@@ -198,7 +198,7 @@
         <div class="faq">
             <div class="faq-item">
                 <h3 data-i18n="pricing.faq1_q">¿Puedo usar From sin pagar?</h3>
-                <p data-i18n="pricing.faq1_a">Puedes descargar From y usarlo con tu propia API key sin ningún pago. La compra de licencia o suscripción desbloquea funciones adicionales y/o IA gestionada.</p>
+                <p data-i18n="pricing.faq1_a">Sí. Puedes descargar From y usar todas sus funciones sin pagar nada — notas, tareas, vistas, proyectos y agentes. La IA requiere un plan: licencia perpetua para usar tu propia API key, o suscripción para IA gestionada sin configurar nada.</p>
             </div>
             <div class="faq-item">
                 <h3 data-i18n="pricing.faq2_q">¿La licencia perpetua incluye actualizaciones?</h3>
@@ -206,7 +206,7 @@
             </div>
             <div class="faq-item">
                 <h3 data-i18n="pricing.faq3_q">¿Qué pasa si cancelo la suscripción?</h3>
-                <p data-i18n="pricing.faq3_a">Sigues usando From con todas sus funciones. Solo pierdes el acceso a la IA gestionada y los tokens incluidos. Puedes seguir usando la IA con tu propia API key.</p>
+                <p data-i18n="pricing.faq3_a">Sigues usando From con todas sus funciones sin IA gestionada. Si quieres seguir usando la IA, puedes adquirir la licencia perpetua y conectar tu propia API key.</p>
             </div>
             <div class="faq-item">
                 <h3 data-i18n="pricing.faq4_q">¿Puedo cambiar de plan?</h3>
