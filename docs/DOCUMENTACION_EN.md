@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-20 (web session)
+> Last update: 2026-04-22
 
 ---
 
@@ -462,6 +462,14 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 ---
 
 ## Changelog
+
+### 2026-04-22
+- Global drag & drop of files from Finder: `BulkImportSheet` popup appears on any window area
+- `BulkImportSheet`: file list, root selector, collection field, note type selector (NoteType)
+- Multi-drop: multiple files at once, same properties applied to all
+- `GlobalDropReceiver` (NSViewRepresentable + AppKit) to bypass SwiftUI `.onDrop` limitations with `NavigationSplitView`
+- `VaultFile` extended with `col` and `noteTipo` fields; sidecar .md writes `col:` and `note_tipo:`
+- `FileService.importFile` accepts new optional params `col` and `noteTipo`
 
 ### 2026-04-21 (session 6)
 - Area chat now has full parity with project chat in `ChatPanel.swift`
