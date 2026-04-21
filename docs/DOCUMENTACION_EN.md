@@ -243,9 +243,10 @@ When a note has `type: project`, it opens in a special 3-column layout:
 - Project status bar: status, start date, end date, progress
 
 #### Right column — AI Chat
-- Chat with automatic context from the project
-- Context always includes: project body, tasks, child notes, refs, fetched URLs
-- Notes created by the AI → automatically become children of the project
+- Chat with automatic context from the project/area
+- Context always includes: body, tasks, child notes, refs, fetched URLs
+- Notes created by the AI → automatically become children of the project/area
+- **Areas have full chat parity with projects** (same behavior in `ChatPanel.swift`)
 
 ---
 
@@ -460,6 +461,14 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 ---
 
 ## Changelog
+
+### 2026-04-21 (session 6)
+- Area chat now has full parity with project chat in `ChatPanel.swift`
+- Context pills hidden in areas (same as projects)
+- Google Drive button hidden in areas (managed via RefsPicker)
+- Session context hidden in areas
+- Automatic area context: body, ancestors, tasks, child notes, refs, URLs, files, collections
+- Dynamic labels "project"/"area" throughout the built context
 
 ### 2026-04-20 (web session)
 - Website getfrom.app: full i18n system with 9 languages (ES, EN, FR, DE, ZH, JA, PT, IT, KO)

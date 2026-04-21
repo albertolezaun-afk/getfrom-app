@@ -264,10 +264,11 @@ Cuando una nota tiene `tipo: proyecto`, se abre en un layout especial de 3 colum
 
 #### Columna derecha — Chat IA
 - Mismo ancho que el editor (50/50 por defecto, ajustable)
-- Sin pills de "Contexto de sesion" (el contexto es automatico desde el proyecto)
+- Sin pills de "Contexto de sesion" (el contexto es automatico desde el proyecto/area)
 - Solo muestra instrucciones permanentes
-- Contexto del chat siempre incluye: body del proyecto, tareas, notas hijas, refs, URLs fetcheadas
-- Notas creadas por la IA → hijas automaticas del proyecto
+- Contexto del chat siempre incluye: body del proyecto/area, tareas, notas hijas, refs, URLs fetcheadas
+- Notas creadas por la IA → hijas automaticas del proyecto/area
+- **Las areas tienen exactamente el mismo comportamiento de chat que los proyectos** (paridad total en `ChatPanel.swift`)
 
 #### Identidad de proyecto
 - `isProject` = `tipos.contains("proyecto")` — especifico, no generico
@@ -1151,6 +1152,16 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
+
+### 2026-04-21 (sesion 6)
+- Chat de area ahora tiene paridad completa con chat de proyecto en `ChatPanel.swift`
+- Pills de contexto ocultas en areas (igual que en proyectos)
+- Boton Google Drive oculto en areas (se gestiona desde RefsPicker)
+- Session context oculto en areas
+- Label de nota vinculada: "Area vinculada al chat" para areas
+- Contexto automatico de area: body, ancestros, tareas, notas hijas, refs, URLs, archivos, colecciones
+- Bloque de tareas/hijos inyectado tambien en historial de chat (modo compacto) para areas
+- Etiquetas dinámicas proyecto/area en todo el contexto construido
 
 ### 2026-04-20 (sesion web)
 - Web getfrom.app: sistema i18n con 9 idiomas (ES, EN, FR, DE, ZH, JA, PT, IT, KO)
