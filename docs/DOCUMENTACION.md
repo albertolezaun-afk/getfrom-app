@@ -880,15 +880,22 @@ Cuando la IA responde o un agente se ejecuta, pueden acceder al perfil para:
 - Configurar estados de tarea personalizados
 - Color e icono por estado
 
-**4. IA**
-- Habilitar/deshabilitar IA
-- Modo: Automatico (suscripcion) / Manual (API key propia)
-- Proveedor: Anthropic, OpenAI, Google
-- API key (en modo manual)
-- Modelo seleccionado
-- Balance de tokens (en modo automatico)
-- Estado de licencia
-- Login OAuth con Claude
+**4. Cuenta** (fusiona antigua pestaña IA)
+- Login / registro en cuenta From
+- Login con Google OAuth
+- Configuracion completa de IA (fusionada aqui):
+  - Toggle IA on/off
+  - Modo: Automatico (suscripcion €7/mes) / Manual (licencia o Claude Pro)
+  - Balance de tokens y recarga (modo Automatico)
+  - Login OAuth con Claude (modo Manual)
+  - Selector de modelo Claude (modo Manual)
+  - Licencia: activar/desactivar license key (modo Manual)
+  - Proveedores multi-API: Anthropic, OpenAI, Google con validacion (modo Manual + licencia)
+  - Busqueda web (Brave Search API key)
+  - Privacidad IA
+- Gestion de plan (link a getfrom.app)
+- Cambiar contrasena, cancelar suscripcion, eliminar cuenta, cerrar sesion
+- Usuarios en modo Manual sin cuenta From ven la config IA en el estado deslogado
 
 **5. Perfil**
 - Editor de profile.md
