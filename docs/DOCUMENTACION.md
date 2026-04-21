@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-22
+> Ultima actualizacion: 2026-04-22 (s2)
 
 ---
 
@@ -242,25 +242,22 @@ Cuando una nota tiene `tipo: proyecto`, se abre en un layout especial de 3 colum
 - Eliminar con context menu
 - Barra de progreso en el header
 
-**Bloque Notas (`ProjectNotesPanel`):**
-- Notas hijas directas del proyecto (parent = titulo del proyecto, sin `tipo: proyecto`)
-- Crear nota inline con el boton +
-- Click → abre la nota en el editor central
-- Fecha relativa de creacion (hoy, ayer, dd MMM)
-- Eliminar con context menu
-- Contenido siempre inyectado en el contexto del chat
+**Bloque Contexto unificado (`ProjectContextPanel`):**
+- Primera fila: siempre la propia nota del proyecto/area (seleccionable, icono `folder.fill`)
+- Notas hijas debajo (parent = titulo del proyecto, sin `tipo: proyecto`), con fecha relativa
+- Refs del frontmatter: notas vinculadas, colecciones, URLs, archivos, Google Docs
+- Seleccion con highlight: click en cualquier fila → cambia la nota activa en el panel central
+- Crear nota hija inline con boton + → se abre automaticamente en el editor central
+- Formato refs en frontmatter `refs:` con prefijos: `col:`, `url:`, `file:`, `gdoc:`
+- Icono de busqueda de vault busca en todos los tipos de archivo (`doc.on.doc`, texto "Vincular elemento…")
+- Eliminar nota con context menu
 
-**Bloque Contexto (`RefsPicker`):**
-- Referencias externas del proyecto: notas vinculadas, colecciones, URLs, archivos, Google Docs
-- Formato en frontmatter `refs:` con prefijos: `col:`, `url:`, `file:`, `gdoc:`
-- Cada ref tiene icono de accion segun tipo (ojo, enlace externo, etc.)
-- Boton para insertar el nombre de la ref en el chat activo
-- URLs: contenido pre-cargado en el contexto del chat (fetch al construir el system prompt)
-
-#### Columna central — Editor
-- Editor Markdown identico al de una nota normal
-- Barra de estado del proyecto: estado, fecha inicio, fecha fin, progreso
-- Banner "Proyecto completado" con boton Reabrir cuando `isDone`
+#### Columna central — Editor (master-detail)
+- Muestra la nota seleccionada en `ProjectContextPanel` (proyecto/area o nota hija)
+- Cuando se selecciona una nota hija: `NoteEditorView(embedded: true, suppressRightPanel: true)` — editor sin panel derecho propio
+- Cuando se selecciona el proyecto/area: editor clasico con `projectStatusBar`/`areaStatusBar`
+- La cabecera (breadcrumb, tipo, coleccion) se suprime para la nota proyecto/area cuando hay nota hija activa — siempre se muestra la cabecera de la nota que esta en el editor
+- Barra de estado del proyecto/area: estado, fecha inicio, fecha fin, progreso (visible solo cuando se edita el proyecto)
 
 #### Columna derecha — Chat IA
 - Columna izquierda y derecha tienen el mismo ancho (25% cada una); editor central ocupa el 50% restante. Todo ajustable con divisores arrastrables.
