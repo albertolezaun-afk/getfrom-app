@@ -227,20 +227,21 @@ When a note has `type: project`, it opens in a special 3-column layout:
 - Date pill with time if assigned
 - Progress bar in header
 
-**Notes block (`ProjectNotesPanel`):**
-- Direct child notes of the project
-- Create inline note with + button
-- Click → opens note in central editor
-- Content always injected into chat context
+**Unified Context block (`ProjectContextPanel`):**
+- First row: the project/area note itself (always visible, selectable, `folder.fill` icon)
+- Child notes below (parent = project title), with relative creation date
+- Frontmatter refs: linked notes, collections, URLs, files, Google Docs
+- Selection highlight: clicking any row changes the active note in the central editor
+- Create child note inline with + → automatically opened in central editor
+- Vault search searches all file types (`doc.on.doc` icon, placeholder "Vincular elemento…")
+- Delete note via context menu
 
-**Context block (`RefsPicker`):**
-- External references: linked notes, collections, URLs, files, Google Docs
-- Frontmatter format `refs:` with prefixes: `col:`, `url:`, `file:`, `gdoc:`
-- URLs: content pre-loaded into chat context
-
-#### Central column — Editor
-- Markdown editor identical to a regular note
-- Project status bar: status, start date, end date, progress
+#### Central column — Editor (master-detail)
+- Shows the note selected in `ProjectContextPanel` (project/area or child note)
+- When a child note is selected: `NoteEditorView(embedded: true, suppressRightPanel: true)` — editor without its own right panel
+- When the project/area is selected: classic editor with `projectStatusBar`/`areaStatusBar`
+- Header (breadcrumb, type, collection) is hidden for the project/area when a child note is active — always shows the header of the note currently in the editor
+- Project/area status bar only visible when editing the project itself
 
 #### Right column — AI Chat
 - Left and right columns have equal width (25% each); center editor takes the remaining 50%. All panels are resizable via draggable dividers.
