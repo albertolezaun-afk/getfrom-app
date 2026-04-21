@@ -243,6 +243,7 @@ When a note has `type: project`, it opens in a special 3-column layout:
 - Project status bar: status, start date, end date, progress
 
 #### Right column — AI Chat
+- Left and right columns have equal width (25% each); center editor takes the remaining 50%. All panels are resizable via draggable dividers.
 - Chat with automatic context from the project/area
 - Context always includes: body, tasks, child notes, refs, fetched URLs
 - Notes created by the AI → automatically become children of the project/area

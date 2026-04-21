@@ -263,7 +263,7 @@ Cuando una nota tiene `tipo: proyecto`, se abre en un layout especial de 3 colum
 - Banner "Proyecto completado" con boton Reabrir cuando `isDone`
 
 #### Columna derecha — Chat IA
-- Mismo ancho que el editor (50/50 por defecto, ajustable)
+- Columna izquierda y derecha tienen el mismo ancho (25% cada una); editor central ocupa el 50% restante. Todo ajustable con divisores arrastrables.
 - Sin pills de "Contexto de sesion" (el contexto es automatico desde el proyecto/area)
 - Solo muestra instrucciones permanentes
 - Contexto del chat siempre incluye: body del proyecto/area, tareas, notas hijas, refs, URLs fetcheadas
