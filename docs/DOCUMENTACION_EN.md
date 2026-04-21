@@ -281,8 +281,8 @@ In From, a task is a note with task properties enabled. Everything is a note. As
 From offers 4 time views that combine dated notes with Apple Calendar events:
 
 - **Day** — Hourly slots, tasks and events positioned at their time, side journal column
-- **Week** — 7 columns (Mon–Sun), undated task sidebar
-- **Month** — Classic monthly grid, click day for detail
+- **Week** — 7 columns (Mon–Sun), undated task sidebar; multi-day notes (with `due` + `due_end` on different days) span across all covered columns in the all-day row
+- **Month** — Classic monthly grid, click day for detail; multi-day notes appear in every day row within their range
 - **Year** — 12 monthly blocks, heatmap-style activity indicators
 
 ---

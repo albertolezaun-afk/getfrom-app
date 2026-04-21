@@ -451,12 +451,14 @@ From ofrece 4 vistas temporales que combinan notas con fecha y eventos de Apple 
 - Cada columna muestra eventos y tareas del dia
 - Sidebar lateral con tareas sin fecha asignada
 - Colores diferenciados: notas (acento) vs calendario (morado)
+- **Soporte multi-dia:** proyectos/notas con `due` (inicio) y `due_end` (fin en otro dia) aparecen en la franja "todo el dia" de cada columna que cubren
 
 ### Vista Mes (MonthTimelineView)
 - Grid mensual clasico
 - Cada celda muestra eventos/tareas del dia
 - Sidebar lateral
 - Click en dia para ver detalle
+- **Soporte multi-dia:** proyectos/notas con `due` y `due_end` en dias distintos aparecen en cada fila del rango
 
 ### Vista Ano (YearTimelineView)
 - 12 bloques mensuales
@@ -799,23 +801,12 @@ Archivos adjuntos almacenados en la carpeta `Archivos/` del vault. Cada archivo 
 
 ### Funcionalidades
 
-- **Importar:** Drag & drop (uno o varios archivos) o boton de importar
+- **Importar:** Drag & drop o boton de importar
 - **Buscar:** Por nombre, descripcion, tags o nota padre
 - **Agrupar:** Por fecha, tipo o nota padre
 - **Metadata:** Descripcion, tags y notas padre editables
 - **Tipos:** PDF, imagen, video, audio, documento, otro (con iconos y colores propios)
 - **Vincular:** Cada archivo puede estar vinculado a multiples notas via "parents"
-
-### Import por drag & drop global
-
-Al arrastrar uno o varios archivos desde Finder sobre cualquier zona de la ventana, aparece un popup `BulkImportSheet` con:
-- Lista visual de los archivos siendo importados (con icono y tipo detectado)
-- Selector de **raiz** (chips de las raices existentes)
-- Campo de **coleccion** (texto libre)
-- Selector de **tipo de nota** (NoteTypes configurados: proyecto, recurso, idea...)
-- Boton "Importar" — guarda todos en `Archivos/` con las propiedades asignadas
-
-La deteccion del drop usa AppKit (`NSDraggingDestination`) via `GlobalDropReceiver` (NSViewRepresentable) para sortear las limitaciones de SwiftUI `.onDrop` con `NavigationSplitView`.
 
 ### Sidecar de metadata
 
@@ -826,8 +817,6 @@ tipo: pdf
 descripcion: Manual de usuario
 tags: documentacion, referencia
 parents: Nota principal, Proyecto X
-col: nombre-coleccion
-note_tipo: recurso
 ---
 ```
 
@@ -1165,14 +1154,6 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
-
-### 2026-04-22
-- Drag & drop global de archivos desde Finder: aparece popup `BulkImportSheet` en cualquier zona de la ventana
-- `BulkImportSheet`: lista de archivos, selector de raiz, campo coleccion, selector de tipo de nota (NoteType)
-- Multi-drop: varios archivos a la vez, mismas propiedades para todos
-- `GlobalDropReceiver` (NSViewRepresentable + AppKit) para sortear limitaciones de SwiftUI `.onDrop` con `NavigationSplitView`
-- `VaultFile` ampliado con campos `col` y `noteTipo`; sidecar .md escribe `col:` y `note_tipo:`
-- `FileService.importFile` acepta nuevos params `col` y `noteTipo` (ambos opcionales)
 
 ### 2026-04-21 (sesion 6)
 - Chat de area ahora tiene paridad completa con chat de proyecto en `ChatPanel.swift`
