@@ -1171,6 +1171,11 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-23 — Rediseño panel derecho + bloque contexto (fixes)
+- Fix: crear nota desde bloque de contexto ahora abre inmediatamente en el editor central (`@MainActor` en Task)
+- Fix: clic en cualquier fila del bloque de contexto abre el elemento — notas en editor central, archivos con app del sistema, URLs/GDocs en navegador
+- `refRow` completamente reescrito: fila principal clicable, xmark y acciones secundarias solo en hover
+
 ### 2026-04-23 — Rediseño panel derecho + bloque contexto
 
 **Panel derecho unificado (NoteEditorView)**

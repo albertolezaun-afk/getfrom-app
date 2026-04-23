@@ -472,6 +472,11 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 - `VaultFile` extended with `col` and `noteTipo` fields; sidecar .md writes `col:` and `note_tipo:`
 - `FileService.importFile` accepts new optional params `col` and `noteTipo`
 
+### 2026-04-23 — Right panel redesign + context block (fixes)
+- Fix: creating a note from the context block now opens it immediately in the central editor (`@MainActor` on Task)
+- Fix: clicking any row in the context block opens the item — notes in central editor, files with system app, URLs/GDocs in browser
+- `refRow` fully rewritten: main row is clickable, xmark and secondary actions only on hover
+
 ### 2026-04-23 — Right panel redesign + context block
 
 **Unified right panel (NoteEditorView)**
