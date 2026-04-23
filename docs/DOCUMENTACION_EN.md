@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-22
+> Last update: 2026-04-23
 
 ---
 
@@ -471,6 +471,28 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 - `GlobalDropReceiver` (NSViewRepresentable + AppKit) to bypass SwiftUI `.onDrop` limitations with `NavigationSplitView`
 - `VaultFile` extended with `col` and `noteTipo` fields; sidecar .md writes `col:` and `note_tipo:`
 - `FileService.importFile` accepts new optional params `col` and `noteTipo`
+
+### 2026-04-23 — Right panel redesign + context block
+
+**Unified right panel (NoteEditorView)**
+- Default tab for regular notes changed from Chat to Index
+- Added `workspace` tab for projects and areas (checklist icon) — shows tasks + context + log stacked
+- `workspace` is the default tab when opening a project or area
+- `projectEditorRow` and `areaEditorRow` rewritten: removed dedicated left panel (tasks/context/log); now use collapsible `RaizTreePanel` like regular notes
+- `projectWorkspacePanel` extracted as shared component used by both project and area
+
+**Simplified compact chat (ChatPanel)**
+- Removed `ContextElementsView` from compact mode — "Session context" bar no longer appears in any note's side panel
+- Permanent instructions moved to `note.text` icon in toolbar (compact popover, highlights purple when instructions are active)
+
+**Redesigned context block (ProjectContextPanel)**
+- Removed mode-switching system (`addMode`) with 6-option menu
+- Single unified field always visible at the bottom: searches notes and auto-detects URLs
+- Pasted URLs (`http...`) added directly on Enter; Google Docs detected by URL pattern
+- No matches: offers inline "Create note" with one click
+- Collections moved to `folder` icon with clickable pills popover (multi-select)
+- `paperclip` icon for file attachment in the same bar
+- `note.text.badge.plus` button in header for direct child note creation
 
 ### 2026-04-21 (session 6)
 - Area chat now has full parity with project chat in `ChatPanel.swift`

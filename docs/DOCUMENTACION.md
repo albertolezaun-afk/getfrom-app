@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-22 (s2)
+> Ultima actualizacion: 2026-04-23
 
 ---
 
@@ -229,9 +229,9 @@ Aparece cuando la nota tiene tipo "activa":
 
 ### Workspace de proyecto (`tipo: proyecto`)
 
-Cuando una nota tiene `tipo: proyecto`, se abre en un layout especial de 3 columnas:
+Cuando una nota tiene `tipo: proyecto`, se abre en un layout de 3 paneles donde el panel derecho tiene tabs adicionales:
 
-#### Columna izquierda — Tareas / Notas / Refs
+#### Panel izquierdo — Arbol colapsable (igual que nota normal)
 
 **Bloque Tareas (`ProjectTaskPanel`):**
 - Las tareas se almacenan en el bloque `tasks:` del frontmatter (no en el body)
@@ -259,13 +259,14 @@ Cuando una nota tiene `tipo: proyecto`, se abre en un layout especial de 3 colum
 - La cabecera (breadcrumb, tipo, coleccion) se suprime para la nota proyecto/area cuando hay nota hija activa — siempre se muestra la cabecera de la nota que esta en el editor
 - Barra de estado del proyecto/area: estado, fecha inicio, fecha fin, progreso (visible solo cuando se edita el proyecto)
 
-#### Columna derecha — Chat IA
-- Columna izquierda y derecha tienen el mismo ancho (25% cada una); editor central ocupa el 50% restante. Todo ajustable con divisores arrastrables.
-- Sin pills de "Contexto de sesion" (el contexto es automatico desde el proyecto/area)
-- Solo muestra instrucciones permanentes
+#### Panel derecho — 4 pestanas
+- **Workspace** (default): ProjectTaskPanel + ProjectContextPanel + ProjectLogPanel apilados verticalmente
+- **Chat**: sin pills de contexto de sesion (el contexto se inyecta automaticamente); instrucciones permanentes via icono en toolbar
+- **Indice**: headings de la nota + conexiones
+- **Historial**: versiones guardadas
 - Contexto del chat siempre incluye: body del proyecto/area, tareas, notas hijas, refs, URLs fetcheadas
 - Notas creadas por la IA → hijas automaticas del proyecto/area
-- **Las areas tienen exactamente el mismo comportamiento de chat que los proyectos** (paridad total en `ChatPanel.swift`)
+- **Las areas tienen exactamente el mismo comportamiento que los proyectos**
 
 #### Identidad de proyecto
 - `isProject` = `tipos.contains("proyecto")` — especifico, no generico
@@ -922,11 +923,22 @@ Cuando la IA responde o un agente se ejecuta, pueden acceder al perfil para:
 - Exportar notas a ZIP
 - Exportar seleccion
 
-**11. Mantenimiento**
-- Version de la app
-- Limpiar cache
-- Optimizar base de datos
-- Gestor de archivos en conflicto (iCloud)
+**11. Mantenimiento** (`MaintenanceSettingsTab.swift`)
+
+Pestaña de auditoría del vault con los siguientes bloques, cada uno con botón verde "mantener" (persiste en UserDefaults) para ocultar items de forma permanente:
+
+- **Tareas sin fecha** — tareas activas (`isNoteTask`) sin `due`. Chips con hover: 📅 asignar fecha (DatePicker gráfico), ⭐ convertir en tarea rápida (due=hoy), ✓ mantener
+- **Eventos y recordatorios antiguos sin contenido** — eventos/recordatorios con >7 días y sin cuerpo
+- **Raíces sin contenido ni notas hijas** — raíces vacías eliminables
+- **Tipos sin usar** — tipos definidos en ajustes no usados en ninguna nota
+- **Notas sin contenido** — excluye proyectos, áreas, tareas y sidecars. Hover: ⚡ tarea rápida, ✓ mantener, 🗑 eliminar. Clic en título abre popup con contenido
+- **Notas huérfanas** — notas regulares (no tareas) sin nota madre. Selector de raíz como pills de colores + buscador. Clic abre popup de contenido
+- **Tareas huérfanas** — tareas activas sin nota madre. Selector incluye raíces + todas las notas del vault
+- **Archivos sin nota madre** — archivos sin sidecar madre. Clic abre popover con preview (imagen grande o texto). Selector de nota madre
+- **Títulos duplicados** — conflictos de wikilinks
+- **Nota madre rota** — nota madre apunta a nota/raíz inexistente. Selector de nueva madre con buscador predictivo
+
+Diseño: ancho máximo 760px en el content area de Ajustes (para todas las pestañas). Sidebar de Ajustes: 320px (igual que columna izquierda de vista Hoy). Hover en filas muestra acciones contextuales.
 
 **12. Taller**
 - Chat de depuracion para agentes y prompts (TallerChatView)
@@ -1158,6 +1170,28 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
+
+### 2026-04-23 — Rediseño panel derecho + bloque contexto
+
+**Panel derecho unificado (NoteEditorView)**
+- Tab por defecto en notas normales cambiado de Chat a Indice
+- Añadido tab `workspace` para proyectos y areas (icono checklist) — muestra tareas + contexto + log apilados
+- Tab `workspace` es el default al abrir un proyecto o area
+- `projectEditorRow` y `areaEditorRow` reescritos: eliminado el panel izquierdo dedicado (tareas/contexto/log); ahora usan `RaizTreePanel` colapsable igual que las notas normales
+- `projectWorkspacePanel` extraido como componente reutilizado por proyecto y area
+
+**Chat compacto simplificado (ChatPanel)**
+- Eliminado `ContextElementsView` del modo compacto — la barra de "Contexto de sesion" ya no aparece en el panel lateral de ninguna nota
+- Instrucciones permanentes movidas a icono `note.text` en el toolbar (popover compacto, se ilumina en morado si hay instrucciones activas)
+
+**Bloque contexto rediseñado (ProjectContextPanel)**
+- Eliminado sistema de modos (`addMode`) con menu de 6 opciones
+- Campo unificado siempre visible en la parte inferior: busca notas y detecta URLs automaticamente
+- URLs pegadas (`http...`) se añaden directamente (Enter); Google Docs detectado por patron de URL
+- Sin coincidencias: ofrece "Crear nota" inline con un clic
+- Colecciones movidas a icono `folder` con popover de pills clicables (multi-seleccion)
+- Icono `paperclip` para adjuntar archivos en la misma barra
+- Boton `note.text.badge.plus` en header para crear nota hija directamente
 
 ### 2026-04-21 (sesion 6)
 - Chat de area ahora tiene paridad completa con chat de proyecto en `ChatPanel.swift`
