@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-23
+> Last update: 2026-04-24
 
 ---
 
@@ -463,6 +463,13 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 ---
 
 ## Changelog
+
+### 2026-04-24 — Editor bug fixes: pasted content, note sync, project child navigation
+
+- **Fix pasted content disappearing:** Race condition in `WebMarkdownEditor.swift` when the WebContent process crashed during paste. The async callback in the ready handler compared editor content against a stale captured value instead of the current `self.parent.text`. Fix: always compare against the live value to decide whether to restore content.
+- **Fix syncNoteFromService reverting user edits:** In `NoteEditorView.swift`, `syncNoteFromService()` reverted the user's `bodyText` because `lastSaveAt = .distantPast` at startup made the time-based guard always pass, and `saveTask == nil` made the pending-save guard also pass. Fix: added `hasLocalBodyChanges` guard — if the local body differs from the last saved content on disk, never revert regardless of timing.
+- **Fix child notes in project missing full UI:** The PROJECT case used a plain `WebMarkdownEditorWithToolbar` with a corrupt binding that destroyed frontmatter. Fix: use `NoteEditorView(embedded: true)` identical to the AREA case, with `.id(note.id)` to force re-creation when switching notes.
+- **Fix navigation between sibling notes in project:** SwiftUI was reusing the embedded `NoteEditorView` when `selectedProjectNote` changed without reinitializing `@State`. Fix 1: `.id(selectedNote.id)` on embedded editors. Fix 2: in `projectWorkspacePanel`, when navigating from an embedded editor use `onNavigate?(target)` instead of `navigatedNote = target` to delegate navigation to the parent.
 
 ### 2026-04-22
 - Global drag & drop of files from Finder: `BulkImportSheet` popup appears on any window area

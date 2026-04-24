@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-23
+> Ultima actualizacion: 2026-04-24
 
 ---
 
@@ -1197,6 +1197,13 @@ LemonSqueezy gestiona:
 - Colecciones movidas a icono `folder` con popover de pills clicables (multi-seleccion)
 - Icono `paperclip` para adjuntar archivos en la misma barra
 - Boton `note.text.badge.plus` en header para crear nota hija directamente
+
+### 2026-04-24 — Fixes editor: contenido pegado, sync de notas y navegacion en proyectos
+
+- **Fix bug contenido pegado desaparece:** Race condition en `WebMarkdownEditor.swift` cuando el WebContent process crasheaba al pegar. El callback async del ready handler comparaba el contenido del editor con un valor capturado obsoleto en lugar del estado actual de `self.parent.text`. Fix: comparar siempre con el valor actual para decidir si hay que restaurar el contenido.
+- **Fix bug syncNoteFromService revertia edicion del usuario:** En `NoteEditorView.swift`, `syncNoteFromService()` revertia el `bodyText` del usuario porque `lastSaveAt = .distantPast` al arrancar hacia que la guarda de tiempo fallara, y `saveTask == nil` hacia que la guarda de tarea pendiente tambien fallara. Fix: nueva guarda `hasLocalBodyChanges` — si el body local difiere del ultimo contenido guardado en disco, nunca revertir independientemente del timing.
+- **Fix bug notas hijas en proyecto sin UI completa:** El bloque PROJECT usaba `WebMarkdownEditorWithToolbar` simple con un binding corrupto que destruia el frontmatter. Fix: usar `NoteEditorView(embedded: true)` identico al caso AREA, con `.id(note.id)` para forzar recreacion al cambiar de nota.
+- **Fix bug navegacion entre notas hermanas en proyecto:** SwiftUI reutilizaba el `NoteEditorView` embebido al cambiar `selectedProjectNote` sin reinicializar el `@State`. Fix 1: `.id(selectedNote.id)` en los embedded editors. Fix 2: en `projectWorkspacePanel`, al navegar desde un editor embebido usar `onNavigate?(target)` en lugar de `navigatedNote = target` para delegar la navegacion al padre.
 
 ### 2026-04-21 (sesion 6)
 - Chat de area ahora tiene paridad completa con chat de proyecto en `ChatPanel.swift`
