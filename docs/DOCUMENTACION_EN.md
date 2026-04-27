@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-27 (session 2)
+> Last update: 2026-04-28
 
 ---
 
@@ -15,7 +15,7 @@
 - **Local-first, radical privacy:** No mandatory servers, no telemetry, no lock-in. Notes are standard `.md` files that work with Obsidian, iA Writer, VS Code, or any text editor.
 - **Native macOS:** Built in Swift and SwiftUI. Native performance with deep system integration (Calendar, Reminders, iCloud Drive, Spotlight).
 - **Integrated AI:** Conversational assistant with full vault context. Autonomous agents that work on their own.
-- **Natural organization:** Flexible parent-child hierarchy without rigid folders. Areas with colors, customizable types, configurable views.
+- **Natural organization:** Flexible parent-child hierarchy without rigid folders. Roots with colors, customizable types, configurable views.
 
 **Target audience:**
 - People tired of cloud-dependent note apps
@@ -49,44 +49,41 @@ From works on a folder in iCloud Drive (the "vault") with this structure:
 
 ```
 Centro/                         (vault root)
-├── Notes/                      (all user notes)
-├── Journal/                    (daily notes: YYYYMMDD.md)
-├── Raices/                      (areas/roots: main categories)
-├── Agents/                     (autonomous AI agents)
-├── Templates/                  (note templates)
-├── Files/                      (attachments)
-├── Collections/                (note collections)
+├── Notas/                      (all user notes)
+├── Diario/                     (daily notes: YYYYMMDD.md)
+├── Raices/                     (roots: top-level categories)
+├── Agentes/                    (AI autonomous agents)
+├── Plantillas/                 (note templates)
+├── Archivos/                   (attachments)
+├── Colecciones/                (note collections)
 └── .from/                      (internal metadata)
     ├── versions/               (version history)
     ├── ai_instructions/        (permanent AI instructions per note)
     └── activity.jsonl          (activity log)
 ```
 
-Each note is a `.md` file with YAML frontmatter that defines its properties.
+Each note is a `.md` file with YAML frontmatter defining its properties.
 
 ---
 
 ## First use — Onboarding
 
 ### Step 1: Welcome screen
-When opening From for the first time, **VaultPickerView** appears — a 2-step wizard:
+On first launch, **VaultPickerView** shows a 2-step wizard:
 1. **Philosophy:** Explains what From is and how it works (local-first, .md files)
-2. **Choose folder:** The user selects a folder in their Mac/iCloud Drive as the vault
+2. **Choose folder:** The user selects a folder in their Mac/iCloud Drive as vault
 
 ### Step 2: Create first Root
-After selecting the vault, From shows the Roots view (SpacesView) with an empty state that invites creating the first area:
-- Each Root has its own color
-- Notes belong to a Root
-- Roots give context to the AI
+After selecting the vault, From shows an empty state that invites the user to create their first root from Settings > Roots.
 
 ### Step 3: Configure AI (optional)
-In Settings > AI, the user can:
+In Settings > Account, the user can:
 - Enable AI
 - Choose automatic mode (From subscription) or manual (own API key)
 - Connect with Claude, OpenAI, or Google
 
 ### Step 4: Create profile (optional)
-In Settings > Profile or through **ProfileWizardView**, the user can create a profile that the AI will use as context to personalize responses.
+In Settings > AI Profile or through **ProfileWizardView**, the user can create a profile that the AI will use as context to personalize responses.
 
 ---
 
@@ -96,58 +93,61 @@ The From interface has 3 main zones:
 
 ### Left sidebar
 
-Fixed navigation sections:
-- **Day** — Current day timeline view
+Fixed navigation sections (in order):
+- **Day** — Timeline view of the current day
 - **Week** — Weekly view with 7 columns
 - **Month** — Monthly view with grid
 - **Year** — Annual view with weekly rows
-- **Tasks** — Dedicated task manager
-- **Notes** — Explorer for all notes
-- **Explore** — Cross-hierarchy collections and types
-- **Links** — URL organizer extracted from notes and manual links
+- **Explore** — Roots, collections and types
+- **Links** — URL organizer extracted from notes and added manually
 - **Files** — Attachment manager
 - **AI** — Chat with the AI assistant
-- **Agents** — Autonomous agent manager
-- **Settings** — App configuration
+- **Settings** — Full configuration (including Agents)
 
-Dynamic sections:
-- **Saved views** — User-created views (kanban, calendar, etc.)
-- **Favorites** — Notes marked as favorites, grouped by area with colors
-- **Recent** — Last 3 accessed notes
+Dynamic sections (shown when they exist):
+- **Views** — User-created custom views (kanban, list, calendar, etc.)
+- **Filters** — Saved filters (legacy)
+- **Favorites** — Notes marked as favorites
 
-### Central area (content)
+> **Agents** are managed from Settings > Agents. The status bar indicator at the bottom also provides quick access to them.
+
+### Central zone (content)
 
 Changes based on the selected sidebar section. Can show:
 - A timeline view (day/week/month/year)
-- The task list
-- The note tree
-- An individual note editor
+- The Explore view (roots, collections, types)
+- The links manager
+- The files manager
 - The AI chat
-- The agent panel
-- Settings
-- A saved view (kanban, calendar, etc.)
+- Full settings
+- A custom view (kanban, calendar, list)
+- An individual note editor
 
 ### Status bar (footer)
 
 Always visible at the bottom:
-- **Agent indicator:** Shows how many agents are active/paused and when the next run is
-- **AI indicator:** Connection status, current model, token balance
-- **Model selector:** Change the active AI model
+- **Agent indicator (left):** Shows how many agents are active/paused, next execution, and a button to review pending agents. Click navigates to Settings > Agents.
+- **AI indicator (right):** Connection status, current model, token balance
+- **Model selector:** Change active AI model
 - **Refresh button:** Manual reload of notes from disk
 
 ### Header bar
 
 Above the central content:
-- **Title** of the current section or note
-- **Breadcrumb** navigation when editing a note (Area > Parent > Note)
-- **Quick action buttons:** New note, New task, Quick task, New event
-- **Manual agents dropdown:** Run agents without going to the agents section
-- **Global search**
-- **History buttons:** Back/Forward
+- **History buttons (left):** Back/Forward
+- **Global search (center):** Real-time search across the entire app
+- **Quick action buttons (right):**
+  - New note (`note.text.badge.plus`)
+  - New project (`Cmd+Shift+P`)
+  - New area
+  - New event
+  - New task (`Cmd+R`)
+  - New custom view
+  - Manual agents dropdown
 
 ### Focus mode
 
-`Cmd+F` hides the sidebar and side panels for distraction-free editing. Toggles with smooth animation.
+`Cmd+F` hides the sidebar and side panels for distraction-free editing. Toggle with smooth animation.
 
 ---
 
@@ -156,14 +156,15 @@ Above the central content:
 | Shortcut | Action |
 |---|---|
 | Cmd+N | New note |
-| Cmd+T | New task |
+| Cmd+R | New task |
 | Cmd+E | New event |
-| Cmd+R | Quick task |
+| Cmd+Shift+P | New project |
 | Cmd+O | Spotlight search |
-| Cmd+F | Focus mode (hide/show panels) |
+| Cmd+F | Focus mode (show/hide panels) |
 | Cmd+Shift+M | Maintenance/Settings |
+| Cmd+? | Open documentation in browser |
 
-Shortcuts are customizable by the user.
+Shortcuts are customizable in Settings > Shortcuts.
 
 ---
 
@@ -174,160 +175,410 @@ Shortcuts are customizable by the user.
 Ways to create a note:
 1. **Cmd+N** from anywhere
 2. **"+" button** in the header
-3. **"+" button** when hovering over a note in the tree (creates child note)
+3. **"+" button** when hovering over a note in the tree (creates a child note)
 4. **From the editor** of another note (+ button in breadcrumb, creates child note)
 5. **From a template** (template menu in the editor)
 
 ### Note editor (NoteEditorView)
 
-The editor is the core of From. It consists of:
+The editor is the central piece of From. It consists of:
 
 #### Breadcrumb (top)
-- Shows the path: Area > Parent > ... > Current note
-- Each level is clickable for navigation
-- Editable title inline (click to rename)
+- Shows the path: Root > Parent > ... > Current note
+- Each level is clickable to navigate
+- Inline editable title (click to rename)
 - + button to create child note
-- Controls (right): date, parent pill, task (circle), favorite (circle), publish (globe circle), Google Docs (circle)
-- Context menu (three dots): Export as Markdown, Export as PDF, Open in Finder, Delete note
+- Controls (right): date, parent, task (circle), favorite (star), publish (globe), Google Docs
+  - All icons: 22x22 circles with subtle background, active/inactive color
+- Context menu (three dots):
+  - Export as Markdown
+  - Export as PDF
+  - Open in Finder
+  - Delete note
 
 #### Type and collection bar
-- **Type:** Multi-select pills to assign types to the note (e.g. project, idea, resource, future). New types can be created on the fly.
-- **Collection (Col):** Assign the note to one or more collections. Option to create a filtered view from the collection.
+- **Type:** Multi-select pills for assigning types to the note (e.g. project, idea, resource, future). New types can be created on the fly. Integrated search.
+- **Collection (Col):** Assign the note to one or more collections.
 
 #### Task properties panel
-Appears when the note has type "active":
-- **Status:** Dropdown with configurable states (pending, in_progress, done, cancelled)
+Appears when the note has `activa: true`:
+- **Status:** Dropdown with configurable statuses (pending, in_progress, done, cancelled)
 - **Due date:** Date picker with or without time
-- **End date:** For notes with a time block
+- **End date:** For notes spanning a time block
 - **Priority:** High, medium, low
-- **Quick task:** Toggle
 - **Recurrence:** Daily, weekly, monthly
 
 #### Markdown editor
-- Rich text editing in Markdown with CodeMirror 6
+- Rich Markdown editing (CodeMirror 6 with WKWebView)
 - Formatting toolbar
 - Wikilinks: `[[Note name]]` to link notes
-- Task checkboxes: `- [ ] text`
-- Agent mentions
+- Inline task checkboxes: `- [ ] Free text` — these tasks appear in the timeline
 - Template insertion
 - Autosave with 800ms debounce
 
+#### Left panel — RaizTreePanel (collapsible)
+- Hierarchical view of notes under the current root
+- Expandable/collapsible nodes with root color
+- Status indicators (green = active, orange = future)
+- Click to navigate between notes
+
+#### Right panel (3 tabs, adjustable width)
+
+**Chat tab:**
+- AI conversation linked to the current note
+- Note context is injected automatically
+- Permanent instructions accessible via `note.text` icon in the toolbar
+- AI modifications are applied live to the editor
+
+**Index tab (default for regular notes):**
+- Note headings — click to jump to section
+- **Connections:**
+  - Editable frontmatter (key-value fields)
+  - Outgoing links (wikilinks)
+  - Incoming links (notes that link to this one)
+  - Tasks grouped by heading
+  - External links (URLs in the content)
+  - AI history
+  - Child notes (max 6)
+
+**History tab:**
+- List of saved versions (reverse chronological)
+- Preview of selected version
+- Restore button (creates safety backup before restoring)
+
 ---
 
-### Project workspace (`type: project`)
+### Project and area workspace (`tipo: proyecto` / `tipo: area`)
 
-When a note has `type: project`, it opens in a special 3-column layout:
+When a note has `tipo: proyecto` or `tipo: area`, it opens in a 3-column workspace layout. The behavior is identical for projects and areas.
 
-#### Left column — Tasks / Notes / Refs
+#### Left column — RaizTreePanel (same as regular note)
 
-**Tasks block (`ProjectTaskPanel`):**
-- Tasks stored in the `tasks:` frontmatter block
-- Create inline tasks (Enter confirms, Esc cancels)
-- Toggle completed with a click
-- Date pill with time if assigned
-- Progress bar in header
+#### Center column — Master-detail editor
+- When a child note is selected: embedded Markdown editor (`embedded: true`) for that note
+- When no child note is selected: editor for the project/area itself
+- The header (breadcrumb, type, collection) always belongs to the note being edited
 
-**Unified Context block (`ProjectContextPanel`):**
-- First row: the project/area note itself (always visible, selectable, `folder.fill` icon)
-- Child notes below (parent = project title), with relative creation date
+#### Right panel — 4 tabs
+
+**Workspace tab (default):**
+
+`ProjectTaskPanel` — Project task block:
+- Tasks stored in the `tasks:` block of the frontmatter (not in the body)
+- Create task inline (Enter confirms, Esc cancels)
+- Toggle completion with one click
+- Date+time assignable via DateTimePickerPopover
+- Progress bar in the header
+
+`ProjectContextPanel` — Unified context block:
+- First row: always the project/area note itself (icon `folder.fill`)
+- Child notes below (parent = project/area title)
 - Frontmatter refs: linked notes, collections, URLs, files, Google Docs
-- Selection highlight: clicking any row changes the active note in the central editor
-- Create child note inline with + → automatically opened in central editor
-- Vault search searches all file types (`doc.on.doc` icon, placeholder "Vincular elemento…")
-- Delete note via context menu
+- Highlight selection: click any row → changes active note in center editor
+- Always-visible search field: searches notes and detects URLs automatically
+  - Pasted URLs (`http...`) are added directly
+  - No matches: offers "Create note" inline
+- Collections icon (`folder`) with clickable pills popover
+- Attachments icon (`paperclip`) to add files
+- `note.text.badge.plus` button to create a child note directly
+- Delete note with context menu
 
-#### Central column — Editor (master-detail)
-- Shows the note selected in `ProjectContextPanel` (project/area or child note)
-- When a child note is selected: `NoteEditorView(embedded: true, suppressRightPanel: true)` — editor without its own right panel
-- When the project/area is selected: classic editor with `projectStatusBar`/`areaStatusBar`
-- Header (breadcrumb, type, collection) is hidden for the project/area when a child note is active — always shows the header of the note currently in the editor
-- Project/area status bar only visible when editing the project itself
+`ProjectLogPanel` — Project activity log.
 
-#### Right column — AI Chat
-- Left and right columns have equal width (25% each); center editor takes the remaining 50%. All panels are resizable via draggable dividers.
-- Chat with automatic context from the project/area
-- Context always includes: body, tasks, child notes, refs, fetched URLs
-- Notes created by the AI → automatically become children of the project/area
-- **Areas have full chat parity with projects** (same behavior in `ChatPanel.swift`)
+**Chat tab:** Same functionality as in regular notes, with automatic context from the project:
+- Body of the project/area
+- Ancestors (root, parents)
+- Tasks from the `tasks:` block
+- Child notes
+- Refs, URLs, files, collections
+
+**Index tab:** Headings + connections of the project.
+
+**History tab:** Saved versions.
+
+#### Project vs area identity
+- `isProject` = `tipos.contains("proyecto")`
+- `isArea` = `tipos.contains("area")`
+- Both open the same workspace layout — behavior is identical
 
 ---
 
-## Tasks
+### Frontmatter
 
-### What is a task in From
+Each note has a YAML block at the beginning of the file:
 
-In From, a task is a note with task properties enabled. Everything is a note. Assigning a type with `defaultActive: true` or manually marking `active: true` gives the note task properties.
+```yaml
+---
+parent: parent-name
+tipo: proyecto, idea
+col: collection1, collection2
+refs: linked-note, url:https://..., file:filename, gdoc:ID
+fav: true
+activa: true
+status: pending
+due: 2026-05-01
+due_end: 2026-05-01 18:00
+priority: high
+created: 2026-01-15
+recurrence: weekly
+evento: true
+apple_id: EVENTKIT_ID
+public_slug: abc12345
+archivado: true
+vista: kanban
+vista_col: status
+vista_group: tipo
+pizarra: true
+gdoc_id: GOOGLE_DOC_ID
+gdoc_account: email@gmail.com
+gdoc_url: https://docs.google.com/...
+---
+```
 
-### Task properties
+Special fields:
+- `archivado: true` — hides the note from main lists without deleting it
+- `tasks:` — special YAML block for project tasks (not a simple field)
+- `chat: true` — indicates the note is an AI conversation
 
-| Property | Values | Description |
-|---|---|---|
-| Status | pending, in_progress, done, cancelled | Current task status |
-| Due date | Date with or without time | When it must be completed |
-| End date | Date with time | For time blocks |
-| Priority | high, medium, low | Urgency level |
-| Recurrence | daily, weekly, monthly, yearly | Automatic repetition |
-| Quick task | true/false | Whether it's a lightweight task |
+### Project tasks (`tasks:`)
 
-### Apple Calendar and Reminders sync
+Project-type notes store their tasks in a `tasks:` block in the frontmatter (type `ProjectTask`), separate from the note body:
 
-- Notes with `event: true` and `due: DATE` sync bidirectionally with Apple Calendar
-- Tasks with `quick: true` sync with Apple Reminders
-- Recurrence is supported (daily, weekly, monthly, yearly)
+```yaml
+tasks:
+  - id: abc123
+    text: Write proposal
+    done: false
+    due: 2026-05-10T10:00
+  - id: def456
+    text: Review with team
+    done: true
+```
+
+These tasks are rendered in the `ProjectTaskPanel` of the workspace and appear in all timeline views (Day, Week, Month, Year) as `InlineTaskChipView`.
+
+### Inline body tasks
+
+Notes can have checkboxes in the Markdown body (`- [ ] text`). These are parsed as `InlineTask` and also appear in timeline views. They are independent from the `ProjectTask` block in the frontmatter.
+
+### Parent-child hierarchy
+
+The system uses a single `parent:` field to define hierarchy. There is no `raiz:` field.
+
+- `parent:` is always the direct immediate parent
+- The root is resolved by traversing the parent chain until reaching a file in `Raices/`
+- A note can be at any depth
+
+Example:
+```
+Raices/coding.md                         (root, no parent)
+  └─ Notas/From — Main note.md          (parent: coding)
+      └─ Notas/From — Plugin.md         (parent: From — Main note)
+          └─ Notas/From — Plugin API.md  (parent: From — Plugin)
+```
+
+### Note types
+
+Types are customizable tags with color. Examples:
+- `proyecto`, `area` — open the 3-column workspace
+- `idea`, `resource`, `future` — regular notes
+- The user can create new types on the fly from the editor or Settings > Types
+- Each type has a `defaultActiva` property that automatically marks notes of that type as active
+
+### Collections
+
+Collections group notes transversally (no hierarchical relationship). A note can belong to multiple collections. From the Explore section you can filter notes by collection.
+
+### Publishing notes
+
+Any note can be published as a public web page:
+1. Globe button in the breadcrumb — click to publish
+2. A short 8-character slug is generated
+3. The note is accessible at `https://from-server-production.up.railway.app/p/SLUG`
+4. URL is copied to clipboard and an alert shows with an option to open in browser
+5. Button turns green when the note is published
+6. **Auto-sync:** changes sync to the server every 30s (debounce, only if content changed)
+7. Click the green button → unpublishes and destroys the URL
+
+### Version history
+
+- From automatically saves a version before each major change
+- Versions are stored in `.from/versions/`
+- Any previous version can be restored
+- On restore, a safety backup of the current state is created
+- Versions are local (not synced via iCloud)
 
 ---
 
 ## Timeline / Calendar
 
-From offers 4 time views that combine dated notes with Apple Calendar events:
+From offers 4 temporal views that combine dated notes, Apple Calendar events, and project tasks.
 
-- **Day** — Hourly slots, tasks and events positioned at their time, side journal column
-- **Week** — 7 columns (Mon–Sun), undated task sidebar; multi-day notes (with `due` + `due_end` on different days) span across all covered columns in the all-day row
-- **Month** — Classic monthly grid, click day for detail; multi-day notes appear in every day row within their range
-- **Year** — 12 monthly blocks, heatmap-style activity indicators
+### Day view (DayTimelineView)
+
+The day view has two zones:
+
+**Left column — Horizontal hourly timeline:**
+- Configurable time slots (start and end hours)
+- Notes with `due` at a specific time positioned in their slot
+- Apple Calendar events at their time
+- Drag to move notes to another hour
+- Resize right edge to adjust duration
+- Current time red line
+- Create task/event inline by clicking an empty slot
+
+**Left column — 3 vertical sections:**
+- **Agenda:** All-day events and notes (no time or multi-day)
+- **Tasks:** Note-tasks and inline project tasks (`InlineTaskChipView`), grouped by parent note. Includes overdue tasks. Click on a task opens its parent note (never a popover).
+- **Today's notes:** Notes created or modified today
+
+**Right panel:** Daily note (`YYYYMMDD.md`) with Markdown editor.
+
+Visibility toggles: Notes / Calendar events / "Go to today" button.
+
+### Week view (WeekTimelineView)
+- 7 columns (Monday to Sunday)
+- Each column shows events and tasks for the day
+- `ProjectsUnscheduledSidebar` on the left with two sections: Overdue (`due < week start`) + No date (`due == nil && isActiva`)
+- Differentiated colors: notes (accent) vs calendar (purple)
+- **Multi-day support:** notes with `due` (start) and `due_end` (end on another day) appear in the "all day" slot of each column they span
+- Inline project tasks (`InlineTaskChipView`) with drag to assign date
+
+### Month view (MonthTimelineView)
+- Classic monthly grid
+- `ProjectsUnscheduledSidebar` sidebar with Overdue + No date
+- Each cell shows events/tasks for the day
+- **Multi-day support** by date range
+- Inline project tasks (`InlineTaskChipView`) with drag `alwaysAllDay: true`
+
+### Year view (YearTimelineView)
+- 12 monthly blocks with weekly rows
+- Heatmap-style activity indicators
+- `ProjectsUnscheduledSidebar` sidebar with Overdue + No date
+- Inline project tasks (`InlineTaskChipView`) with drag
 
 ---
 
-## Areas / Roots
+## Roots
 
-An Area (or Root) is the top-level category in From's hierarchy. Each area:
+### What is a Root
+
+A Root is the top-level category in From's hierarchy. Each root:
 - Has its own customizable color
 - Contains notes organized in a tree
-- Has a markdown context field that the AI uses to understand the scope
-- Stored as a `.md` file in the `Raices/` folder
+- Has a Markdown context field that the AI uses to understand the scope
+- Is stored as a `.md` file in the `Raices/` folder
+
+### Managing Roots
+
+Roots are managed from **Settings > Roots**:
+- Create new root (name + color)
+- Rename (automatically updates `parent:` field of all child notes)
+- Change color
+- Delete (child notes become orphaned — they are not deleted)
+
+### Explore view (ColeccionesView)
+
+The **Explore** section in the sidebar is the entry point to all organized content:
+
+**Explore left sidebar:**
+- List of expandable roots, each with:
+  - Note count
+  - Collections of the root
+  - Note types used in the root
+- Click on root → center panel with root dashboard
+- Click on collection → list of notes in that collection
+- Click on type → list of notes of that type
+
+**Root center panel:**
+- Header: name (double-click to rename), note/collection/type count, "Open note" button
+- Collections section: collection cards with counts
+- Types section: color pills with counts
+
+**Collection/type center panel:**
+- Filtered note list with batch actions (change col/type)
+- Click on note → editor in right panel with collapsed sidebar
 
 ---
 
-## Configurable views
+## Custom views
 
-From allows creating custom views on notes:
+From allows creating custom views over notes. Accessible from the "Views" section in the sidebar.
 
-- **Kanban** — Configurable columns, drag cards between columns
-- **List** — Note list with custom filters and sorting
-- **Calendar** — Notes positioned by date
-- **Cards** — Pinterest/Trello-style card view
-- **Focus** — One note at a time, distraction-free
+### Kanban (KanbanView)
+- Configurable columns (by status, type, priority, etc.)
+- Drag cards between columns
+- Create notes directly in columns
 
-Views can also be embedded inline inside the note editor (inline kanban, list, tabs, calendar).
+### Configurable list (NoteListViewConfig)
+- Note list with custom filters and sorting
+- Configurable visible columns
+
+### Calendar (NoteCalendarView)
+- Calendar view with notes positioned by date
+
+### Cards (NoteCardsView)
+- Card view with content previews
+
+### Focus (NoteFocusView)
+- One note at a time with sequential navigation
+
+### Inline views
+
+Views can be embedded inside a note editor:
+- **Inline Kanban, List, Calendar, Tabs** — filter child notes of the current note
+
+Created from the editor.
 
 ---
 
 ## Search
 
-- **Spotlight search (Cmd+O)** — Centered modal, instant search in title and content, area pills for filtering
-- **Global search** — Bar integrated into the header, real-time results grouped by type
-- **Engine** — SQLite FTS5 for full-text search, also used for RAG (AI searches for relevant context)
+### Spotlight search (Cmd+O)
+- Centered modal in macOS Spotlight style (480x520px)
+- Instant search in title and content
+- Root pills for quick filtering
+- Clickable results to navigate directly
+
+### Global search (header)
+- Bar integrated in the header, always visible
+- Real-time search while typing
+- Results: notes, tasks, files, links
+
+### Search engine
+- SQLite FTS5 for full-text search
+- Automatic indexing when loading notes
+- Also used internally for RAG (the AI searches relevant context in the vault)
 
 ---
 
 ## AI Chat
 
-### Main chat view
+### Main chat view (ChatView)
 
 3-column interface:
-- **Left:** Conversation sidebar with search, linked note selector, + new conversation
-- **Center:** Chat with streaming, Markdown support, @mention support (`@agent`, `@/prompt`, `@note`)
-- **Right:** Linked note panel — editor synced live with chat context, AI can edit it directly
+
+**Left column (280px) — Conversation sidebar:**
+- Search field (filters by title and content)
+- Linked note button: links a note to the conversation
+- Google Drive button (if connected): import documents as context
+- + button for new conversation
+- List of conversations with title, date and associated note
+
+**Center column — Chat (ChatPanel):**
+- User and assistant messages with streaming
+- Markdown support in responses
+- Multi-line input with auto-resize
+- @mention support:
+  - `@agent_name` — Run agent
+  - `@/prompt_name` — Use saved prompt
+  - `@note_name` — Inject note as context
+- Mention popup with keyboard navigation
+
+**Right column (360px) — Linked note panel (collapsible):**
+- Linked note editor
+- Toolbar: Undo, Redo, Open in main editor, Unlink
+- Live sync with the chat context
 
 ### AI modes
 
@@ -348,93 +599,412 @@ Views can also be embedded inline inside the note editor (inline kanban, list, t
 | Anthropic | Claude Sonnet 4.6 | Powerful |
 | Google | Gemini 1.5 Pro | Balanced |
 
+### Contextual chat in the editor
+
+When the Chat tab is opened in the editor's right panel, the chat has automatic context from:
+- Full content of the current note
+- Ancestor chain (root > parent > note)
+- RAG search for relevant context from the vault
+
+In projects and areas, the chat additionally includes: `tasks:` block tasks, child notes, refs, URLs, files, and collections.
+
 ---
 
-## AI Editor
+## AI Editor (AIEditorService)
 
-A special mode where the AI can directly edit the content of a note. The **AISessionBanner** provides controls to undo/redo AI changes, confirm, discard, or toggle the original view. Each note can also have permanent AI instructions stored in `.from/ai_instructions/`.
+### What is AI editor mode
+
+A special mode where the AI can directly edit the content of a note. The AI reads the note, receives instructions from the user, and returns the modified note.
+
+### How it works
+
+1. The user activates AI mode in the editor
+2. The **AISessionBanner** appears with controls:
+   - Undo / Redo AI changes
+   - Confirm changes
+   - Discard changes
+   - Toggle to see original version
+3. The user writes instructions
+4. The AI modifies the note and shows the result
+5. The user confirms or discards
+
+### Permanent instructions
+
+Each note can have permanent AI instructions (stored in `.from/ai_instructions/`). These instructions are applied every time the AI edits that specific note. Configured via the `note.text` icon in the chat toolbar.
 
 ---
 
 ## Autonomous agents
 
-An agent is an automated task that the AI executes autonomously. Each agent has:
-- Instructions (with @mention support for notes, areas, journal, profile)
-- A schedule (manual, daily, weekly, monthly, on-open)
-- Allowed actions (read/create/update notes, fetch URLs, web search, read/update profile)
-- Pre-loaded context sources (profile, journal, all notes, specific area, specific note)
+### What is an agent
 
-Agents run up to 8 turns and log results in their own memory section. From includes 10 predefined templates.
+An agent is an automated task that the AI executes autonomously. Each agent has instructions, an execution schedule, permitted actions and context sources.
+
+### Accessing Agents
+
+Agents are in **Settings > Agents**. You can also:
+- Click the agent indicator in the bottom status bar
+- Use the manual agents dropdown in the header to launch them directly
+
+### Agents view (AgentListView)
+
+**Left column (340px):**
+- Search field
+- Creation menu (three dots):
+  - "From description" (sparkles): Describe in natural language and the AI generates the agent
+  - "Manual": Create blank agent
+  - "From template": Clone a predefined template
+- Agent list with schedule, next execution and actions (Play, Stop, Delete)
+
+**Right column:** Selected agent detail (AgentDetailView)
+
+### Agent configuration (AgentDetailView)
+
+**Schedule:**
+| Type | Description |
+|---|---|
+| Manual | Only runs when the user launches it |
+| Daily | Runs every day at the configured time |
+| Weekly | A specific day of the week at a time |
+| Monthly | A specific day of the month at a time |
+| On open | When From opens (maximum once per hour) |
+
+**Instructions:** Text editor with @mentions:
+- `@today`, `@profile`, `@diary`, `@Root`, `@Note`
+
+**Permitted actions:**
+
+| Action | Description |
+|---|---|
+| read notes | Read note content |
+| update note | Modify or create sections in notes |
+| create note | Create new notes |
+| fetch_url | Download and parse web content |
+| search web | Search the internet |
+| read root | Read content of a root |
+| read profile | Read user profile and context |
+| update profile | Modify the profile |
+
+**Context sources (pre-loaded):**
+
+| Source | Description |
+|---|---|
+| Profile | Content of profile.md and contexto.md |
+| Today | Today's diary note |
+| Diary (N) | Last N diary entries |
+| All notes | Index of all notes |
+| Root X | All notes of a root |
+| Note X | A specific note |
+| Note X + children | A note and all its descendants |
+
+**Manual execution:** Button that executes the agent immediately with optional input.
+
+**Agent memory:** `## Agent memory` section in the .md file where execution logs are saved.
+
+### Agent execution
+
+The execution process:
+1. Context sources are loaded
+2. System prompt is built with instructions and context
+3. Sent to the selected AI model
+4. The AI responds with text and optionally action blocks
+5. Action blocks are parsed and executed
+6. The result is returned to the AI for the next iteration
+7. Repeated up to a maximum of 8 turns
+8. Result is logged in the agent memory
+
+Action block format:
+````
+```from-action
+action: update_note
+title: Note name
+content: New content
+heading: ## Specific section
+```
+````
+
+### Run panel (AgentRunPanel)
+
+Modal dialog when running an agent manually:
+- Multi-line input (required or optional depending on the agent)
+- Voice recording to dictate input
+- Buttons: Cancel (Esc) / Run (Enter)
+
+### Predefined templates
+
+From includes agent templates ready to use for common productivity scenarios.
 
 ---
 
-## Links tab
+## Workshop (TallerChatView)
 
-- Automatic URL extraction from all notes (markdown links + bare URLs)
-- Manual link management, persisted in `links.json` in the vault root
-- Per-link overrides: custom title, collections, hide — without modifying the note
-- Collapsible sidebar: All | Manual | Collections | By note
-- Links appear in Cmd+O and global search with a blue "Link" badge
-- `LinkService` with FTS5 SQLite table for description search
+A workspace in Settings > Workshop for debugging and improving agents and prompts. It's a sandbox where the AI helps refine instructions.
+
+Usage:
+1. Write in the chat with `@agent_name` to load an agent, `@/prompt_name` for a prompt, `@note_name` for a note
+2. The AI analyzes the agent/prompt and suggests improvements
+3. Suggestions include "Apply" and "Discard" buttons
+4. Apply directly updates the agent or prompt
 
 ---
 
-## Canvas
+## Files (ArchivosView)
 
-An infinite visual canvas for diagrams and mind maps. Stored as a note with `canvas: true`. Supports text nodes, arrows, color palette, undo/redo, and export as image.
+Attachments stored in the `Archivos/` folder of the vault. Each file has a `.md` sidecar with metadata.
+
+### Features
+- **Import:** Drag & drop or import button
+- **Search:** By name, description, tags or parent note
+- **Group:** By date, type or parent note
+- **Types:** PDF, image, video, audio, document, other
+- **Link:** Each file can be linked to multiple notes
+
+### Metadata sidecar
+
+```yaml
+---
+tipo: pdf
+descripcion: User manual
+tags: documentation, reference
+parents: Main note, Project X
+---
+```
+
+---
+
+## Canvas / Whiteboard (PizarraView)
+
+Infinite canvas visual space for creating diagrams and mind maps. Stored as a note with `pizarra: true`.
+
+### Features
+- Free drawing surface with zoom/pan
+- Text nodes
+- Arrows/connections between nodes
+- Color palette
+- Configurable line width
+- Undo/Redo
+- Export as image
 
 ---
 
 ## Profile
 
-The profile is information about the user that the AI uses as context:
-- **profile.md** — Name, role, interests, etc.
-- **context.md** — Additional context and AI memory
-- **ProfileWizardView** — Guided wizard to create the profile step by step
+### What is the Profile
+
+The profile is information about the user that the AI uses as context to personalize responses and help agents understand who the user is.
+
+### Components
+- **profile.md** — User data: name, role, interests, etc.
+- **contexto.md** — Additional context and AI memory
+- **ProfileWizardView** — Guided assistant to create the profile step by step
+
+Managed from Settings > AI Profile.
+
+---
+
+## Settings (FromSettingsView)
+
+Settings have a left sidebar with groups and tab selection. Maximum content area width: 760px.
+
+### Group (untitled) — Account
+- **Account** — Login/registration, complete AI configuration:
+  - AI on/off toggle
+  - Mode: Automatic (€7/month subscription) / Manual (license or Claude Pro)
+  - Token balance and top-up (Automatic mode)
+  - Claude OAuth login (Manual mode)
+  - Claude model selector (Manual mode)
+  - License: activate/deactivate license key
+  - Multi-API providers: Anthropic, OpenAI, Google with validation
+  - Web search (Brave Search API key)
+  - AI privacy
+  - Plan management, change password, cancel subscription, delete account
+- **Google** — Google Drive and Google Docs integration:
+  - List of connected Google accounts (multi-account)
+  - Connect/remove account
+  - Target folder for new Google Docs
+
+### Content group
+- **Space** — Vault path, configured folders
+- **Roots** — Create, rename, change color and delete roots
+- **Types** — Create, edit and delete note types (color, name, defaultActiva)
+- **Statuses** — Configure custom task statuses with color and icon
+- **Templates** — Manage note templates from the vault
+- **Calendar** — Visible calendars, reminder lists, sync configuration
+
+### Appearance group
+- **View** — Timeline view configuration (start/end hour, etc.)
+- **Appearance** — Theme: System, Light, Dark
+- **Voice** — Voice recording and transcription configuration
+
+### Artificial Intelligence group
+- **Prompts** — Saved prompt library. Invoked from chat with `@/name`
+- **AI Profile** — profile.md and contexto.md editor; ProfileWizardView
+- **Agents** — Full autonomous agents manager (AgentListView)
+- **Workshop** — Sandbox for debugging agents and prompts (TallerChatView)
+- **Assistant** — Prompt assistant for creating/improving prompts (PromptAssistantTab)
+
+### Productivity group
+- **Shortcuts** — Customizable keyboard shortcuts (ShortcutsSettingsTab)
+
+### Data group
+- **Backup** — Manual/automatic daily backup, maximum backups, restore from backup
+- **Export** — Export notes to ZIP
+- **Import** — Import notes from ZIP or Obsidian vault
+- **Maintenance** — Vault audit:
+  - Tasks without date, old events without content, empty roots
+  - Unused types, notes without content, orphaned notes
+  - Orphaned tasks, files without parent note, duplicate titles
+  - Broken parent note
 
 ---
 
 ## Sync and data
 
-- **iCloud Drive** — Notes are plain `.md` files, synced automatically across devices
-- **CloudKit** — Active change sync with push notifications and conflict resolution
-- **Backups** — Automatic daily backups in Application Support (max 10, configurable)
-- **Conflict resolution** — Most recent timestamp wins; conflicts shown in a banner for manual review
+### iCloud Drive
+- Notes are `.md` files in iCloud Drive
+- Cross-device sync is automatic via iCloud
+- From doesn't depend on its own server for sync
+
+### CloudKit (CloudSyncService)
+- Active change sync (push notifications)
+- Conflict resolution (most recent timestamp wins, 1-second tolerance)
+- Upload with 2-second debounce
+- Record types: "Note" (content) and "File" (assets)
+- On conflict: visible banner with button to go to ConflictsView and resolve
+
+### Automatic backups
+- Run 10 minutes after opening the app
+- Frequency: daily (if more than 24h since last backup)
+- Location: Application Support (not in the vault)
+- Include: Notes, Roots, Diary, Templates, Agents, Files
+- Retention: maximum 10 backups (configurable in Settings > Backup)
 
 ---
 
 ## Backend (from-server)
 
-Optional backend built with TypeScript, Bun, and Hono. Manages authentication, AI tokens, cloud agent execution, payments, and note publishing.
+### Description
 
-**Main endpoints:** `/auth`, `/agents`, `/tokens`, `/webhooks/lemonsqueezy`, `/p/:slug`
+Optional backend built with TypeScript, Bun, and Hono. Manages authentication, AI tokens, note publishing, and payments.
 
-**Database:** PostgreSQL with Drizzle ORM. Tables: users, token_ledger, agent_runs, admin_api_keys, refresh_tokens, public_notes.
+### Main endpoints
 
-**Security:** JWT (HS256), bcryptjs passwords, AES-encrypted API keys, CORS restricted to getfrom.app.
+**Authentication (/auth)**
+- POST /auth/register — Register with email + password
+- POST /auth/login — Login
+- POST /auth/refresh — Token rotation
+- POST /auth/logout — Sign out
+- POST /auth/google — Google OAuth login
+- GET /auth/me — Current user profile
+
+**Agents (/agents)**
+- POST /agents/run — Run agent with context
+- GET /agents/runs — Execution history
+- GET /agents/runs/:id — Execution detail
+
+**Tokens (/tokens)**
+- GET /tokens/balance — User token balance
+- GET /tokens/ledger — Transaction history
+
+**Admin (/admin)**
+- GET /admin/providers — AI provider status
+- PUT /admin/providers/key — Configure API keys
+- PATCH /admin/providers/:provider/toggle — Enable/disable provider
+- GET /admin/users — User list
+- POST /admin/tokens/add — Manual token adjustment
+- POST /admin/users/:id/make-admin — Make admin
+- GET /admin/stats — Usage statistics
+
+**Webhooks (/webhooks)**
+- POST /webhooks/lemonsqueezy — Payment processor
+- POST /webhooks/license-verify — License validation
+- POST /webhooks/checkout-url — Generate payment link
+
+**Public notes (/notes, /p)**
+- POST /notes/publish — Publish note with slug
+- POST /notes/unpublish/:slug — Unpublish
+- GET /p/:slug — Render public note (no auth)
+
+### Database
+
+PostgreSQL with Drizzle ORM. Tables:
+
+| Table | Description |
+|---|---|
+| users | Accounts, subscription, license, token balance |
+| token_ledger | Immutable transaction log |
+| agent_runs | Agent execution history |
+| admin_api_keys | AI provider API keys (AES encrypted) |
+| refresh_tokens | Refresh tokens with 30-day TTL |
+| public_notes | Published notes with slugs |
+
+### Security
+- JWT (HS256) with 15-min access token + 30-day refresh token
+- Passwords hashed with bcryptjs (cost 12)
+- API keys encrypted with AES in the database
+- CORS restricted to getfrom.app and localhost
+- Parameterized queries via Drizzle ORM
 
 ---
 
 ## Business model and pricing
 
+### Plans
+
 | Plan | Price | Includes |
 |---|---|---|
 | Free | $0 | All app features without AI |
-| License | $59 (one-time) | Full app + AI with own API key (Anthropic/OpenAI/Google) or Claude OAuth |
-| Subscription | $7/month | Full app + managed AI (10M tokens/month, no API key needed) |
+| License | $59 USD (one-time) | Full app + AI with own API key (Anthropic/OpenAI/Google) or Claude OAuth |
+| Subscription | €7/month | Full app + managed AI (10M tokens/month, no API key needed) |
 
-**Important:** License and subscription are exclusive AI modes. Subscription = managed AI only (From handles API keys). License = bring your own API key or Claude OAuth. Modes cannot be mixed.
+**Important:** Subscription and license are mutually exclusive modes. With subscription, only managed AI is used (From manages API keys). With license, only the user's own API key or Claude OAuth is used. Modes cannot be mixed.
 
-Payments processed by LemonSqueezy (subscriptions, licenses, license validation, automatic user creation on purchase).
+### Payment processor
+
+LemonSqueezy manages:
+- Subscription lifecycle (creation, renewal, cancellation)
+- Orders (licenses, top-ups)
+- License validation
+- Automatic user creation on purchase
 
 ---
 
 ## Integrations
 
-- **Apple Calendar** — Read/create events, bidirectional sync
-- **Apple Reminders** — Read/create reminders, mark as completed
-- **Google Drive / Google Docs** — Multi-account, two-way note ↔ Doc sync, AI context
-- **Claude OAuth** — Login with Claude Pro/Max subscription via PKCE
+### Apple Calendar
+- Reading calendar events
+- Creating events from From
+- Bidirectional event sync (`evento: true` + `due: DATE`)
+
+### Apple Reminders
+- Reading pending reminders
+- Creating reminders from tasks
+- Mark as complete from From
+- Recurrence support
+
+### Google Drive and Google Docs
+- **Multi-account:** Multiple simultaneous Google accounts
+- **Navigation:** Drive browser from chat (select as AI context)
+- **Per-note sync icon:** In each note's toolbar, icon to link/manage a Google Doc
+  - Unlinked (gray): click to create Doc. If >1 account, popup to choose
+  - Linked (green): dropdown with Open Doc / Copy link / Move to folder / Unlink
+- **Target folder:** Configurable in Settings > Google
+- **Bidirectional note ↔ Google Doc sync:**
+  - **Push:** When saving a note with `gdoc_id`, the Doc is updated automatically (3s debounce)
+  - **Pull:** When opening a note with `gdoc_id`, content is downloaded if the Doc changed
+  - Frontmatter: `gdoc_id` (doc ID) + `gdoc_account` (email) + `gdoc_url` (link)
+- **AI context:** Any Google Doc can be added as chat context
+- **OAuth:** ASWebAuthenticationSession with `drive.file` + `documents` + profile scopes
+- **Conversion:** Google Docs JSON → Markdown (headings, bold, italic, links, lists, strikethrough)
+
+### Google OAuth
+- Login with Google account (no password)
+- Managed in Settings > Account
+
+### Claude OAuth
+- Login with Claude Pro/Max subscription
+- Uses tokens from the user's subscription
+- PKCE flow for security
 
 ---
 
@@ -443,151 +1013,140 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 | Term | Meaning |
 |---|---|
 | Vault | Root folder containing all user content |
-| Root / Area | Top-level category (e.g. work, personal, projects) |
-| Note | .md file with frontmatter — basic unit of content |
-| Task | Note with task properties (status, date, priority) |
-| Quick task | Lightweight task without extensive content |
-| Agent | Automated task that AI executes autonomously |
-| Type | Customizable label to classify notes |
-| Collection | Cross-hierarchy grouping of notes |
+| Root | Top-level category (e.g. work, personal, projects) |
+| Note | .md file with frontmatter — basic content unit |
+| Task | Note with `activa: true` and task properties (status, date, priority) |
+| Project | Note with `tipo: proyecto` — opens 3-column workspace |
+| Area | Note with `tipo: area` — opens the same 3-column workspace |
+| ProjectTask | Project task stored in the `tasks:` frontmatter block |
+| InlineTask | Checkbox in the note body (`- [ ] text`) |
+| Agent | Automated task that the AI executes autonomously |
+| Type | Customizable tag to classify notes |
+| Collection | Transversal grouping of notes (`col:` field) |
 | Wikilink | Link between notes: `[[Note name]]` |
-| Canvas | Visual canvas for diagrams |
-| Frontmatter | YAML block at the start of each note with properties |
-| Parent | Parent note or area in the hierarchy |
+| Whiteboard | Visual canvas for diagrams (note with `pizarra: true`) |
+| Frontmatter | YAML block at the beginning of each note with properties |
+| Parent | Parent note or root in the hierarchy |
 | View | Display configuration (kanban, calendar, list, etc.) |
 | Workshop | Sandbox for debugging agents and prompts |
-| RAG | Retrieval-Augmented Generation — AI searches for relevant context |
+| RAG | Retrieval-Augmented Generation — AI searches relevant context |
 | Token | Unit of measure for AI usage |
 | Slug | Short identifier for public notes |
+| Archived | Note hidden from main lists (`archivado: true`) |
+
+---
+
+## Internal services (technical reference)
+
+| Service | Responsibility |
+|---|---|
+| VaultService | Access to .md files on disk (async actor) |
+| NoteService | Note CRUD, hierarchy tree, Calendar integration |
+| CalendarService | EventKit: events + reminders |
+| SearchService | SQLite FTS5 + RAG |
+| AIService | Multi-provider AI + SSE streaming |
+| AIEditorService | AI editing sessions with history |
+| ClaudeAuthService | PKCE OAuth for Claude |
+| ProfileService | User profile + context + automatic summary |
+| AgentService | Agent loading, scheduling and execution |
+| RaizService | Roots with colors + context |
+| ViewService | Configurable views (kanban, etc.) |
+| FileService | Attachments with metadata sidecar |
+| BackupService | Vault snapshots |
+| CloudSyncService | CloudKit sync |
+| VersionService | Version history (local) |
+| ActivityLogService | JSONL activity log |
+| NavigationHistoryService | Back/forward history |
+| StatusBarService | Status bar notifications |
+| TranscriptionService | Voice to text |
+| GoogleDriveService | Google Drive integration |
+| VaultImporterService | Import external vaults |
+| LicenseService | License validation |
+| LinkService | Link management (SQLite FTS5 `links` table) |
+| FromServerService | Backend API client |
 
 ---
 
 ## Changelog
 
-### 2026-04-24 — Editor bug fixes: pasted content, note sync, project child navigation
+### 2026-04-28 — Dead code cleanup
+- Deleted never-used files: `AreasView.swift`, `TaskListView.swift`, `NewTaskNoteSheet.swift`, `NoteTreeView.swift`, `NoteContextBar.swift`
+- Documentation completely revised and updated to reflect actual code state
 
-- **Fix pasted content disappearing:** Race condition in `WebMarkdownEditor.swift` when the WebContent process crashed during paste. The async callback in the ready handler compared editor content against a stale captured value instead of the current `self.parent.text`. Fix: always compare against the live value to decide whether to restore content.
-- **Fix syncNoteFromService reverting user edits:** In `NoteEditorView.swift`, `syncNoteFromService()` reverted the user's `bodyText` because `lastSaveAt = .distantPast` at startup made the time-based guard always pass, and `saveTask == nil` made the pending-save guard also pass. Fix: added `hasLocalBodyChanges` guard — if the local body differs from the last saved content on disk, never revert regardless of timing.
-- **Fix child notes in project missing full UI:** The PROJECT case used a plain `WebMarkdownEditorWithToolbar` with a corrupt binding that destroyed frontmatter. Fix: use `NoteEditorView(embedded: true)` identical to the AREA case, with `.id(note.id)` to force re-creation when switching notes.
-- **Fix navigation between sibling notes in project:** SwiftUI was reusing the embedded `NoteEditorView` when `selectedProjectNote` changed without reinitializing `@State`. Fix 1: `.id(selectedNote.id)` on embedded editors. Fix 2: in `projectWorkspacePanel`, when navigating from an embedded editor use `onNavigate?(target)` instead of `navigatedNote = target` to delegate navigation to the parent.
+### 2026-04-27 — Sparkle diagnostics
+- Identified issue with v1.2 missing `SUPublicEDKey`, blocking automatic updates
+- Solution: install v1.5 manually; from v1.5 automatic updates work correctly
 
-### 2026-04-22
-- Global drag & drop of files from Finder: `BulkImportSheet` popup appears on any window area
-- `BulkImportSheet`: file list, root selector, collection field, note type selector (NoteType)
-- Multi-drop: multiple files at once, same properties applied to all
-- `GlobalDropReceiver` (NSViewRepresentable + AppKit) to bypass SwiftUI `.onDrop` limitations with `NavigationSplitView`
-- `VaultFile` extended with `col` and `noteTipo` fields; sidecar .md writes `col:` and `note_tipo:`
-- `FileService.importFile` accepts new optional params `col` and `noteTipo`
-
-### 2026-04-23 — Right panel redesign + context block (fixes)
-- Fix: creating a note from the context block now opens it immediately in the central editor (`@MainActor` on Task)
-- Fix: clicking any row in the context block opens the item — notes in central editor, files with system app, URLs/GDocs in browser
-- `refRow` fully rewritten: main row is clickable, xmark and secondary actions only on hover
-
-### 2026-04-23 — Right panel redesign + context block
-
-**Unified right panel (NoteEditorView)**
-- Default tab for regular notes changed from Chat to Index
-- Added `workspace` tab for projects and areas (checklist icon) — shows tasks + context + log stacked
-- `workspace` is the default tab when opening a project or area
-- `projectEditorRow` and `areaEditorRow` rewritten: removed dedicated left panel (tasks/context/log); now use collapsible `RaizTreePanel` like regular notes
-- `projectWorkspacePanel` extracted as shared component used by both project and area
-
-**Simplified compact chat (ChatPanel)**
-- Removed `ContextElementsView` from compact mode — "Session context" bar no longer appears in any note's side panel
-- Permanent instructions moved to `note.text` icon in toolbar (compact popover, highlights purple when instructions are active)
-
-**Redesigned context block (ProjectContextPanel)**
-- Removed mode-switching system (`addMode`) with 6-option menu
-- Single unified field always visible at the bottom: searches notes and auto-detects URLs
-- Pasted URLs (`http...`) added directly on Enter; Google Docs detected by URL pattern
-- No matches: offers inline "Create note" with one click
-- Collections moved to `folder` icon with clickable pills popover (multi-select)
-- `paperclip` icon for file attachment in the same bar
-- `note.text.badge.plus` button in header for direct child note creation
-
-### 2026-04-21 (session 6)
-- Area chat now has full parity with project chat in `ChatPanel.swift`
-- Context pills hidden in areas (same as projects)
-- Google Drive button hidden in areas (managed via RefsPicker)
-- Session context hidden in areas
-- Automatic area context: body, ancestors, tasks, child notes, refs, URLs, files, collections
-- Dynamic labels "project"/"area" throughout the built context
-
-### 2026-04-20 (web session)
-- Website getfrom.app: full i18n system with 9 languages (ES, EN, FR, DE, ZH, JA, PT, IT, KO)
-- Automatic browser language detection, localStorage persistence
-- Language `<select>` dropdown in nav on all pages (replaces EN/ES toggle)
-- Pricing content fixes: plans are exclusive modes (subscription = managed AI, license = own API key)
-- App is free without AI; FAQ and comparison table updated to reflect this accurately
-- Contrast fix: comparison table text now has explicit color in dark mode
-- All changes pushed to GitHub (albertolezaun-afk/getfrom-app)
-
-### 2026-04-19 (session 4) — Links tab
-- New **Links** tab between Explore and Files in the sidebar
-- Automatic URL extraction from all notes with cache by `modifiedAt`
-- Manual links addable from the tab; persisted in `links.json` at vault root
-- Per-link overrides: custom title, collections, hide
-- `LinkService` with FTS5 `links` table in SQLite
-
-### 2026-04-19 (session 4)
-- CodeMirror 6 editor — fix iteration: rendered tables, files as chips, images with persistent resize/align, clickable wikilinks, drag & drop, inline naming for tasks and child notes
-
-### 2026-04-19 (session 3)
-- Collections as workflow: dedicated tab with chat+editor, clickable Resources panel
-- Filters and grouping by collection in Notes tab
-- Vault files (PDFs, etc.) selectable in Session context
-
-### 2026-04-19 (session 2)
-- Strategic redesign: separation of projects / quick tasks / notes
-- Complete project workspace: task column, child notes, refs
-- `ProjectTaskPanel`, `ProjectNotesPanel`, `RefsPicker`
-- Project chat with automatic full context
-
-### 2026-04-27 (session 2) — Web: bilingual docs, dark mode contrast fix
-
-**Help page getfrom.app/docs/:**
-- `landing/docs/index.html`: renders `DOCUMENTACION.md` (ES) or `DOCUMENTACION_EN.md` (EN) via `marked.js`
-- ES/EN language toggle in nav — pill buttons, persists in localStorage, auto-detects browser language
-- Navigable sidebar index with active section highlight on scroll
-
-**App (v1.5 pending release):**
-- "Check for updates…" menu item in From menu (calls Sparkle `checkForUpdates`)
-- "From Help" menu item → opens `https://getfrom.app/docs/` in browser (Cmd+?)
-- `sharedUpdaterController` as global to avoid `mutating getter` error in SwiftUI struct
-
-**Dark mode contrast fix (styles.css):**
-- `--text-secondary-dark` raised from `#8b8b8b` to `#a0a0a0` (~7:1 contrast ratio on dark background)
-- Global `h1, h2, h3, h4 { color: var(--text-dark) }` rule in dark mode — fixes invisible headings
-- 4 scattered `@media (prefers-color-scheme: dark)` blocks → consolidated into one
-- `nav-links.open` on mobile: invalid nested media query → fixed
-- `comparison-table`, `footer-bottom`, `legal-updated`, `privacy-card` → explicit dark colors
-
-### 2026-04-27 — Redesigned timelines, inline tasks, window fix, system improvements
+### 2026-04-27 — Redesigned timelines, inline tasks, window fixes
 
 **Redesigned Timeline views:**
-- `DayTimelineView`: left panel with 3 sections — Agenda (all-day events), Tasks (notes + inline tasks grouped by parent), Today's notes (created today). Clicking a task opens its note dashboard, never a popover.
-- `ProjectsUnscheduledSidebar` rewritten with `periodStart: Date` parameter. Sections: Overdue (`due < periodStart`) + No date (`due == nil && isActiva`). Used in Week, Month and Year views.
+- `DayTimelineView`: left panel with 3 sections — Agenda (all-day events), Tasks (notes + inline tasks grouped by parent), Today's notes (created today). Click on task opens its parent note dashboard, never a popover.
+- `ProjectsUnscheduledSidebar` rewritten with `periodStart: Date` parameter. Sections: Overdue (`due < periodStart`) + No date (`due == nil && isActiva`). Used in Week, Month and Year.
 
 **Inline tasks in all timelines:**
-- Inline project tasks (`ProjectTask`, parsed from `tasks:` frontmatter block) now appear in Day, Week, Month and Year views.
+- Project inline tasks (`ProjectTask`, parsed from `tasks:` in frontmatter) now appear in Day, Week, Month and Year.
 - Render: `InlineTaskChipView` with `.draggable("projecttask||{parentNoteUUID}||{task.text}")`. Tap opens parent note.
 - `ForEach` uses `task.id` (UUID) as identifier, not `task.text`, to avoid collisions with duplicate text.
-- Fix drag to week/month/year: `alwaysAllDay: Bool = false` parameter on `NoteDropTarget`. With `alwaysAllDay: true` the drop doesn't calculate hour from Y position and saves date only.
-- Fix notes with hour before grid start: `isAllDayNote()` in `WeekTimelineView` treats `h < startHour` as all-day.
+- Fix drag to week/month/year: `alwaysAllDay: Bool = false` parameter in `NoteDropTarget`. With `alwaysAllDay: true` the drop doesn't calculate time from Y position and saves only the date.
 
 **System improvements:**
-- Window launches maximized: `WindowScreenConstraint.constrain` calls `window.setFrame(visible, display: true, animate: false)` on every launch. Fixes small startup window and bottom cutoff.
-- "Check for updates…" menu item added to the From menu (after "About"). Calls `sharedUpdaterController.checkForUpdates(nil)`.
-- "From Help" menu item replaced to open `https://getfrom.app/docs/` in the browser (Cmd+?).
-- Documentation page at `getfrom.app/docs/`: renders `DOCUMENTACION.md` with `marked.js`, navigable sidebar index, dark design consistent with the rest of the site.
+- Window starts maximized: `WindowScreenConstraint.constrain` always calls `window.setFrame(visible, display: true, animate: false)` on startup.
+- "Check for updates…" menu added to the From menu (after "About").
+- "From Help" menu opens `https://getfrom.app/docs/` in browser (Cmd+?).
 
-**Releases:** v1.4 (build 5) shipped with timeline changes. v1.5 (build 6) pending with menu and window fixes.
+**Release:** v1.4 (build 5) published. v1.5 (build 6) pending.
 
-### 2026-04-18
-- Complete getfrom.app website deployed on GitHub Pages
-- Note editor migrated to WKWebView + CodeMirror 6 with Live Preview
-- Google Drive / Google Docs integration with multi-account support
-- Collections (`col:`) and configurable views implemented
-- Note publishing end-to-end with auto-sync
-- Document created
+### 2026-04-24 — Editor and child note navigation fixes
+
+**Bug 1: Pasted content disappears**
+- Race condition in WebMarkdownEditor when WebContent process crashes on paste
+- Fix: compare `editorDoc` with `self.parent.text` (current value) instead of captured `content`
+
+**Bug 2: syncNoteFromService reverted user's bodyText**
+- `lastSaveAt = .distantPast` on startup + missing guard for local edits
+- Fix: new guard `hasLocalBodyChanges = bodyText != Self.extractBody(from: lastSavedContent)`
+
+**Bug 3: Child notes in project without full UI**
+- PROJECT case used simple `WebMarkdownEditorWithToolbar` with corrupt binding
+- Fix: replace with `NoteEditorView(note: selectedNote, embedded: true, suppressRightPanel: true)`
+
+**Bug 4: Navigation between sibling notes in project didn't work**
+- SwiftUI reused same embedded `NoteEditorView` without reinitializing `@State`
+- Fix: `.id(selectedNote.id)` on embedded NoteEditorView; `if embedded { onNavigate?(target) }`
+
+### 2026-04-23 — Project/area context panel fixes
+- `ProjectContextPanel.swift`: implemented use of `onNavigate` parameter (previously ignored)
+- `NoteEditorView.swift`: more explicit `selectedNote` binding in `ProjectContextPanel`
+
+### 2026-04-23 — Right panel redesign + context block
+- Default tab in regular notes changed to Index
+- Added `workspace` tab for projects and areas — shows tasks + context + log stacked
+- `workspace` tab is the default when opening a project or area
+- `ProjectContextPanel`: removed `addMode` system, unified always-visible field
+
+### 2026-04-21 — Area/project chat parity
+- Area chat with full parity with project chat in `ChatPanel.swift`
+- Automatic area context: body, ancestors, tasks, child notes, refs, URLs, files, collections
+
+### 2026-04-20 (web session) — Web i18n 9 languages
+- `getfrom.app`: i18n system with 9 languages (ES, EN, FR, DE, ZH, JA, PT, IT, KO)
+- Automatic detection by browser language, persisted in localStorage
+
+### 2026-04-19 (session 4) — Links tab
+- New `Links` tab (`enlaces.json` in vault root)
+- Automatic URL extraction from notes with `modifiedAt` cache
+- `LinkService` with FTS5 `links` table in SQLite
+
+### 2026-04-19 (sessions 1-3) — Project workspace, CodeMirror 6 editor
+- Project workspace: tasks column (frontmatter `tasks:`), child notes, refs
+- `ProjectTaskPanel`, `ProjectContextPanel` (formerly `RefsPicker`)
+- Project chat with automatic context (body + tasks + child notes + refs + URLs)
+- CodeMirror 6 editor: tables, files as chips, images with resize/align, clickable wikilinks, drag & drop
+
+### 2026-04-18 — App foundation
+- Editor migrated from NSTextView to WKWebView + CodeMirror 6
+- Collections (`col:`) and Vista notes (`vista:`)
+- Full Google Drive and Google Docs integration with multi-account support
+- Full `getfrom.app` website on GitHub Pages
+- End-to-end note publishing
+- Toolbar icon redesign: 22x22 circles with subtle background
