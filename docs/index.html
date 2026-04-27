@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentación — From</title>
-    <meta name="description" content="Guía completa de From. Todo lo que necesitas saber para sacar el máximo partido a tu segundo cerebro.">
+    <title>Documentation — From</title>
+    <meta name="description" content="From documentation. Everything you need to get the most out of your second brain.">
     <link rel="icon" type="image/svg+xml" href="../icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -60,6 +60,31 @@
             text-decoration: none; transition: color 0.2s;
         }
         .nav-link:hover { color: var(--text); }
+
+        /* Lang toggle */
+        .lang-toggle {
+            display: flex; align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            font-size: 12px; font-weight: 600;
+        }
+        .lang-btn {
+            padding: 5px 11px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            border: none; background: none;
+            font-size: 12px; font-weight: 600;
+            font-family: inherit;
+        }
+        .lang-btn:hover { color: var(--text); }
+        .lang-btn.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
         .nav-download {
             font-size: 13px; font-weight: 600;
             background: var(--accent); color: #fff;
@@ -86,7 +111,6 @@
         aside::-webkit-scrollbar { width: 4px; }
         aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-        .toc-section { margin-bottom: 4px; }
         .toc-h2 {
             display: block; padding: 6px 20px;
             font-size: 12px; font-weight: 600;
@@ -95,14 +119,12 @@
             transition: color 0.15s;
             border-left: 2px solid transparent;
         }
-        .toc-h2:hover, .toc-h2.active { color: var(--text); }
+        .toc-h2:hover { color: var(--text); }
         .toc-h2.active { color: var(--accent); border-left-color: var(--accent); }
         .toc-h3 {
             display: block; padding: 4px 20px 4px 32px;
-            font-size: 12px;
-            color: #555;
-            text-decoration: none;
-            transition: color 0.15s;
+            font-size: 12px; color: #555;
+            text-decoration: none; transition: color 0.15s;
         }
         .toc-h3:hover { color: var(--text-secondary); }
 
@@ -114,111 +136,38 @@
             padding: 48px 56px 96px;
         }
 
-        #content h1 {
-            font-size: 28px; font-weight: 700;
-            margin-bottom: 8px; color: var(--text);
-        }
-        #content h1 + p, #content h1 + blockquote {
-            color: var(--text-secondary); font-size: 14px;
-            margin-bottom: 32px;
-        }
+        #content h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+        #content h1 + p, #content h1 + blockquote { color: var(--text-secondary); font-size: 14px; margin-bottom: 32px; }
         #content h2 {
             font-size: 20px; font-weight: 700;
-            margin: 48px 0 16px;
-            padding-top: 48px;
+            margin: 48px 0 16px; padding-top: 48px;
             border-top: 1px solid var(--border);
-            color: var(--text);
-            scroll-margin-top: 72px;
+            color: var(--text); scroll-margin-top: 72px;
         }
         #content h2:first-of-type { margin-top: 0; border-top: none; padding-top: 0; }
-        #content h3 {
-            font-size: 15px; font-weight: 600;
-            margin: 28px 0 10px;
-            color: var(--text);
-            scroll-margin-top: 72px;
-        }
-        #content h4 {
-            font-size: 13px; font-weight: 600;
-            margin: 20px 0 8px;
-            color: var(--text-secondary);
-            text-transform: uppercase; letter-spacing: 0.04em;
-        }
+        #content h3 { font-size: 15px; font-weight: 600; margin: 28px 0 10px; color: var(--text); scroll-margin-top: 72px; }
+        #content h4 { font-size: 13px; font-weight: 600; margin: 20px 0 8px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.04em; }
         #content p { font-size: 14px; line-height: 1.75; color: #c0c0c0; margin-bottom: 14px; }
-        #content ul, #content ol {
-            font-size: 14px; line-height: 1.75;
-            color: #c0c0c0; margin-bottom: 14px;
-            padding-left: 22px;
-        }
+        #content ul, #content ol { font-size: 14px; line-height: 1.75; color: #c0c0c0; margin-bottom: 14px; padding-left: 22px; }
         #content li { margin-bottom: 4px; }
         #content li strong { color: var(--text); }
         #content a { color: var(--accent); text-decoration: none; }
         #content a:hover { text-decoration: underline; }
         #content strong { color: var(--text); }
-        #content code {
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 12px;
-            background: #1e1e22;
-            border: 1px solid var(--border);
-            padding: 2px 6px; border-radius: 4px;
-            color: #a78bfa;
-        }
-        #content pre {
-            background: #131315;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 16px 20px;
-            overflow-x: auto;
-            margin: 16px 0;
-        }
-        #content pre code {
-            background: none; border: none; padding: 0;
-            font-size: 13px; color: #d4d4d4;
-        }
-        #content blockquote {
-            border-left: 3px solid var(--accent);
-            padding: 2px 16px;
-            color: var(--text-secondary);
-            margin: 16px 0;
-            font-style: italic;
-        }
-        #content table {
-            width: 100%; border-collapse: collapse;
-            font-size: 13px; margin: 16px 0;
-        }
-        #content th {
-            text-align: left; padding: 8px 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            font-weight: 600; color: var(--text);
-        }
-        #content td {
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            color: #c0c0c0;
-        }
+        #content code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: #1e1e22; border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; color: #a78bfa; }
+        #content pre { background: #131315; border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; }
+        #content pre code { background: none; border: none; padding: 0; font-size: 13px; color: #d4d4d4; }
+        #content blockquote { border-left: 3px solid var(--accent); padding: 2px 16px; color: var(--text-secondary); margin: 16px 0; font-style: italic; }
+        #content table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 16px 0; }
+        #content th { text-align: left; padding: 8px 12px; background: var(--card-bg); border: 1px solid var(--border); font-weight: 600; color: var(--text); }
+        #content td { padding: 8px 12px; border: 1px solid var(--border); color: #c0c0c0; }
         #content tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
         #content hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
         /* Loading */
-        #loading {
-            display: flex; align-items: center; gap: 10px;
-            color: var(--text-secondary); font-size: 14px;
-            padding: 48px 0;
-        }
-        .spinner {
-            width: 18px; height: 18px;
-            border: 2px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-        }
+        #loading { display: flex; align-items: center; gap: 10px; color: var(--text-secondary); font-size: 14px; padding: 48px 0; }
+        .spinner { width: 18px; height: 18px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Última actualización */
-        .meta {
-            font-size: 12px; color: var(--text-secondary);
-            margin-bottom: 32px;
-        }
 
         @media (max-width: 768px) {
             aside { display: none; }
@@ -236,58 +185,92 @@
         </svg>
         From
     </a>
-    <span class="nav-title">Documentación</span>
+    <span class="nav-title" id="nav-title">Documentación</span>
     <div class="nav-spacer"></div>
-    <a href="../support.html" class="nav-link">Soporte</a>
-    <a href="/../#download" class="nav-download">Descargar</a>
+    <a href="../support.html" class="nav-link" id="nav-support">Soporte</a>
+    <div class="lang-toggle">
+        <button class="lang-btn" id="btn-es" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="/#download" class="nav-download" id="nav-download">Descargar</a>
 </nav>
 
 <div class="layout">
     <aside id="toc"></aside>
-
     <main>
         <div id="loading">
             <div class="spinner"></div>
-            Cargando documentación…
+            <span id="loading-text">Cargando documentación…</span>
         </div>
         <div id="content" style="display:none"></div>
     </main>
 </div>
 
 <script>
-    // Slugify para IDs de ancla
-    function slugify(text) {
-        return text.toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .trim().replace(/\s+/g, '-');
-    }
-
-    // Renderer personalizado que añade IDs a los headings
-    const renderer = new marked.Renderer();
-    renderer.heading = function({ text, depth }) {
-        const id = slugify(text);
-        return `<h${depth} id="${id}">${text}</h${depth}>`;
+    const FILES = {
+        es: 'DOCUMENTACION.md',
+        en: 'DOCUMENTACION_EN.md'
+    };
+    const UI = {
+        es: { title: 'Documentación', support: 'Soporte', download: 'Descargar', loading: 'Cargando documentación…', error: 'Error cargando la documentación.' },
+        en: { title: 'Documentation', support: 'Support',  download: 'Download',  loading: 'Loading documentation…',  error: 'Error loading documentation.' }
     };
 
+    function slugify(text) {
+        return text.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+    }
+
+    const renderer = new marked.Renderer();
+    renderer.heading = function({ text, depth }) {
+        return `<h${depth} id="${slugify(text)}">${text}</h${depth}>`;
+    };
     marked.setOptions({ renderer, breaks: false, gfm: true });
 
-    fetch('DOCUMENTACION.md')
-        .then(r => r.text())
-        .then(md => {
-            document.getElementById('loading').style.display = 'none';
-            const content = document.getElementById('content');
-            content.style.display = 'block';
-            content.innerHTML = marked.parse(md);
-            buildToc(content);
-            // Scroll to hash if present
-            if (location.hash) {
-                const el = document.getElementById(location.hash.slice(1));
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }
-        })
-        .catch(() => {
-            document.getElementById('loading').innerHTML = 'Error cargando la documentación.';
-        });
+    let currentLang = localStorage.getItem('from-docs-lang')
+        || (navigator.language.startsWith('en') ? 'en' : 'es');
+
+    function applyLangUI(lang) {
+        const t = UI[lang];
+        document.documentElement.lang = lang;
+        document.getElementById('nav-title').textContent   = t.title;
+        document.getElementById('nav-support').textContent = t.support;
+        document.getElementById('nav-download').textContent = t.download;
+        document.getElementById('loading-text').textContent = t.loading;
+        document.getElementById('btn-es').classList.toggle('active', lang === 'es');
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    }
+
+    function loadDoc(lang) {
+        applyLangUI(lang);
+        const content = document.getElementById('content');
+        const loading = document.getElementById('loading');
+        content.style.display = 'none';
+        loading.style.display = 'flex';
+
+        fetch(FILES[lang] + '?v=' + Date.now())
+            .then(r => { if (!r.ok) throw new Error(); return r.text(); })
+            .then(md => {
+                loading.style.display = 'none';
+                content.style.display = 'block';
+                content.innerHTML = marked.parse(md);
+                buildToc(content);
+                if (location.hash) {
+                    const el = document.getElementById(location.hash.slice(1));
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    window.scrollTo(0, 0);
+                }
+            })
+            .catch(() => {
+                loading.innerHTML = UI[lang].error;
+            });
+    }
+
+    function setLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('from-docs-lang', lang);
+        loadDoc(lang);
+    }
 
     function buildToc(content) {
         const toc = document.getElementById('toc');
@@ -297,20 +280,29 @@
             const id = h.id;
             const text = h.textContent;
             if (h.tagName === 'H2') {
-                html += `<a class="toc-h2" href="#${id}" onclick="scrollTo('${id}')">${text}</a>`;
+                html += `<a class="toc-h2" href="#${id}">${text}</a>`;
             } else {
-                html += `<a class="toc-h3" href="#${id}" onclick="scrollTo('${id}')">${text}</a>`;
+                html += `<a class="toc-h3" href="#${id}">${text}</a>`;
             }
         });
         toc.innerHTML = html;
 
-        // Highlight active section on scroll
-        const links = toc.querySelectorAll('.toc-h2');
+        // Click suave en sidebar
+        toc.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const el = document.getElementById(a.getAttribute('href').slice(1));
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Resaltar sección activa
+        const h2links = toc.querySelectorAll('.toc-h2');
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
-                    links.forEach(l => l.classList.remove('active'));
-                    const link = toc.querySelector(`[href="#${e.target.id}"]`);
+                    h2links.forEach(l => l.classList.remove('active'));
+                    const link = toc.querySelector(`.toc-h2[href="#${e.target.id}"]`);
                     if (link) link.classList.add('active');
                 }
             });
@@ -318,10 +310,8 @@
         content.querySelectorAll('h2').forEach(h => observer.observe(h));
     }
 
-    function scrollTo(id) {
-        const el = document.getElementById(id);
-        if (el) { el.scrollIntoView({ behavior: 'smooth' }); return false; }
-    }
+    // Arrancar
+    loadDoc(currentLang);
 </script>
 </body>
 </html>
