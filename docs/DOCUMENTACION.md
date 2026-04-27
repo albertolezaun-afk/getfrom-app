@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-27
+> Ultima actualizacion: 2026-04-27 (sesion 2)
 
 ---
 
@@ -1292,6 +1292,25 @@ LemonSqueezy gestiona:
 - Validacion de contenido vacio antes de publicar
 - Menu mejorado: Copiar enlace publico / Despublicar (cuando ya esta publicada)
 - Icono globo en breadcrumb copia enlace al clipboard
+
+### 2026-04-27 (sesion 2) — Web: docs bilingüe, contraste dark mode
+
+**Pagina de ayuda getfrom.app/docs/:**
+- `landing/docs/index.html`: renderiza `DOCUMENTACION.md` (ES) o `DOCUMENTACION_EN.md` (EN) con `marked.js`
+- Selector de idioma ES/EN en el nav — botones pill, persiste en localStorage, detecta idioma del navegador
+- Sidebar con indice navegable por secciones, resalta seccion activa al hacer scroll
+
+**App (v1.5 pendiente de publicar):**
+- Menu "Comprobar actualizaciones…" en menu From (llama a Sparkle `checkForUpdates`)
+- Menu "Ayuda de From" → abre `https://getfrom.app/docs/` en el navegador (Cmd+?)
+- `sharedUpdaterController` como global para evitar `mutating getter` en SwiftUI struct
+
+**Fix contraste dark mode web (styles.css):**
+- `--text-secondary-dark` subido de `#8b8b8b` a `#a0a0a0` (contraste ~7:1 sobre fondo oscuro)
+- Regla `h1, h2, h3, h4 { color: var(--text-dark) }` global en dark mode — elimina titulos invisibles
+- 4 bloques `@media (prefers-color-scheme: dark)` dispersos → unificados en uno solo
+- `nav-links.open` en movil: media query anidada invalida → corregida
+- `comparison-table`, `footer-bottom`, `legal-updated`, `privacy-card` → colores dark explicitos
 
 ### 2026-04-27 — Timelines rediseñados, inline tasks, ventana y mejoras sistema
 

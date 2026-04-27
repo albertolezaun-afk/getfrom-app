@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-27
+> Last update: 2026-04-27 (session 2)
 
 ---
 
@@ -543,6 +543,25 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 - Complete project workspace: task column, child notes, refs
 - `ProjectTaskPanel`, `ProjectNotesPanel`, `RefsPicker`
 - Project chat with automatic full context
+
+### 2026-04-27 (session 2) — Web: bilingual docs, dark mode contrast fix
+
+**Help page getfrom.app/docs/:**
+- `landing/docs/index.html`: renders `DOCUMENTACION.md` (ES) or `DOCUMENTACION_EN.md` (EN) via `marked.js`
+- ES/EN language toggle in nav — pill buttons, persists in localStorage, auto-detects browser language
+- Navigable sidebar index with active section highlight on scroll
+
+**App (v1.5 pending release):**
+- "Check for updates…" menu item in From menu (calls Sparkle `checkForUpdates`)
+- "From Help" menu item → opens `https://getfrom.app/docs/` in browser (Cmd+?)
+- `sharedUpdaterController` as global to avoid `mutating getter` error in SwiftUI struct
+
+**Dark mode contrast fix (styles.css):**
+- `--text-secondary-dark` raised from `#8b8b8b` to `#a0a0a0` (~7:1 contrast ratio on dark background)
+- Global `h1, h2, h3, h4 { color: var(--text-dark) }` rule in dark mode — fixes invisible headings
+- 4 scattered `@media (prefers-color-scheme: dark)` blocks → consolidated into one
+- `nav-links.open` on mobile: invalid nested media query → fixed
+- `comparison-table`, `footer-bottom`, `legal-updated`, `privacy-card` → explicit dark colors
 
 ### 2026-04-27 — Redesigned timelines, inline tasks, window fix, system improvements
 
