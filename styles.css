@@ -12,7 +12,7 @@
     --text: #1a1a1a;
     --text-secondary: #555555;
     --text-dark: #e8e8e8;
-    --text-secondary-dark: #8b8b8b;
+    --text-secondary-dark: #a0a0a0;
     --card-bg: #ffffff;
     --card-bg-dark: #18181a;
     --border: #e5e5e5;
@@ -45,36 +45,72 @@ img { max-width: 100%; height: auto; }
 /* ── Dark mode ── */
 @media (prefers-color-scheme: dark) {
     body { background: var(--bg-dark); color: var(--text-dark); }
-    .card, .legal-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
-    .card h3, .privacy-card h3, .account-card h3, .support-card h3, .integration-item h3, .pricing-card h3 { color: var(--text-dark); }
-    .nav { background: rgba(14,14,16,0.88); border-color: var(--border-dark); }
-    .text-secondary, .hero p, .section-header p, .card p, .step p,
-    .faq-item p, .cta p, .footer, .pricing-desc, .account-desc,
-    .legal-body p, .legal-body li { color: var(--text-secondary-dark); }
+
+    /* Fondos */
     .section-alt { background: var(--card-bg-dark); }
-    .footer { background: var(--card-bg-dark); border-color: var(--border-dark); }
-    .faq-item { border-color: var(--border-dark); }
-    .btn-secondary { border-color: var(--border-dark); color: var(--text-secondary-dark); }
-    .hero-badge { background: rgba(74,144,217,0.15); }
-    .privacy-card { background: rgba(74,144,217,0.06); border-color: rgba(74,144,217,0.15); }
+    .card, .legal-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .pricing-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .pricing-card.featured { border-color: var(--accent); }
-    .pricing-price { color: var(--text-dark); }
-    .pricing-feature { color: var(--text-secondary-dark); }
     .account-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .support-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
     .legal-card { background: var(--card-bg-dark); border-color: var(--border-dark); }
+    .integration-item { background: var(--card-bg-dark); border-color: var(--border-dark); }
+    .sync-visual { background: var(--card-bg-dark); border-color: var(--border-dark); }
+    .privacy-card { background: rgba(74,144,217,0.08); border-color: rgba(74,144,217,0.18); }
+    .footer { background: var(--card-bg-dark); border-color: var(--border-dark); }
+    .hero-badge { background: rgba(74,144,217,0.15); }
+    .screenshot-placeholder { border-color: var(--border-dark); background: linear-gradient(135deg, rgba(74,144,217,0.1), rgba(74,144,217,0.03)); }
+
+    /* Nav */
+    .nav { background: rgba(14,14,16,0.92); border-color: var(--border-dark); }
     .nav-logo, .nav-logo:hover { color: var(--text-dark); }
     .nav-links a { color: var(--text-secondary-dark); }
     .mobile-menu-btn span { background: var(--text-dark); }
-    .section-header h2, .step h3, .faq-item h3, .cta h2, .page-hero h1,
-    .sync-node-label, .legal-body h2, .legal-body h3 { color: var(--text-dark); }
-    .screenshot-placeholder { border-color: var(--border-dark); background: linear-gradient(135deg, rgba(74,144,217,0.1), rgba(74,144,217,0.03)); }
-    .integration-item { background: var(--card-bg-dark); border-color: var(--border-dark); }
-    .sync-visual { background: var(--card-bg-dark); border-color: var(--border-dark); }
-    .comparison-table th, .comparison-table td { border-color: var(--border-dark); }
-    .comparison-table thead th { background: var(--card-bg-dark); }
+
+    /* Bordes y separadores */
+    .faq-item { border-color: var(--border-dark); }
+    .btn-secondary { border-color: var(--border-dark); color: var(--text-secondary-dark); }
+
+    /* Headings — texto principal */
+    h1, h2, h3, h4 { color: var(--text-dark); }
+    .section-header h2, .page-hero h1, .cta h2 { color: var(--text-dark); }
+    .step h3, .faq-item h3, .sync-node-label { color: var(--text-dark); }
+    .card h3, .privacy-card h3, .account-card h3, .support-card h3,
+    .integration-item h3, .pricing-card h3, .legal-body h2, .legal-body h3 { color: var(--text-dark); }
+
+    /* Texto secundario — todos los párrafos descriptivos */
+    .hero p, .section-header p, .cta p { color: var(--text-secondary-dark); }
+    .card p, .privacy-card p, .account-card p, .support-card p,
+    .integration-item p, .step p, .faq-item p { color: var(--text-secondary-dark); }
+    .pricing-desc, .pricing-period, .pricing-feature { color: var(--text-secondary-dark); }
+    .account-desc { color: var(--text-secondary-dark); }
+    .legal-body p, .legal-body li { color: var(--text-secondary-dark); }
+    .footer-brand p, .footer-col h4, .footer-col a { color: var(--text-secondary-dark); }
+    .text-secondary { color: var(--text-secondary-dark); }
+
+    /* Precios */
+    .pricing-price { color: var(--text-dark); }
+
+    /* Comparison table */
+    .comparison-table th, .comparison-table td { border-color: var(--border-dark); color: var(--text-dark); }
+    .comparison-table thead th { background: var(--card-bg-dark); color: var(--text-secondary-dark); }
+    .comparison-table tbody td { color: var(--text-dark); }
     .comparison-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+    /* Lang select */
+    .lang-select { color: var(--text-secondary-dark); border-color: var(--border-dark); background-color: transparent; }
+    .lang-select option { background: #1a1a1a; color: var(--text-dark); }
+    .lang-select:hover, .lang-select:focus { border-color: var(--accent); color: var(--accent); }
+
+    /* Footer */
+    .footer-bottom { border-color: var(--border-dark); color: var(--text-secondary-dark); }
+
+    /* Legal */
+    .legal-body strong { color: var(--text-dark); }
+    .legal-updated { border-color: var(--border-dark); color: var(--text-secondary-dark); }
+
+    /* Mobile nav */
+    .nav-links.open { background: var(--bg-dark); border-color: var(--border-dark); }
 }
 
 /* ── Nav ── */
@@ -120,12 +156,6 @@ img { max-width: 100%; height: auto; }
     -webkit-appearance: none;
 }
 .lang-select:hover, .lang-select:focus { border-color: var(--accent); color: var(--accent); outline: none; }
-@media (prefers-color-scheme: dark) {
-    .lang-select { color: var(--text-secondary-dark); border-color: var(--border-dark); background-color: transparent; }
-    .lang-select option { background: #1a1a1a; color: var(--text-dark); }
-    .lang-select:hover, .lang-select:focus { border-color: var(--accent); color: var(--accent); }
-    .comparison-table th, .comparison-table td { color: var(--text-dark); }
-}
 .mobile-menu-btn {
     display: none; background: none; border: none; cursor: pointer;
     flex-direction: column; gap: 5px; padding: 4px;
@@ -340,10 +370,6 @@ img { max-width: 100%; height: auto; }
     text-align: center;
     font-size: 13px; color: var(--text-secondary);
 }
-@media (prefers-color-scheme: dark) {
-    .footer-bottom { border-color: var(--border-dark); }
-    .footer-brand p, .footer-col h4, .footer-col a { color: var(--text-secondary-dark); }
-}
 
 /* ── Privacy cards ── */
 .privacy-grid {
@@ -501,17 +527,11 @@ img { max-width: 100%; height: auto; }
     margin-bottom: 8px; line-height: 1.6;
 }
 .legal-body strong { color: var(--text); }
-@media (prefers-color-scheme: dark) {
-    .legal-body strong { color: var(--text-dark); }
-}
 .legal-updated {
     font-size: 13px; color: var(--text-secondary);
     margin-bottom: 40px;
     padding-bottom: 24px;
     border-bottom: 1px solid var(--border);
-}
-@media (prefers-color-scheme: dark) {
-    .legal-updated { border-color: var(--border-dark); }
 }
 
 /* ── Integrations ── */
@@ -614,9 +634,6 @@ img { max-width: 100%; height: auto; }
         position: absolute; top: 56px; left: 0; right: 0;
         background: var(--bg); border-bottom: 1px solid var(--border);
         padding: 16px 24px; gap: 12px;
-    }
-    @media (prefers-color-scheme: dark) {
-        .nav-links.open { background: var(--bg-dark); border-color: var(--border-dark); }
     }
     .mobile-menu-btn { display: flex; }
     .hero { padding: 120px 20px 60px; }
