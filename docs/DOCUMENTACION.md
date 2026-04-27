@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-24
+> Ultima actualizacion: 2026-04-27
 
 ---
 
@@ -1198,13 +1198,6 @@ LemonSqueezy gestiona:
 - Icono `paperclip` para adjuntar archivos en la misma barra
 - Boton `note.text.badge.plus` en header para crear nota hija directamente
 
-### 2026-04-24 — Fixes editor: contenido pegado, sync de notas y navegacion en proyectos
-
-- **Fix bug contenido pegado desaparece:** Race condition en `WebMarkdownEditor.swift` cuando el WebContent process crasheaba al pegar. El callback async del ready handler comparaba el contenido del editor con un valor capturado obsoleto en lugar del estado actual de `self.parent.text`. Fix: comparar siempre con el valor actual para decidir si hay que restaurar el contenido.
-- **Fix bug syncNoteFromService revertia edicion del usuario:** En `NoteEditorView.swift`, `syncNoteFromService()` revertia el `bodyText` del usuario porque `lastSaveAt = .distantPast` al arrancar hacia que la guarda de tiempo fallara, y `saveTask == nil` hacia que la guarda de tarea pendiente tambien fallara. Fix: nueva guarda `hasLocalBodyChanges` — si el body local difiere del ultimo contenido guardado en disco, nunca revertir independientemente del timing.
-- **Fix bug notas hijas en proyecto sin UI completa:** El bloque PROJECT usaba `WebMarkdownEditorWithToolbar` simple con un binding corrupto que destruia el frontmatter. Fix: usar `NoteEditorView(embedded: true)` identico al caso AREA, con `.id(note.id)` para forzar recreacion al cambiar de nota.
-- **Fix bug navegacion entre notas hermanas en proyecto:** SwiftUI reutilizaba el `NoteEditorView` embebido al cambiar `selectedProjectNote` sin reinicializar el `@State`. Fix 1: `.id(selectedNote.id)` en los embedded editors. Fix 2: en `projectWorkspacePanel`, al navegar desde un editor embebido usar `onNavigate?(target)` en lugar de `navigatedNote = target` para delegar la navegacion al padre.
-
 ### 2026-04-21 (sesion 6)
 - Chat de area ahora tiene paridad completa con chat de proyecto en `ChatPanel.swift`
 - Pills de contexto ocultas en areas (igual que en proyectos)
@@ -1299,6 +1292,27 @@ LemonSqueezy gestiona:
 - Validacion de contenido vacio antes de publicar
 - Menu mejorado: Copiar enlace publico / Despublicar (cuando ya esta publicada)
 - Icono globo en breadcrumb copia enlace al clipboard
+
+### 2026-04-27 — Timelines rediseñados, inline tasks, ventana y mejoras sistema
+
+**Vistas Timeline rediseñadas:**
+- `DayTimelineView`: panel izquierdo con 3 secciones — Agenda (eventos todo el dia), Tareas (notas + inline tasks agrupadas por padre), Notas de hoy (creadas en el dia). El click en tarea abre su nota dashboard, nunca popover.
+- `ProjectsUnscheduledSidebar` reescrito con parametro `periodStart: Date`. Secciones: Vencidas (`due < periodStart`) + Sin fecha (`due == nil && isActiva`). Usado en Semana, Mes y Año.
+
+**Inline tasks en todos los timelines:**
+- Las tareas inline de proyectos (`ProjectTask`, parseadas de `tasks:` en el frontmatter) ahora aparecen en Dia, Semana, Mes y Año.
+- Render: `InlineTaskChipView` con `.draggable("projecttask||{parentNoteUUID}||{task.text}")`. Tap abre la nota padre.
+- `ForEach` usa `task.id` (UUID) como identificador, no `task.text`, para evitar colisiones con texto duplicado.
+- Fix drag a semana/mes/año: parametro `alwaysAllDay: Bool = false` en `NoteDropTarget`. Con `alwaysAllDay: true` el drop no calcula hora desde posicion Y y guarda solo la fecha.
+- Fix notas con hora antes del inicio del grid: `isAllDayNote()` en `WeekTimelineView` trata `h < startHour` como todo-el-dia.
+
+**Mejoras sistema:**
+- Ventana arranca maximizada: `WindowScreenConstraint.constrain` llama `window.setFrame(visible, display: true, animate: false)` siempre al arrancar. Resuelve arranque pequeno y parte inferior cortada.
+- Menu "Comprobar actualizaciones…" añadido al menu From (despues de "About"). Llama a `sharedUpdaterController.checkForUpdates(nil)`.
+- Menu "Ayuda de From" sustituido para abrir `https://getfrom.app/docs/` en el navegador (Cmd+?).
+- Pagina de documentacion en `getfrom.app/docs/`: renderiza `DOCUMENTACION.md` con `marked.js`, sidebar con indice navegable, diseno oscuro coherente con el resto del site.
+
+**Publicacion:** v1.4 (build 5) publicada con los cambios de timeline. v1.5 (build 6) pendiente con mejoras de menu y ventana.
 
 ### 2026-04-18
 - Documento creado con la descripcion completa de From

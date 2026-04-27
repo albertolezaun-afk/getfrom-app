@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-24
+> Last update: 2026-04-27
 
 ---
 
@@ -543,6 +543,27 @@ Payments processed by LemonSqueezy (subscriptions, licenses, license validation,
 - Complete project workspace: task column, child notes, refs
 - `ProjectTaskPanel`, `ProjectNotesPanel`, `RefsPicker`
 - Project chat with automatic full context
+
+### 2026-04-27 — Redesigned timelines, inline tasks, window fix, system improvements
+
+**Redesigned Timeline views:**
+- `DayTimelineView`: left panel with 3 sections — Agenda (all-day events), Tasks (notes + inline tasks grouped by parent), Today's notes (created today). Clicking a task opens its note dashboard, never a popover.
+- `ProjectsUnscheduledSidebar` rewritten with `periodStart: Date` parameter. Sections: Overdue (`due < periodStart`) + No date (`due == nil && isActiva`). Used in Week, Month and Year views.
+
+**Inline tasks in all timelines:**
+- Inline project tasks (`ProjectTask`, parsed from `tasks:` frontmatter block) now appear in Day, Week, Month and Year views.
+- Render: `InlineTaskChipView` with `.draggable("projecttask||{parentNoteUUID}||{task.text}")`. Tap opens parent note.
+- `ForEach` uses `task.id` (UUID) as identifier, not `task.text`, to avoid collisions with duplicate text.
+- Fix drag to week/month/year: `alwaysAllDay: Bool = false` parameter on `NoteDropTarget`. With `alwaysAllDay: true` the drop doesn't calculate hour from Y position and saves date only.
+- Fix notes with hour before grid start: `isAllDayNote()` in `WeekTimelineView` treats `h < startHour` as all-day.
+
+**System improvements:**
+- Window launches maximized: `WindowScreenConstraint.constrain` calls `window.setFrame(visible, display: true, animate: false)` on every launch. Fixes small startup window and bottom cutoff.
+- "Check for updates…" menu item added to the From menu (after "About"). Calls `sharedUpdaterController.checkForUpdates(nil)`.
+- "From Help" menu item replaced to open `https://getfrom.app/docs/` in the browser (Cmd+?).
+- Documentation page at `getfrom.app/docs/`: renders `DOCUMENTACION.md` with `marked.js`, navigable sidebar index, dark design consistent with the rest of the site.
+
+**Releases:** v1.4 (build 5) shipped with timeline changes. v1.5 (build 6) pending with menu and window fixes.
 
 ### 2026-04-18
 - Complete getfrom.app website deployed on GitHub Pages
