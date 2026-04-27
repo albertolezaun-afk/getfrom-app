@@ -1069,6 +1069,13 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-28 — Publicacion v1.6 (build 7)
+- Explorar completamente rediseñado: raices expandibles, dashboard por raiz, FilteredNotesView con chat integrado, batch select col/tipo/madre
+- Fix keychain: eliminados los prompts de contraseña al instalar nuevas versiones de la app
+- Agente limpiador de contexto con `runOnStartup` + `startupDelay`
+- `NoteService.tipos(inRaiz:)` — tipos unicos de una raiz
+- `ChatPanel`: modo Explorar con contexto prioritario de coleccion/tipo, limite 60K chars
+
 ### 2026-04-28 — Limpieza de codigo muerto
 - Eliminados ficheros nunca usados: `AreasView.swift`, `TaskListView.swift`, `NewTaskNoteSheet.swift`, `NoteTreeView.swift`, `NoteContextBar.swift`
 - Documentacion completamente revisada y actualizada al estado real del codigo
