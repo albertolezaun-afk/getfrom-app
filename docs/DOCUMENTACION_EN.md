@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-28
+> Last update: 2026-04-29
 
 ---
 
@@ -1068,6 +1068,25 @@ LemonSqueezy manages:
 ---
 
 ## Changelog
+
+### 2026-04-29 — Week/month/year timeline redesign + Event/Task popup + chip fixes
+- **Week timeline redesigned**: compact task row per day (dot+text), events in the grid as blocks proportional to their duration with real EKCalendar color. No chips in the hourly grid
+- **Month timeline**: events as color pills (bar+title+time), tasks as plain text with dot. Events first, then tasks in each row
+- **Year timeline**: note-events as compact color pills, tasks replaced by grey counter "· N tasks"
+- **Event/Task popup**: clicking any timeline shows a popup with two tabs (red/blue). "Event" creates in Apple Calendar, "Task" creates an active note
+- **CalendarEvent.color**: `Color` field reflecting the EKCalendar color. Used in event blocks
+- **Sin fecha sidebar**: now includes body `InlineTask` (`- [ ]` checkboxes) alongside YAML ProjectTask. Removed `note.isActiva` requirement for undated ProjectTasks
+- **DraggableTaskChip compact**: checkbox and date hidden in compact mode (week/month/year timelines)
+
+### 2026-04-29 — Tracked notes, configurable Day dashboard, event alarms
+- **Tracked notes** (new concept, independent from tasks): `seguimiento: true` flag in frontmatter, bookmark button in the editor, highlighted section in Root Dashboard and Day view with drag to reorder manually
+- **Configurable Day dashboard**: 3 columns of cards the user adds/removes/reorders in edit mode. 9 card types: Daily note, Tasks, Tracked, Notes of today, Today's events, Next 24h, Recent, Quick shortcuts, Mini calendar. Layout persists in UserDefaults
+- **Configurable quick shortcuts**: 3 actions (New note, New task, New event) + 5 destinations (note, web link, collection, type, root). Each with icon, color and label
+- **Mini calendar**: 4 horizontal months with smooth navigation
+- **Visual cards**: SeguimientoRow with root color dot, Recent/Notes-of-today using DashboardNoteRow grouped by root, hover calendar in tasks for quick date change
+- **Configurable event alarms**: in Settings > Calendar & Reminders, "Default alarms" section. Hour for all-day events (default 9:00) and minutes-before for timed events (default 5 min)
+- **RaizDashboardView**: color selector with circle + compact palette, `+` on each collection/tipo to create note, `+` on section headers to create new ones
+- **Day skeleton**: 76px DayStrip height, larger heights in hourly timeline, font sizes tuned
 
 ### 2026-04-28 — Performance optimization pass
 - VaultService: `read()` is now `async` — eliminates up to 2s freezes waiting for iCloud downloads

@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-28 (sesion admin dashboard)
+> Ultima actualizacion: 2026-04-29
 
 ---
 
@@ -1068,6 +1068,25 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
+
+### 2026-04-29 — Rediseño timelines semana/mes/año + popup Evento/Tarea + fixes chips
+- **Timeline Semana rediseñado**: fila de tareas compacta por día (punto+texto), eventos en el grid como bloques proporcionales a su duración con color real del EKCalendar. Sin chips en el grid horario
+- **Timeline Mes**: eventos como píldoras de color (barra+título+hora), tareas como texto plano con punto. Eventos primero, lureas después en cada fila
+- **Timeline Año**: eventos de nota como píldoras compactas, tareas sustituidas por contador gris "· N tareas"
+- **Popup Evento/Tarea**: al hacer clic en cualquier timeline aparece un popup con dos pestañas (rojo/azul). "Evento" crea en Apple Calendar, "Tarea" crea nota activa
+- **CalendarEvent.color**: campo `Color` que refleja el color del EKCalendar. Usado en bloques de eventos
+- **Sidebar Sin fecha**: ahora incluye `InlineTask` del body (`- [ ]` checkboxes) además de ProjectTask YAML. Eliminado requisito `note.isActiva` de ProjectTask undated
+- **DraggableTaskChip compact**: checkbox y fecha ocultos en modo compact (timelines semana/mes/año)
+
+### 2026-04-29 — Notas en seguimiento, dashboard de Día configurable, alarmas eventos
+- **Notas en seguimiento** (concepto nuevo, independiente de tareas): flag `seguimiento: true` en frontmatter, botón bookmark en el editor, sección destacada en Dashboard de raíz y vista Día con drag para reordenar manualmente
+- **Dashboard de Día configurable**: 3 columnas con cards que el usuario añade/quita/reordena en modo edición. 9 tipos de cards: Diario, Tareas, En seguimiento, Notas de hoy, Eventos hoy, Próximas 24h, Recientes, Atajos rápidos, Mini calendario. Layout persiste en UserDefaults
+- **Atajos rápidos configurables**: 3 acciones (Nueva nota, Nueva tarea, Nuevo evento) + 5 destinos (nota, enlace web, colección, tipo, raíz). Cada uno con icono, color y label
+- **Mini calendario**: 4 meses horizontales con navegación cómoda
+- **Cards visuales**: SeguimientoRow con punto de color de raíz, Recientes/Notas de hoy con DashboardNoteRow agrupado por raíz, hover calendario en tareas para cambiar fecha rápida
+- **Alarmas configurables para eventos**: en Ajustes > Calendario y Recordatorios, sección "Alarmas por defecto". Hora para all-day (default 9:00) y minutos antes para timed (default 5 min)
+- **RaizDashboardView**: selector de color con círculo + paleta compacta, `+` en cada colección/tipo para crear nota, `+` en headers para crear nuevos
+- **Esqueleto del día**: altura 76px en DayStrip, alturas mayores en timeline horario, fuentes ajustadas
 
 ### 2026-04-28 — Optimización de rendimiento (perf pass)
 - VaultService: `read()` ahora es `async` — elimina congelados de hasta 2s esperando iCloud
