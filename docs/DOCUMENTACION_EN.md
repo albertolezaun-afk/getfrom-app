@@ -1069,6 +1069,12 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-28 — Root dashboard: tasks, drag&drop, UI improvements
+- "Edit Root" button, sidebar auto-collapse, right column 420px
+- Upcoming Tasks section: note tasks + inline tasks by parent note, overdue in red, context menu
+- DashNoteRow: hover collection icon, drag to cards/tipos, full context menu (open, props, collection, delete)
+- Collections and tipos accept note drops
+
 ### 2026-04-28 — Absorb task into note
 - "Add to project" renamed to "Add to note" with search across all notes
 - On select: inserts `- [ ] Title` checkbox into the target note's body

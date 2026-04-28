@@ -1069,6 +1069,12 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-28 — Dashboard raíz: tareas, drag&drop, mejoras UI
+- Botón "Editar Raíz", auto-colapso sidebar, columna derecha 420px
+- Sección Próximas Tareas: note tasks + inline tasks por nota, overdue en rojo, context menu
+- DashNoteRow: hover icon colección, drag a cards/tipos, context menu completo (abrir, props, colección, eliminar)
+- Colecciones y tipos aceptan drops de notas
+
 ### 2026-04-28 — Absorber tarea a nota
 - "Añadir a proyecto" renombrado a "Añadir a nota" con buscador en todas las notas
 - Al seleccionar nota: inserta `- [ ] Título` como checkbox en el cuerpo de la nota destino
