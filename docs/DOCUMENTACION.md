@@ -1069,6 +1069,15 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-28 — Timeline drag&drop, editor rich previews, explorar mejoras
+- **Timeline:** drag horizontal para eventos y recordatorios, resize por borde derecho en eventos editables, drag vertical →todo el día con hint visual, snap redondeo correcto, tareas con hora excluidas de lista "Tareas"
+- **Reminders:** tareas sin hora se guardan sin componente de tiempo (antes aparecían a las 00:00 en Reminders)
+- **Editor:** URLs sueltas clicables, YouTube preview con thumbnail, link preview cards (favicon+dominio) para cualquier URL standalone, file cards estilo Apple Notes con icono por tipo
+- **Bug PDF:** `importAndInsert` insertaba `[[file.pdf]]` (wikilink) en lugar de `![[file.pdf]]` (file embed) — corregido
+- **Campo URL en contexto:** reemplazado `TextField` SwiftUI por `NSViewRepresentable` que fuerza `makeFirstResponder` — paste ya no va a la WKWebView
+- **Explorar:** botón `← raíz` en FilteredNotesView para volver al dashboard; dashboard tiene ColorPicker nativo, botón renombrar y botón eliminar con confirmación
+- **Tareas Hoy:** agrupación por raíz → parent (antes solo parent); overdue mezclados en su grupo natural con fecha en rojo
+
 ### 2026-04-28 — Publicacion v1.6 (build 7)
 - Explorar completamente rediseñado: raices expandibles, dashboard por raiz, FilteredNotesView con chat integrado, batch select col/tipo/madre
 - Fix keychain: eliminados los prompts de contraseña al instalar nuevas versiones de la app
