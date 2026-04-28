@@ -1069,6 +1069,9 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-28 — Release v1.7 (build 8)
+- Release including all improvements from previous session: timeline drag&drop, rich editor previews, explorer, tasks grouped by root
+
 ### 2026-04-28 — Timeline drag&drop, rich editor previews, explorer improvements
 - **Timeline:** horizontal drag for events and reminders, right-edge resize for editable events, vertical drag → all-day with visual hint, correct snap rounding, timed tasks excluded from task list
 - **Reminders:** tasks without time saved without time component (previously appeared at 00:00 in Reminders)
