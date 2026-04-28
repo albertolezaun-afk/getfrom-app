@@ -1069,6 +1069,13 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — Editor de evento, vista Mes scroll continuo, fixes timeline
+- **EventPropertiesPanel**: panel bajo el título cuando la nota es un evento. Pills editables de fecha (azul), hora inicio (cyan), hora fin (índigo) y repetición. Aparece en el editor de notas automáticamente
+- **Vista Mes — scroll continuo**: eliminada la paginación por mes. Scroll libre desde 180 días atrás hasta 365 adelante. Día actual centrado al abrir. Cabeceras de mes pegadas (pinned) al hacer scroll. Botón "Hoy" para volver al día actual. Clic en miniCalendar navega al día
+- **Tareas con hora en el grid semanal**: tareas con hora específica aparecen en el grid horario como bloques compactos con barra de color de raíz, igual que eventos pero visualmente distintos
+- **Fix duplicación al arrastrar tareas sin fecha**: `rebuildItemsCache` solo incluye `isNoteTask` en Loop 1, evitando que notas de proyecto aparezcan dos veces (una como nota y otra via sus ProjectTasks)
+- **Fix eventos no aparecían tras crear**: `onCreated` recarga datos del calendario en todos los timelines
+
 ### 2026-04-29 — Rediseño timelines semana/mes/año + popup Evento/Tarea + fixes chips
 - **Timeline Semana rediseñado**: fila de tareas compacta por día (punto+texto), eventos en el grid como bloques proporcionales a su duración con color real del EKCalendar. Sin chips en el grid horario
 - **Timeline Mes**: eventos como píldoras de color (barra+título+hora), tareas como texto plano con punto. Eventos primero, lureas después en cada fila

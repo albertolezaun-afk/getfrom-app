@@ -1069,6 +1069,13 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — Event editor panel, continuous month scroll, timeline fixes
+- **EventPropertiesPanel**: panel below the title when a note is an event. Editable pills for date (blue), start time (cyan), end time (indigo), and recurrence. Appears automatically in the note editor
+- **Month view — continuous scroll**: replaced month-by-month pagination with a free scroll from 180 days back to 365 ahead. Today is centered on open. Pinned month headers while scrolling. "Today" button to return. Mini-calendar click navigates to that day
+- **Timed tasks in weekly grid**: tasks with a specific time appear in the hourly grid as compact blocks with a raíz color bar, visually distinct from calendar events
+- **Fix: drag duplication from sidebar**: `rebuildItemsCache` now restricts Loop 1 to `isNoteTask` only, preventing project notes from appearing twice (once as the note, once via their ProjectTasks)
+- **Fix: events not showing after creation**: `onCreated` now reloads calendar data in all timeline views
+
 ### 2026-04-29 — Week/month/year timeline redesign + Event/Task popup + chip fixes
 - **Week timeline redesigned**: compact task row per day (dot+text), events in the grid as blocks proportional to their duration with real EKCalendar color. No chips in the hourly grid
 - **Month timeline**: events as color pills (bar+title+time), tasks as plain text with dot. Events first, then tasks in each row
