@@ -1069,6 +1069,13 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-28 — Editor visual upgrade + fixes
+- Editor: 16px font, 1.75 line-height, 740px max-width centered, heading spacing, Notion-style blockquote, dimmed syntax markers (opacity 0.3), bordered inline code, gradient HR, improved dark mode
+- Fix inverted drag cursor when dragging files onto note (wrong coordinate conversion in WKWebView inside SwiftUI)
+- Fix PDF paste: checks file URL before raw image (PDF icon TIFF no longer pasted instead of the actual file)
+- Fix card clicks (links/files/YouTube): ignoreEvent corrected to separate left-click (opens) from right-click (edit mode)
+- Inline URLs also shown as cards (removed isStandalone condition)
+
 ### 2026-04-28 — Release v1.7 (build 8)
 - Release including all improvements from previous session: timeline drag&drop, rich editor previews, explorer, tasks grouped by root
 

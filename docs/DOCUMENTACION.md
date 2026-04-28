@@ -1069,6 +1069,13 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-28 — Editor visual upgrade + fixes
+- Editor: font 16px, line-height 1.75, max-width 740px centrado, headings con espaciado, blockquote estilo Notion, syntax markers dimmed (opacity 0.3), inline code con borde, HR gradiente, dark mode mejorado
+- Fix drag cursor invertido al arrastrar archivos sobre la nota (conversión de coordenadas incorrecta en WKWebView embebido en SwiftUI)
+- Fix paste PDF: comprueba file URL antes que imagen raw (el icono TIFF del PDF ya no se pega en lugar del archivo)
+- Fix click en tarjetas (links/archivos/YouTube): ignoreEvent corregido para separar click izquierdo (abre) de click derecho (editar)
+- URLs inline también se muestran como tarjetas (eliminada condición isStandalone)
+
 ### 2026-04-28 — Publicacion v1.7 (build 8)
 - Release con todas las mejoras de la sesión anterior: timeline drag&drop, rich editor previews, explorar, tareas agrupadas por raíz
 
