@@ -1069,6 +1069,11 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-28 — Absorb task into note
+- "Add to project" renamed to "Add to note" with search across all notes
+- On select: inserts `- [ ] Title` checkbox into the target note's body
+- Deletes the task note (including Apple Reminders cleanup) — fixes reappearance bug
+
 ### 2026-04-28 — Editor visual upgrade + fixes
 - Editor: 16px font, 1.75 line-height, 740px max-width centered, heading spacing, Notion-style blockquote, dimmed syntax markers (opacity 0.3), bordered inline code, gradient HR, improved dark mode
 - Fix inverted drag cursor when dragging files onto note (wrong coordinate conversion in WKWebView inside SwiftUI)

@@ -1069,6 +1069,11 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-28 — Absorber tarea a nota
+- "Añadir a proyecto" renombrado a "Añadir a nota" con buscador en todas las notas
+- Al seleccionar nota: inserta `- [ ] Título` como checkbox en el cuerpo de la nota destino
+- Elimina la nota de tarea (incluye limpiar Apple Reminders) — fix del bug de reaparición
+
 ### 2026-04-28 — Editor visual upgrade + fixes
 - Editor: font 16px, line-height 1.75, max-width 740px centrado, headings con espaciado, blockquote estilo Notion, syntax markers dimmed (opacity 0.3), inline code con borde, HR gradiente, dark mode mejorado
 - Fix drag cursor invertido al arrastrar archivos sobre la nota (conversión de coordenadas incorrecta en WKWebView embebido en SwiftUI)
