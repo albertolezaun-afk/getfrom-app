@@ -1069,6 +1069,15 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-28 — Performance optimization pass
+- VaultService: `read()` is now `async` — eliminates up to 2s freezes waiting for iCloud downloads
+- NoteService: `parseFrontmatter` in a single pass (20x fewer iterations per note), parallel `loadAll()` with `withTaskGroup`
+- NoteEditorView: 3 `onChange` merged into 1 — prevents triple `syncNoteFromService()` per reload
+- ColeccionesView: `NoteType.loadAll()` cached in `@State` — no longer reads disk on every sidebar render
+- NoteListView: `filteredNotes` and `availableTipos` cached in `@State`
+- DayTimelineView: `tasksByRaiz` and `notesCreatedGrouped` cached — no longer recomputed on every render
+- ChatPanel: duplicate `onChange(of: activePrompt?.id)` removed
+
 ### 2026-04-28 — Root dashboard: tasks, drag&drop, UI improvements
 - "Edit Root" button, sidebar auto-collapse, right column 420px
 - Upcoming Tasks section: note tasks + inline tasks by parent note, overdue in red, context menu
@@ -1160,6 +1169,20 @@ LemonSqueezy manages:
 - Added `workspace` tab for projects and areas — shows tasks + context + log stacked
 - `workspace` tab is the default when opening a project or area
 - `ProjectContextPanel`: removed `addMode` system, unified always-visible field
+
+### 2026-04-28 — Server administration dashboard
+
+- New admin panel at `/admin/dashboard` served from the Hono server on Railway
+- In-page login with JWT, auto-refresh every 60s
+- KPIs: total users, active subscriptions, estimated MRR, agent runs, tokens consumed
+- Chart.js charts: new users and agent runs per day (last 30 days)
+- Server health: DB status, API latency, version
+- AI provider management: configure encrypted API keys (Anthropic/OpenAI/Google), activate/pause
+- User table with search and pagination (20/page)
+- Per-user actions: add tokens, edit subscription/license/role, reset password, delete with confirmation
+- New endpoints: `GET /admin/stats/detailed`, `GET /admin/agents/recent`, `GET /admin/ledger/recent`, `PATCH /admin/users/:id`, `POST /admin/users/:id/reset-password`, `DELETE /admin/users/:id`
+- Recent agent runs table with user email (JOIN)
+- Recent token ledger table with user email (JOIN)
 
 ### 2026-04-21 — Area/project chat parity
 - Area chat with full parity with project chat in `ChatPanel.swift`

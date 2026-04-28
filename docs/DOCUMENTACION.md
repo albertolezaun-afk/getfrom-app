@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-28
+> Ultima actualizacion: 2026-04-28 (sesion admin dashboard)
 
 ---
 
@@ -1069,6 +1069,15 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-28 — Optimización de rendimiento (perf pass)
+- VaultService: `read()` ahora es `async` — elimina congelados de hasta 2s esperando iCloud
+- NoteService: `parseFrontmatter` en un pase (20x menos iteraciones por nota), `loadAll()` paralelo con `withTaskGroup`
+- NoteEditorView: 3 `onChange` fusionados en 1 — evita triple `syncNoteFromService()` por cada recarga
+- ColeccionesView: `NoteType.loadAll()` cacheado en `@State` — ya no lee disco en cada render del sidebar
+- NoteListView: `filteredNotes` y `availableTipos` cacheados en `@State`
+- DayTimelineView: `tasksByRaiz` y `notesCreatedGrouped` cacheados — no recalculan en cada render
+- ChatPanel: `onChange(of: activePrompt?.id)` duplicado eliminado
+
 ### 2026-04-28 — Dashboard raíz: tareas, drag&drop, mejoras UI
 - Botón "Editar Raíz", auto-colapso sidebar, columna derecha 420px
 - Sección Próximas Tareas: note tasks + inline tasks por nota, overdue en rojo, context menu
@@ -1174,6 +1183,20 @@ LemonSqueezy gestiona:
 - Sin coincidencias: ofrece "Crear nota" inline
 - Colecciones movidas a icono `folder` con popover
 - Icono `paperclip` para adjuntar archivos
+
+### 2026-04-28 — Dashboard de administracion del servidor
+
+- Nuevo panel admin en `/admin/dashboard` servido desde el propio servidor Hono en Railway
+- Login en-pagina con JWT, auto-refresh cada 60s
+- KPIs: usuarios totales, suscripciones activas, MRR estimado, ejecuciones, tokens consumidos
+- Graficas Chart.js: nuevos usuarios y ejecuciones de agentes (ultimos 30 dias)
+- Estado del servidor: health, DB, latencia, version
+- Gestion de proveedores IA: configurar API keys cifradas (Anthropic/OpenAI/Google), activar/pausar
+- Tabla de usuarios con busqueda y paginacion (20/pagina)
+- Acciones por usuario: añadir tokens, editar suscripcion/licencia/rol, resetear contraseña, eliminar con confirmacion
+- Nuevos endpoints: `GET /admin/stats/detailed`, `GET /admin/agents/recent`, `GET /admin/ledger/recent`, `PATCH /admin/users/:id`, `POST /admin/users/:id/reset-password`, `DELETE /admin/users/:id`
+- Tabla de ejecuciones recientes con email de usuario (JOIN)
+- Tabla de movimientos de tokens recientes con email de usuario (JOIN)
 
 ### 2026-04-21 (sesion 6) — Paridad chat area/proyecto
 - Chat de area con paridad completa con chat de proyecto en `ChatPanel.swift`
