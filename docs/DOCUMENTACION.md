@@ -1069,6 +1069,15 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — Fixes: shortcuts, drag semana, sync checkboxes, caché timelines
+- **Shortcuts atajos rápidos**: raíz/colección/tipo ahora navegan correctamente a Explorar. Shortcut nueva tarea usa QuickTaskSheet con pill de fecha
+- **QuickTaskSheet**: selector de fecha como pill naranja con popover de calendario (estilo NewEventView)
+- **Drag en vista semanal**: gesture vertical/horizontal en eventos y tareas de From. Handle de resize en borde inferior. Apple Calendar events son solo lectura
+- **Fix eventos no aparecían**: CalendarService invalida caché inmediatamente tras crear/editar/borrar eventos
+- **Fix botón actualizar**: NoteService.notesVersion notifica a todos los timelines para reconstruir caches
+- **Fix loop checkboxes / scroll al inicio / regeneración**: syncInlineCheckboxesToApple solo corre para notas con activa:true. El body sin activa:true es checklist, no tarea. Esto eliminaba un loop de guardado que causaba scroll al inicio y regeneración de checkboxes
+
+
 ### 2026-04-29 — Editor de evento, vista Mes scroll continuo, fixes timeline
 - **EventPropertiesPanel**: panel bajo el título cuando la nota es un evento. Pills editables de fecha (azul), hora inicio (cyan), hora fin (índigo) y repetición. Aparece en el editor de notas automáticamente
 - **Vista Mes — scroll continuo**: eliminada la paginación por mes. Scroll libre desde 180 días atrás hasta 365 adelante. Día actual centrado al abrir. Cabeceras de mes pegadas (pinned) al hacer scroll. Botón "Hoy" para volver al día actual. Clic en miniCalendar navega al día
