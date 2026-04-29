@@ -1069,6 +1069,10 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v2.5: fix permisos Calendario — entitlement hardened runtime + detección por fetch
+- **Fix definitivo**: añadido el entitlement `com.apple.security.personal-information.calendars` y `.reminders` en el binario firmado. Con hardened runtime activo (requerido para notarización), macOS exige este entitlement para mostrar el diálogo TCC incluso en apps no sandboxed
+- **Fix banner**: si `fetchFilteredEvents` devuelve eventos reales, el servicio infiere que tiene acceso real y actualiza `calendarAccessGranted = true` — el banner desaparece aunque `authorizationStatus` devuelva `notDetermined` por el estado cacheado del EKEventStore
+
 ### 2026-04-29 — v2.4: fix permisos Calendario — petición diferida y diagnóstico TCC
 - **Fix raíz**: la petición de permisos de Calendario ya no ocurre durante el startup síncrono (cuando la app puede no ser frontmost). Ahora se hace en un Task diferido 3s después del arranque, con `NSApp.activate()` previo, para garantizar que macOS muestre el diálogo TCC
 - **Fix lógica**: si el estado TCC es `.denied`, el botón pasa a "Abrir Preferencias" en lugar de intentar `requestFullAccessToEvents()` (que no muestra diálogo para estado denegado)
