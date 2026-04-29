@@ -1069,6 +1069,9 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v2.2: fix calendar banner showing even when permission granted
+- **Fix**: `CalendarService.init()` now sets `calendarAccessGranted=true` immediately if TCC already has the permission granted, preventing the banner from appearing on launch
+
 ### 2026-04-29 — v2.1: definitive calendar permission fix + update card in sidebar
 - **Calendar permission fix**: the "No access" banner no longer gets stuck even when permission is granted. CalendarService now has observable calendarAccessGranted/remindersAccessGranted properties. TCC cache is reset on app foreground
 - **Update card in sidebar**: Sparkle update card at sidebar bottom (Claude-style) instead of default Sparkle window

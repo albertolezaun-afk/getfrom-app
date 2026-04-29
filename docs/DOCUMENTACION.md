@@ -1069,6 +1069,9 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v2.2: fix banner Calendario no desaparecía aunque permiso concedido
+- **Fix**: `CalendarService.init()` ahora inicializa `calendarAccessGranted=true` directamente si TCC ya tiene el permiso concedido, evitando que el banner aparezca al arrancar aunque el permiso esté activo
+
 ### 2026-04-29 — v2.1: fix permisos Calendario definitivo + tarjeta de actualización
 - **Fix permisos Calendario**: el banner "Sin acceso" ya no se queda bloqueado aunque el permiso esté concedido. `CalendarService` tiene propiedades observables `calendarAccessGranted`/`remindersAccessGranted` que se actualizan con el resultado real de cada fetch. Al volver desde Preferencias del Sistema se resetea la caché de TCC y se reintenta el acceso
 - **Tarjeta de actualización en sidebar**: cuando Sparkle detecta una actualización disponible, aparece una tarjeta al fondo del sidebar (estilo Claude) en lugar de la ventana de Sparkle. Muestra icono, "Reiniciar para actualizar" y versión. Al pulsar abre el diálogo de instalación de Sparkle
