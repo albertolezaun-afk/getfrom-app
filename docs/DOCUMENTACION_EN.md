@@ -1069,6 +1069,11 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v2.4: fix calendar permission — deferred request and TCC diagnostic
+- **Root fix**: the Calendar permission request no longer happens during synchronous startup (when the app may not be frontmost). It's now deferred 3s after launch in a background Task, with `NSApp.activate()` first, ensuring macOS shows the TCC dialog
+- **Logic fix**: if TCC status is `.denied`, the button switches to "Open Preferences" instead of calling `requestFullAccessToEvents()` (which doesn't show a dialog for denied status)
+- **Diagnostic**: Settings → Calendar now shows the raw TCC status (notDetermined / denied / fullAccess) for debugging
+
 ### 2026-04-29 — v2.3: fix calendar permission signing identity conflict
 - **Definitive fix**: tapping "Allow access" now resets the Calendar TCC entry before requesting permission (tccutil reset Calendar). Resolves the conflict between the development build's permission grant and the production build (Developer ID), which are different signing identities in TCC
 

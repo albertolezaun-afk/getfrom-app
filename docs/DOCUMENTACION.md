@@ -1069,6 +1069,11 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v2.4: fix permisos Calendario — petición diferida y diagnóstico TCC
+- **Fix raíz**: la petición de permisos de Calendario ya no ocurre durante el startup síncrono (cuando la app puede no ser frontmost). Ahora se hace en un Task diferido 3s después del arranque, con `NSApp.activate()` previo, para garantizar que macOS muestre el diálogo TCC
+- **Fix lógica**: si el estado TCC es `.denied`, el botón pasa a "Abrir Preferencias" en lugar de intentar `requestFullAccessToEvents()` (que no muestra diálogo para estado denegado)
+- **Diagnóstico**: en Ajustes → Calendario aparece el estado TCC raw (notDetermined / denied / fullAccess) para facilitar el diagnóstico
+
 ### 2026-04-29 — v2.3: fix permisos Calendario conflicto de identidad de firma
 - **Fix definitivo**: al pulsar "Permitir acceso", From resetea la entrada TCC de Calendario antes de pedir permiso (tccutil reset Calendar). Esto resuelve el conflicto entre el permiso concedido al build de desarrollo y el build de producción (Developer ID), que son identidades de firma distintas en TCC
 
