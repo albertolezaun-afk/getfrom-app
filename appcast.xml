@@ -7,6 +7,19 @@
         <language>en</language>
 
         <item>
+            <title>Version 2.0</title>
+            <pubDate>Wed, 29 Apr 2026 00:00:00 +0000</pubDate>
+            <sparkle:version>11</sparkle:version>
+            <sparkle:shortVersionString>2.0</sparkle:shortVersionString>
+            <enclosure
+                url="https://github.com/albertolezaun-afk/getfrom-app/releases/download/v2.0/From-2.0.dmg"
+                sparkle:edSignature="V1RSvDQchfiRr6TRQPiOaMyQu/xbQtigx5TbN+AfQUhjIVGXt5O5mCV5uP1dygf4b4olNUXHWzBRD5FMYjFFCw=="
+                length="17408354"
+                type="application/octet-stream"
+            />
+        </item>
+
+        <item>
             <title>Version 1.9</title>
             <pubDate>Wed, 29 Apr 2026 00:00:00 +0000</pubDate>
             <sparkle:version>10</sparkle:version>

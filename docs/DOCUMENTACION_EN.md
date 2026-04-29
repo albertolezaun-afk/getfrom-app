@@ -1069,6 +1069,13 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — Backup performance + unified Settings layout
+- **BackupSettingsTab optimization**: background size calculation (backupSizes cache), async folderList with ProgressView, activity log with LazyVStack
+- **Unified right panel in Settings**: new `SettingsRightPanel` (260pt) with contextual info per tab. Full-width tabs (Taller, Assistant, Agents) without panel. No individual tab modified
+
+### 2026-04-29 — v2.0: permission banner now disappears after granting access
+- **Fix**: the "No Calendar Access" banner now disappears automatically when returning to From after granting permission in System Preferences (listens to NSApplication.didBecomeActiveNotification)
+
 ### 2026-04-29 — v1.9: calendar permission fix, timeline banner
 - **Fix "Allow access" button in Settings**: if system dialog doesn't appear (TCC blocked), opens System Preferences → Privacy automatically
 - **Permission banner in Day timeline**: appears above timeline when Calendar or Reminders access is missing

@@ -1069,6 +1069,13 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — Rendimiento Backup + layout unificado Ajustes
+- **Optimización BackupSettingsTab**: cálculo de tamaños en background (caché `backupSizes`), folderList async con `ProgressView`, activity log con `LazyVStack`
+- **Panel derecho unificado en Ajustes**: nuevo `SettingsRightPanel` (260pt) con info contextual por pestaña. Tabs full-width (Taller, Asistente, Agentes) sin panel. Sin modificar ningún tab individual
+
+### 2026-04-29 — v2.0: fix banner permisos no desaparecía al volver desde Preferencias
+- **Fix**: el banner "Sin acceso a Calendario" ahora desaparece automáticamente al volver a From tras conceder permisos en Preferencias del Sistema (escucha NSApplication.didBecomeActiveNotification)
+
 ### 2026-04-29 — v1.9: fix permisos calendario, banner timeline
 - **Fix botón "Permitir acceso" en Ajustes**: si el diálogo del sistema no aparece (TCC bloqueado), abre Preferencias del Sistema → Privacidad automáticamente
 - **Banner de permisos en timeline de Día**: aparece encima del timeline cuando faltan permisos de Calendario o Recordatorios
