@@ -1069,6 +1069,10 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v2.1: definitive calendar permission fix + update card in sidebar
+- **Calendar permission fix**: the "No access" banner no longer gets stuck even when permission is granted. CalendarService now has observable calendarAccessGranted/remindersAccessGranted properties. TCC cache is reset on app foreground
+- **Update card in sidebar**: Sparkle update card at sidebar bottom (Claude-style) instead of default Sparkle window
+
 ### 2026-04-29 — Backup performance + unified Settings layout
 - **BackupSettingsTab optimization**: background size calculation (backupSizes cache), async folderList with ProgressView, activity log with LazyVStack
 - **Unified right panel in Settings**: new `SettingsRightPanel` (260pt) with contextual info per tab. Full-width tabs (Taller, Assistant, Agents) without panel. No individual tab modified
