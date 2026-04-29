@@ -1069,6 +1069,11 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v1.8: timeline tareas vs eventos, fix save loop, fix all-day
+- **Timeline diario — tareas sin caja**: las tareas aparecen como punto de color de raíz + texto, sin fondo ni caja. Los eventos mantienen su bloque con fondo. Sin checkbox
+- **Fix save loop crítico**: `saveImmediately` ahora ignora guardados cuando el contenido no ha cambiado. Esto corta el bucle crash→restore→save que causaba que las tareas inline reaparecieran y el scroll saltara al inicio
+- **Fix evento todo el día en Calendar**: el ciclo From→Apple→From hacía que all-day events se convirtieran en eventos a las 00:00. Corregido detectando start+end ambos a medianoche como all-day
+
 ### 2026-04-29 — Dashboard UX, drag mejoras, bugs críticos sync/duplicado/scroll
 - **Card "Próximos días"**: 3 columnas (mañana/pasado/trasposado). Eventos con barra de color, tareas con punto de raíz. Con hora → posición cronológica; sin hora → al final con divisor
 - **Card "Recientes"**: orden cronológico global (eliminado agrupado por raíz). Botón hover para elegir cantidad de notas (3–20, por defecto 5)

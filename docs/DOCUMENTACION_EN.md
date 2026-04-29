@@ -1069,6 +1069,11 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v1.8: timeline tasks vs events, save loop fix, all-day fix
+- **Day timeline — tasks without box**: tasks render as a raíz color dot + text, no background or box. Events keep their block style. No checkbox
+- **Critical save loop fix**: `saveImmediately` now skips saving when content hasn't changed. Breaks the crash→restore→save cycle that caused inline tasks to reappear and scroll to jump to the top
+- **All-day event Calendar fix**: the From→Apple→From sync cycle was converting all-day events into 00:00 timed events. Fixed by detecting start+end both at midnight as all-day
+
 ### 2026-04-29 — Dashboard UX, drag improvements, critical sync/duplicate/scroll bugs
 - **"Upcoming Days" card**: 3 columns (tomorrow/day after/day after that). Events with color bar, tasks with raíz dot. Timed items sorted chronologically; untimed tasks at the bottom with divider
 - **"Recent" card**: global chronological order (removed raíz grouping). Hover button to choose note count (3–20, default 5)
