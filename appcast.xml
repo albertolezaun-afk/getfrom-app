@@ -7,6 +7,19 @@
         <language>en</language>
 
         <item>
+            <title>Version 1.8</title>
+            <pubDate>Wed, 29 Apr 2026 00:00:00 +0000</pubDate>
+            <sparkle:version>9</sparkle:version>
+            <sparkle:shortVersionString>1.8</sparkle:shortVersionString>
+            <enclosure
+                url="https://github.com/albertolezaun-afk/getfrom-app/releases/download/v1.8/From-1.8.dmg"
+                sparkle:edSignature="E8WA+UA6b4iapIAPR5o3Up6dqldlemM4YFViZ5ZUOWeTY5SGxGtNfa1zXN43bE5HLRWBW1MkpEbta1tkbzA7Dg=="
+                length="14713847"
+                type="application/octet-stream"
+            />
+        </item>
+
+        <item>
             <title>Version 1.7</title>
             <pubDate>Mon, 28 Apr 2026 00:00:00 +0000</pubDate>
             <sparkle:version>8</sparkle:version>
