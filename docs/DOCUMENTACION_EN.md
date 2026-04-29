@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-29
+> Last update: 2026-04-29 (v2.6)
 
 ---
 
@@ -1068,6 +1068,12 @@ LemonSqueezy manages:
 ---
 
 ## Changelog
+
+### 2026-04-29 — v2.6: timeline — wider creation popup, fix events not showing, tasks in separate rows
+- **Creation popup**: new event/task popup is now a native macOS popover (280px wide) instead of rendering inside the narrow hour column
+- **Fix events**: after creating an event, `loadAll()` is called correctly — events appear in the timeline immediately without manual refresh
+- **Task layout**: tasks use a 90-minute virtual margin in the row assignment algorithm, preventing titles of nearby tasks from overlapping in the same row
+- **Task width**: minimum task width increased to 200px to show full titles without truncation
 
 ### 2026-04-29 — v2.5: fix calendar permission — hardened runtime entitlement + fetch-based detection
 - **Definitive fix**: added `com.apple.security.personal-information.calendars` and `.reminders` entitlements to the signed binary. With hardened runtime active (required for notarization), macOS requires this entitlement to show the TCC dialog even for non-sandboxed apps

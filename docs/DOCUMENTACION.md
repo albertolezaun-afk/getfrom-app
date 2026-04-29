@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-29
+> Ultima actualizacion: 2026-04-29 (v2.6)
 
 ---
 
@@ -1068,6 +1068,12 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
+
+### 2026-04-29 — v2.6: timeline — popup creación amplio, fix eventos no aparecían, tareas en filas separadas
+- **Popup creación**: el popup de nuevo evento/tarea ahora es un popover macOS nativo (ancho 280px) en lugar de renderizarse dentro de la columna de hora (ilegible por estrecha)
+- **Fix eventos**: tras crear un evento desde el popup, `loadAll()` se llama correctamente — los eventos ya aparecen en el timeline sin recargar manualmente
+- **Layout tareas**: las tareas usan un margen visual de 90 minutos para el algoritmo de filas, evitando que títulos de tareas cercanas se superpongan en la misma fila
+- **Ancho tareas**: ancho mínimo de tareas aumentado a 200px para mostrar títulos completos sin truncar
 
 ### 2026-04-29 — v2.5: fix permisos Calendario — entitlement hardened runtime + detección por fetch
 - **Fix definitivo**: añadido el entitlement `com.apple.security.personal-information.calendars` y `.reminders` en el binario firmado. Con hardened runtime activo (requerido para notarización), macOS exige este entitlement para mostrar el diálogo TCC incluso en apps no sandboxed
