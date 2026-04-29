@@ -1069,6 +1069,10 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v1.9: calendar permission fix, timeline banner
+- **Fix "Allow access" button in Settings**: if system dialog doesn't appear (TCC blocked), opens System Preferences → Privacy automatically
+- **Permission banner in Day timeline**: appears above timeline when Calendar or Reminders access is missing
+
 ### 2026-04-29 — v1.8.1: calendar permission fix, timeline banner
 - **Fix "Allow access" button in Settings**: if the system dialog doesn't appear (TCC blocked by previous build), automatically opens System Preferences → Privacy
 - **Permission banner in Day timeline**: appears above the timeline when Calendar or Reminders access is missing, with a direct button to grant it

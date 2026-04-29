@@ -1069,6 +1069,10 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v1.9: fix permisos calendario, banner timeline
+- **Fix botón "Permitir acceso" en Ajustes**: si el diálogo del sistema no aparece (TCC bloqueado), abre Preferencias del Sistema → Privacidad automáticamente
+- **Banner de permisos en timeline de Día**: aparece encima del timeline cuando faltan permisos de Calendario o Recordatorios
+
 ### 2026-04-29 — v1.8.1: fix permisos calendario, banner timeline
 - **Fix botón "Permitir acceso" en Ajustes**: si el diálogo del sistema no aparece (TCC bloqueado por build anterior), abre Preferencias del Sistema → Privacidad automáticamente
 - **Banner de permisos en timeline de Día**: aparece encima del timeline cuando faltan permisos de Calendario o Recordatorios, con botón directo para concederlos
