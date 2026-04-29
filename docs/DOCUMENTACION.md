@@ -1069,6 +1069,9 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v2.3: fix permisos Calendario conflicto de identidad de firma
+- **Fix definitivo**: al pulsar "Permitir acceso", From resetea la entrada TCC de Calendario antes de pedir permiso (tccutil reset Calendar). Esto resuelve el conflicto entre el permiso concedido al build de desarrollo y el build de producción (Developer ID), que son identidades de firma distintas en TCC
+
 ### 2026-04-29 — v2.2: fix banner Calendario no desaparecía aunque permiso concedido
 - **Fix**: `CalendarService.init()` ahora inicializa `calendarAccessGranted=true` directamente si TCC ya tiene el permiso concedido, evitando que el banner aparezca al arrancar aunque el permiso esté activo
 

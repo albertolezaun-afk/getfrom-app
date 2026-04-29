@@ -1069,6 +1069,9 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v2.3: fix calendar permission signing identity conflict
+- **Definitive fix**: tapping "Allow access" now resets the Calendar TCC entry before requesting permission (tccutil reset Calendar). Resolves the conflict between the development build's permission grant and the production build (Developer ID), which are different signing identities in TCC
+
 ### 2026-04-29 — v2.2: fix calendar banner showing even when permission granted
 - **Fix**: `CalendarService.init()` now sets `calendarAccessGranted=true` immediately if TCC already has the permission granted, preventing the banner from appearing on launch
 
