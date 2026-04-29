@@ -1069,6 +1069,21 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — Dashboard UX, drag mejoras, bugs críticos sync/duplicado/scroll
+- **Card "Próximos días"**: 3 columnas (mañana/pasado/trasposado). Eventos con barra de color, tareas con punto de raíz. Con hora → posición cronológica; sin hora → al final con divisor
+- **Card "Recientes"**: orden cronológico global (eliminado agrupado por raíz). Botón hover para elegir cantidad de notas (3–20, por defecto 5)
+- **Card "Notas de hoy"**: fix race condition cache. Fix filtro IA. Fix fallback `created:` en buildNote (hoy en vez de ayer)
+- **Botón editar dashboard**: movido a icono flotante en esquina topTrailing, sin texto ni fila propia
+- **Atajos rápidos**: context menu "Cambiar icono y color" con paleta + grid SF Symbols. Emoji eliminado (macOS popover focus irresolvible)
+- **Timeline diario — colores**: eventos usan color del calendario Apple, tareas usan color de raíz, inline tasks usan color de raíz de su nota padre
+- **Timeline diario — hover 15min**: cada hora dividida en 4 QuarterSlotDropZone con dimensiones explícitas via GeometryReader
+- **Timeline diario — duración**: por defecto 1h (antes 45min)
+- **Timeline diario — sin flicker al soltar**: posición snapped se mantiene hasta que el save confirma
+- **Dashboard bloques fijos**: `.draggable("")` → `OptionalDraggable`; permite selección de texto sin activar drag
+- **Fix tareas inline que reaparecen**: threshold sync externo subido a 60s; evita ciclo CloudSync revert
+- **Fix scroll**: preserva `scrollDOM.scrollTop` de CodeMirror al aceptar cambios externos
+- **Fix duplicado timeline**: `triggerAppleIntegration` comprueba `appleId` existente y actualiza en lugar de crear nuevo recordatorio
+
 ### 2026-04-29 — Fixes: shortcuts, drag semana, sync checkboxes, caché timelines
 - **Shortcuts atajos rápidos**: raíz/colección/tipo ahora navegan correctamente a Explorar. Shortcut nueva tarea usa QuickTaskSheet con pill de fecha
 - **QuickTaskSheet**: selector de fecha como pill naranja con popover de calendario (estilo NewEventView)

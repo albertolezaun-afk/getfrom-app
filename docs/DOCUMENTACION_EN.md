@@ -1069,6 +1069,21 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — Dashboard UX, drag improvements, critical sync/duplicate/scroll bugs
+- **"Upcoming Days" card**: 3 columns (tomorrow/day after/day after that). Events with color bar, tasks with raíz dot. Timed items sorted chronologically; untimed tasks at the bottom with divider
+- **"Recent" card**: global chronological order (removed raíz grouping). Hover button to choose note count (3–20, default 5)
+- **"Notes today" card**: fixed cache race condition, fixed AI filter, fixed `created:` fallback in buildNote (today instead of yesterday)
+- **Edit dashboard button**: moved to floating icon in topTrailing corner, no text or dedicated row
+- **Quick shortcuts**: context menu "Change icon & color" with palette + SF Symbol grid. Emoji removed (macOS popover focus unreliable)
+- **Day timeline — colors**: events use Apple Calendar color, tasks use raíz color, inline tasks use parent note's raíz color
+- **Day timeline — 15min hover**: each hour split into 4 QuarterSlotDropZone with explicit GeometryReader dimensions
+- **Day timeline — duration**: default 1h (was 45min)
+- **Day timeline — no flicker on drop**: snapped position held until save confirms via notesVersion
+- **Dashboard blocks fixed**: `.draggable("")` → `OptionalDraggable`; allows text selection without triggering drag
+- **Fix inline tasks reappearing**: external sync threshold raised to 60s; breaks CloudSync revert cycle
+- **Fix scroll jump**: CodeMirror `scrollDOM.scrollTop` preserved before/after external body update
+- **Fix timeline duplicate**: `triggerAppleIntegration` checks existing `appleId` and updates instead of creating a new reminder
+
 ### 2026-04-29 — Event editor panel, continuous month scroll, timeline fixes
 - **EventPropertiesPanel**: panel below the title when a note is an event. Editable pills for date (blue), start time (cyan), end time (indigo), and recurrence. Appears automatically in the note editor
 - **Month view — continuous scroll**: replaced month-by-month pagination with a free scroll from 180 days back to 365 ahead. Today is centered on open. Pinned month headers while scrolling. "Today" button to return. Mini-calendar click navigates to that day
