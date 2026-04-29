@@ -1069,6 +1069,10 @@ LemonSqueezy manages:
 
 ## Changelog
 
+### 2026-04-29 — v1.8.1: calendar permission fix, timeline banner
+- **Fix "Allow access" button in Settings**: if the system dialog doesn't appear (TCC blocked by previous build), automatically opens System Preferences → Privacy
+- **Permission banner in Day timeline**: appears above the timeline when Calendar or Reminders access is missing, with a direct button to grant it
+
 ### 2026-04-29 — v1.8: timeline tasks vs events, save loop fix, all-day fix
 - **Day timeline — tasks without box**: tasks render as a raíz color dot + text, no background or box. Events keep their block style. No checkbox
 - **Critical save loop fix**: `saveImmediately` now skips saving when content hasn't changed. Breaks the crash→restore→save cycle that caused inline tasks to reappear and scroll to jump to the top

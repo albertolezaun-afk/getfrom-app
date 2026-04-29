@@ -1069,6 +1069,10 @@ LemonSqueezy gestiona:
 
 ## Changelog
 
+### 2026-04-29 — v1.8.1: fix permisos calendario, banner timeline
+- **Fix botón "Permitir acceso" en Ajustes**: si el diálogo del sistema no aparece (TCC bloqueado por build anterior), abre Preferencias del Sistema → Privacidad automáticamente
+- **Banner de permisos en timeline de Día**: aparece encima del timeline cuando faltan permisos de Calendario o Recordatorios, con botón directo para concederlos
+
 ### 2026-04-29 — v1.8: timeline tareas vs eventos, fix save loop, fix all-day
 - **Timeline diario — tareas sin caja**: las tareas aparecen como punto de color de raíz + texto, sin fondo ni caja. Los eventos mantienen su bloque con fondo. Sin checkbox
 - **Fix save loop crítico**: `saveImmediately` ahora ignora guardados cuando el contenido no ha cambiado. Esto corta el bucle crash→restore→save que causaba que las tareas inline reaparecieran y el scroll saltara al inicio
