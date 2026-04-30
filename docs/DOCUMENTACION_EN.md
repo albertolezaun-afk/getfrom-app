@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-29 (v2.6)
+> Last update: 2026-04-30 (iOS v1)
 
 ---
 
@@ -1068,6 +1068,13 @@ LemonSqueezy manages:
 ---
 
 ## Changelog
+
+### 2026-04-30 — iOS v1: first iPhone app version
+- **iOS target added** to Xcode project (`From iOS`, bundle `com.albertolezaun.FromiOS`, iOS 26.0+)
+- **Shared CloudKit**: same `iCloud.com.albertolezaun.From` database as Mac — automatic sync
+- **Shared code**: Models/ and Services/ compile on both platforms with `#if os(macOS)` guards
+- **iOS views**: permissions onboarding, vault setup, home with roots and recents, note list with filters, detail/editor, task list, quick create (note/task/photo)
+- **Tested on iPhone 16 Pro** (iOS 26.3.1) — build and run confirmed
 
 ### 2026-04-29 — v2.6: timeline — wider creation popup, fix events not showing, tasks in separate rows
 - **Creation popup**: new event/task popup is now a native macOS popover (280px wide) instead of rendering inside the narrow hour column

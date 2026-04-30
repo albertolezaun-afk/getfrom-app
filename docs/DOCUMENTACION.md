@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-29 (v2.6)
+> Ultima actualizacion: 2026-04-30 (iOS v1)
 
 ---
 
@@ -1068,6 +1068,13 @@ LemonSqueezy gestiona:
 ---
 
 ## Changelog
+
+### 2026-04-30 — iOS v1: primera versión de la app para iPhone
+- **Target iOS añadido** al proyecto Xcode (`From iOS`, bundle `com.albertolezaun.FromiOS`, iOS 26.0+)
+- **CloudKit compartido**: misma base de datos `iCloud.com.albertolezaun.From` que el Mac — sync automático
+- **Código compartido**: Models/ y Services/ compilan en ambas plataformas con guards `#if os(macOS)`
+- **Vistas iOS**: onboarding de permisos, setup de vault, home con raíces y recientes, lista de notas con filtros, detalle/editor, lista de tareas, creación rápida (nota/tarea/foto)
+- **App ejecutada en iPhone 16 Pro** (iOS 26.3.1) — compilación y ejecución confirmadas
 
 ### 2026-04-29 — v2.6: timeline — popup creación amplio, fix eventos no aparecían, tareas en filas separadas
 - **Popup creación**: el popup de nuevo evento/tarea ahora es un popover macOS nativo (ancho 280px) en lugar de renderizarse dentro de la columna de hora (ilegible por estrecha)
