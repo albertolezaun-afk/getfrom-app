@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-30 (iOS v1)
+> Last update: 2026-04-30 (iOS v1 + Mac fixes)
 
 ---
 

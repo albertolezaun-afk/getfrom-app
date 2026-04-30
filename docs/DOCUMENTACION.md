@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-30 (iOS v1)
+> Ultima actualizacion: 2026-04-30 (iOS v1 + Mac fixes)
 
 ---
 
