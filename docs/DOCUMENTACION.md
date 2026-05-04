@@ -1225,6 +1225,21 @@ LemonSqueezy gestiona:
 - Identificado problema con v1.2 sin `SUPublicEDKey` que impide updates automaticos
 - Solucion: instalar v1.5 manualmente; a partir de v1.5 los updates automaticos funcionan
 
+### 2026-05-04b — Panel Actividad, URL contexto, chat colapsable
+
+**Panel de Actividad unificado (reemplaza Tareas + Log):**
+- `ProjectTask` gana campo `createdAt` serializado como `%YYYY-MM-DDTHH:mm:ss`. Tareas antiguas van al fondo.
+- `ProjectActivityPanel`: un solo bloque cronológico (más reciente primero) con tareas + log mezclados. Pill selector "Tarea / Log". Al crear tarea (Enter) → popover de fecha opcional; segundo Enter confirma sin fecha. Completadas inline en su posición cronológica.
+- `ProjectWorkspacePanel` elimina `ProjectTaskPanel` + `ProjectLogPanel` y usa el panel unificado.
+
+**Fix URL en bloque de contexto:**
+- `isURL` detecta dominios sin `https://` (e.g. `miramiweb.es`). En `commitInput`, normaliza añadiendo `https://` automáticamente.
+
+**Chat colapsable:**
+- Botón `›` en esquina del panel de chat para colapsar; franja vertical de 22px con `‹` para expandir.
+- `@AppStorage("chatDefaultExpanded")` persiste el estado por defecto.
+- Ajustes → Vista: toggle "Chat abierto por defecto".
+
 ### 2026-05-04 — Fixes resize timeline, ForEach IDs, dashboard layout
 
 **Fix resize evento de calendario:**

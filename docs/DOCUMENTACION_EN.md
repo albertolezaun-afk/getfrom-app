@@ -1212,6 +1212,21 @@ LemonSqueezy manages:
 - Deleted never-used files: `AreasView.swift`, `TaskListView.swift`, `NewTaskNoteSheet.swift`, `NoteTreeView.swift`, `NoteContextBar.swift`
 - Documentation completely revised and updated to reflect actual code state
 
+### 2026-05-04b — Unified Activity panel, context URL fix, collapsible chat
+
+**Unified Activity panel (replaces Tasks + Log):**
+- `ProjectTask` gains `createdAt` field serialized as `%YYYY-MM-DDTHH:mm:ss`. Old tasks go to the bottom.
+- `ProjectActivityPanel`: single chronological block (newest first) mixing tasks and log entries. "Task / Log" pill selector. Creating a task (Enter) → optional due date popover; second Enter confirms without date. Completed tasks stay inline in their chronological position.
+- `ProjectWorkspacePanel` drops separate `ProjectTaskPanel` + `ProjectLogPanel` in favour of the unified panel.
+
+**Context block URL fix:**
+- `isURL` now detects domains without `https://` (e.g. `miramiweb.es`). `commitInput` auto-prepends `https://`.
+
+**Collapsible chat panel:**
+- `›` button on the chat panel header to collapse; 22px vertical strip with `‹` to expand.
+- `@AppStorage("chatDefaultExpanded")` persists the default state.
+- Settings → Vista: "Chat open by default" toggle.
+
 ### 2026-05-04 — Timeline resize fix, ForEach IDs, dashboard layout
 
 **Calendar event resize fix:**
