@@ -1,7 +1,7 @@
 # From — Documentacion completa
 
 > Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-04-30 (iOS v1 + Mac fixes)
+> Ultima actualizacion: 2026-05-04
 
 ---
 
@@ -1224,6 +1224,19 @@ LemonSqueezy gestiona:
 ### 2026-04-27 — Diagnostico Sparkle
 - Identificado problema con v1.2 sin `SUPublicEDKey` que impide updates automaticos
 - Solucion: instalar v1.5 manualmente; a partir de v1.5 los updates automaticos funcionan
+
+### 2026-05-04 — Fixes resize timeline, ForEach IDs, dashboard layout
+
+**Fix resize evento de calendario:**
+- Añadido `onlyThisOccurrence: Bool = false` a `CalendarService.updateEvent`. Cuando es `true` usa `span: .thisEvent` y preserva el identificador del evento recurrente.
+- `commitResizeHorizontal` y `commitMoveHorizontal` pasan `onlyThisOccurrence: true`. Bug: para recurrentes, `span: .futureEvents` cambiaba el ID → el evento desaparecía tras `loadAll()`.
+
+**Fix ForEach IDs duplicados en dashboard cards:**
+- `DashboardCards`: reemplazado `id: \.min` (minuto de inicio, colisiona) por `id: \.offset` con `enumerated()`.
+
+**Fix dashboard columnas expandidas:**
+- `.fixedSize(horizontal: false, vertical: true)` en cada columna del dashboard para que no se estiren a la altura de la columna más alta.
+- Editor de diario acotado a `minHeight: 240, maxHeight: 480`.
 
 ### 2026-04-27 — Timelines rediseñados, inline tasks, ventana y mejoras sistema
 

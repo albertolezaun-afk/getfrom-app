@@ -1,7 +1,7 @@
 # From — Complete Product Documentation
 
 > Living document. Updated automatically with each development session.
-> Last update: 2026-04-30 (iOS v1 + Mac fixes)
+> Last update: 2026-05-04
 
 ---
 
@@ -1211,6 +1211,19 @@ LemonSqueezy manages:
 ### 2026-04-28 — Dead code cleanup
 - Deleted never-used files: `AreasView.swift`, `TaskListView.swift`, `NewTaskNoteSheet.swift`, `NoteTreeView.swift`, `NoteContextBar.swift`
 - Documentation completely revised and updated to reflect actual code state
+
+### 2026-05-04 — Timeline resize fix, ForEach IDs, dashboard layout
+
+**Calendar event resize fix:**
+- Added `onlyThisOccurrence: Bool = false` to `CalendarService.updateEvent`. When `true`, uses `span: .thisEvent` and preserves the event identifier for recurring events.
+- `commitResizeHorizontal` and `commitMoveHorizontal` now pass `onlyThisOccurrence: true`. Bug: for recurring events, `span: .futureEvents` changed the ID → event disappeared after `loadAll()`.
+
+**ForEach duplicate IDs fix in dashboard cards:**
+- `DashboardCards`: replaced `id: \.min` (start minute, collides when two items start at same time) with `id: \.offset` using `enumerated()`.
+
+**Dashboard column height fix:**
+- Added `.fixedSize(horizontal: false, vertical: true)` to each dashboard column so columns don't stretch to match the tallest column's height.
+- Diary editor capped to `minHeight: 240, maxHeight: 480`.
 
 ### 2026-04-27 — Sparkle diagnostics
 - Identified issue with v1.2 missing `SUPublicEDKey`, blocking automatic updates
