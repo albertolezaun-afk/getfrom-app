@@ -1,1357 +1,308 @@
-# From — Documentacion completa
+# From — Documentación completa
 
-> Documento vivo. Se actualiza automaticamente en cada sesion de trabajo.
-> Ultima actualizacion: 2026-05-04
+> Documento vivo. Actualizado en cada sesión de desarrollo.
+> Última actualización: 2026-05-06 (v3.0 — migración completa a arquitectura de nodos)
 
 ---
 
-## Que es From
+## Qué es From
 
-**From** es una aplicacion nativa para macOS que funciona como un segundo cerebro personal. Combina notas en Markdown, gestion de tareas, vistas de calendario, agentes autonomos de IA y sincronizacion con iCloud, todo en una app local-first donde los datos son del usuario y nunca salen de su dispositivo.
+**From** es una aplicación nativa para macOS e iOS que funciona como un segundo cerebro personal. Organiza toda la información en un árbol de bullets sincronizado en tiempo real entre dispositivos, con agentes autónomos de IA y gestión de archivos integrada.
 
-**Tagline:** Tu segundo cerebro. En tu Mac. Solo tuyo.
+**Tagline:** Tu segundo cerebro. En todos tus dispositivos.
 
 **Propuesta de valor:**
-- **Local-first, privacidad radical:** Sin servidores obligatorios, sin telemetria, sin lock-in. Las notas son archivos `.md` estandar que funcionan con Obsidian, iA Writer, VS Code o cualquier editor de texto.
-- **Nativo macOS:** Construido en Swift y SwiftUI. Rendimiento nativo, integracion con el sistema (Calendar, Reminders, iCloud Drive, Spotlight).
-- **IA integrada:** Asistente conversacional con contexto completo del vault. Agentes autonomos que trabajan solos.
-- **Organizacion natural:** Jerarquia parent-child flexible sin carpetas rigidas. Raices con colores, tipos personalizables, vistas configurables.
+- **Árbol de bullets universal:** Todo — notas, tareas, proyectos, diario, archivos — vive en un árbol de nodos flexible organizado en workspaces con colores.
+- **Sync real en tiempo real:** Los cambios se sincronizan entre Mac, iPhone y la nube automáticamente. Sin iCloud Drive, sin ficheros .md que gestionar.
+- **IA integrada:** Asistente conversacional con contexto completo de los nodos. Agentes autónomos que ejecutan tareas periódicas.
+- **Nativo macOS + iOS:** Construido en Swift y SwiftUI. Rendimiento nativo.
 
-**Publico objetivo:**
-- Personas cansadas de apps de notas dependientes de la nube
-- Usuarios que priorizan la privacidad
-- Usuarios de Mac que quieren rendimiento nativo
+**Público objetivo:**
 - Knowledge workers (proyectos, tareas, notas interconectadas)
-- Entusiastas de IA que quieren RAG local sobre sus propios datos
+- Personas que quieren todo en un único sistema sin fricciones
+- Usuarios de Mac + iPhone que necesitan continuidad real entre dispositivos
+- Entusiastas de IA que quieren un asistente con contexto real de su vida
 
 ---
 
-## Stack tecnologico
+## Stack tecnológico
 
-| Componente | Tecnologia |
+| Componente | Tecnología |
 |---|---|
-| App macOS | Swift 5 + SwiftUI |
-| Plataforma | macOS 14+ (Sonoma) |
-| Almacenamiento | Archivos `.md` en iCloud Drive |
-| Busqueda | SQLite FTS5 (full-text search + RAG) |
-| Backend opcional | TypeScript + Bun + Hono + PostgreSQL |
-| Sincronizacion | CloudKit (iCloud) |
+| App macOS | Swift 5.10 + SwiftUI |
+| App iOS | Swift 5.10 + SwiftUI |
+| Plataforma macOS | macOS 14+ (Sonoma) |
+| Plataforma iOS | iOS 17+ |
+| Almacenamiento local | SQLite (NodeDB, FTS5) |
+| Sync en la nube | TypeScript + Bun + Hono + Drizzle + PostgreSQL (Railway) |
+| Archivos en la nube | Cloudflare R2 (S3-compatible) via presigned URLs |
+| Búsqueda | SQLite FTS5 local + NodeSearchParser |
 | Calendario | EventKit (Apple Calendar + Reminders) |
-| IA | Multi-proveedor: Anthropic, OpenAI, Google |
+| IA | Multi-proveedor: Anthropic Claude, OpenAI, Google Gemini |
 | Pagos | LemonSqueezy |
-| Landing | HTML estatico (getfrom.app, GitHub Pages) |
+| Updates | Sparkle (macOS) |
+| Landing | HTML estático (getfrom.app) |
 
 ---
 
-## Estructura del vault
+## Arquitectura de datos
 
-From trabaja sobre una carpeta en iCloud Drive (el "vault") con esta estructura:
+### Modelo de nodos
+
+El dato fundamental es el **Node** — un bullet con texto, body markdown opcional, propiedades y hijos. Los nodos se organizan en **Workspaces** (espacios de trabajo con nombre y color).
 
 ```
-Centro/                         (vault raiz)
-├── Notas/                      (todas las notas del usuario)
-├── Diario/                     (notas diarias: YYYYMMDD.md)
-├── Raices/                     (raices: categorias principales)
-├── Agentes/                    (agentes autonomos IA)
-├── Plantillas/                 (plantillas de notas)
-├── Archivos/                   (archivos adjuntos)
-├── Colecciones/                (colecciones de notas)
-└── .from/                      (metadatos internos)
-    ├── versions/               (historial de versiones)
-    ├── ai_instructions/        (instrucciones IA permanentes por nota)
-    └── activity.jsonl          (log de actividad)
+Workspace "Trabajo"
+├── Proyecto X
+│   ├── Fase 1
+│   │   ├── Tarea pendiente   [status: pending, due: 2026-05-10]
+│   │   └── Tarea hecha       [status: done]
+│   └── Recursos
+│       └── Documento de referencia  [body: "contenido markdown..."]
+└── Reuniones
+    └── 20260506  [isDiaryEntry: true]
+
+Workspace "Personal"
+├── ...
 ```
 
-Cada nota es un archivo `.md` con frontmatter YAML que define sus propiedades.
+Un Node tiene:
+- `text`: el título/bullet (una línea)
+- `body`: markdown libre (la nota al abrir)
+- `types`: etiquetas globales (`["tarea", "proyecto", "cliente"...]`)
+- `status`: estado operativo (`pending | done | cancelled | ...`)
+- `due`: fecha de vencimiento
+- `priority`: alta | media | baja
+- `isFavorite`, `isDiaryEntry`, `isChat`, `isEvent`, `isActive`
+- `collections`: organización interna del workspace
+- `siblingOrder`: fractional indexing para ordenación manual
+- `parentId`: jerarquía padre-hijo
+
+### Capa de almacenamiento
+
+```
+Dispositivo (Mac / iPhone)
+  └── nodes.db (SQLite)
+        ├── workspaces
+        ├── nodes          (FTS5 full-text search)
+        ├── node_types     (tipos de nodo)
+        └── node_fields    (campos personalizados)
+
+NodeService (in-memory)
+  └── nodesByWorkspace: [UUID: [UUID: Node]]  (árbol completo en RAM)
+```
+
+### Sincronización
+
+```
+Mac  ←──── delta sync cada 5min ────→  Railway PostgreSQL  ←──── delta sync ────→  iPhone
+            (POST /sync)                sync_workspaces                              (POST /sync)
+                                        sync_nodes
+```
+
+**Protocolo delta:** El cliente envía todos los nodos modificados desde `lastSyncAt`. El servidor aplica "ganador más reciente" (`updated_at`) y devuelve los cambios del servidor que el cliente no tiene.
+
+**Archivos:** Los archivos nunca pasan por Railway. Flujo: App → `POST /files/presign-upload` (obtiene URL R2) → App sube directamente a R2 → `extraData["r2Key"]` guardado en el nodo.
+
+### Backup local de nodos
+
+`NodeBackupService` exporta todos los nodos a Markdown cada 2 horas en:
+`~/Library/Application Support/From/Backups/`
 
 ---
 
 ## Primer uso — Onboarding
 
-### Paso 1: Pantalla de bienvenida
-Al abrir From por primera vez, aparece **VaultPickerView**, un wizard de 2 pasos:
-1. **Filosofia:** Explica que es From y como funciona (local-first, archivos .md)
-2. **Elegir carpeta:** El usuario selecciona una carpeta en su Mac/iCloud Drive como vault
+### macOS
+1. **Pantalla de bienvenida:** Permisos básicos (Calendar, Notifications)
+2. **Elegir espacio:** El usuario selecciona o crea una carpeta local que From usará como base (para agentes y archivos locales). El vault .md ya no existe.
+3. **Login (opcional):** Para activar sync entre dispositivos, el usuario hace login con su cuenta From.
 
-### Paso 2: Crear primera Raiz
-Tras seleccionar el vault, From muestra un estado vacio que invita a crear la primera raiz desde Ajustes > Raices.
-
-### Paso 3: Configurar IA (opcional)
-En Ajustes > Cuenta, el usuario puede:
-- Activar la IA
-- Elegir modo automatico (suscripcion From) o manual (propia API key)
-- Conectar con Claude, OpenAI o Google
-
-### Paso 4: Crear perfil (opcional)
-En Ajustes > Perfil IA o a traves de **ProfileWizardView**, el usuario puede crear un perfil que la IA usara como contexto para personalizar respuestas.
+### iOS
+1. **Onboarding:** Pantalla de bienvenida
+2. **Configurar espacio** (si se necesita uno local para archivos)
+3. Los nodos se cargan automáticamente desde el servidor si hay sesión activa
 
 ---
 
-## Navegacion principal
+## Funcionalidades principales (macOS)
 
-La interfaz de From tiene 3 zonas principales:
+### Árbol de bullets (NodesView)
+- Vista principal de la app
+- Bullet expandible/colapsable con dot, checkbox, indentación
+- Zoom in/out: navegar dentro de cualquier nodo como si fuera la raíz
+- Búsqueda inline con comandos: `estado:pendiente`, `fecha:hoy`, `tipo:proyecto`, `prioridad:alta`, `col:Marketing`, etc.
+- Drag & drop para reorganizar el árbol
+- Crear bullets con Enter, Tab para indentar, Backspace para des-indentar
+- Atajos inline: `-t` (tarea), `-p:alta` (prioridad), `-d:hoy` (fecha)
 
-### Barra lateral izquierda (sidebar)
+### Panel de detalle del nodo (NodeEditorView)
+- Breadcrumb de ancestros
+- Título editable
+- Body en Markdown
+- Panel de propiedades lateral (estado, fecha, tipos, colecciones, prioridad, favorito)
+- Árbol de hijos inline
 
-Secciones fijas de navegacion (en orden):
-- **Dia** — Vista timeline del dia actual
-- **Semana** — Vista semanal con 7 columnas
-- **Mes** — Vista mensual con grid
-- **Ano** — Vista anual con filas semanales
-- **Explorar** — Raices, colecciones y tipos transversales
-- **Enlaces** — Organizador de URLs extraidas de notas y manuales
-- **Archivos** — Gestor de archivos adjuntos
-- **IA** — Chat con el asistente de IA
-- **Ajustes** — Configuracion completa (incluyendo Agentes)
+### Dashboard global (GlobalDashboardView)
+- Vista de hoy: tareas vencidas, vencen hoy, próximas
+- Panel de diario diario (DailyNotePanelView)
+- Timeline: Día / Semana / Mes / Año
+- Kanban por estado
 
-Secciones dinamicas (se muestran cuando existen):
-- **Vistas** — Vistas personalizadas del usuario (kanban, lista, calendario, etc.)
-- **Filtros** — Filtros guardados (legacy)
-- **Favoritos** — Notas marcadas como favoritas
+### Búsqueda global (Cmd+O)
+- Nodos, archivos y agentes
+- Instantáneo, sin servidor
 
-> Los **Agentes** se gestionan desde Ajustes > Agentes. El indicador de la barra de estado inferior tambien da acceso rapido a ellos.
+### Agentes IA (AgentService)
+- Los agentes son nodos con `types: ["agente"]`
+- Instrucción fija + fuentes de contexto + schedule
+- Herramientas: `leer nodo`, `actualizar nodo`, `crear nodo`, `fetch_url`, `buscar web`
+- Se ejecutan automáticamente según schedule o manualmente
+- Memoria en `node.body`
 
-### Zona central (contenido)
+### Archivos (ArchivosView + FileService)
+- Importar archivos desde Finder (drag & drop o menú)
+- Subida a Cloudflare R2 via presigned URL
+- Vista de archivos con thumbnails, búsqueda, agrupación por tipo/workspace
 
-Cambia segun la seccion seleccionada en la sidebar. Puede mostrar:
-- Una vista de timeline (dia/semana/mes/ano)
-- La vista Explorar (raices, colecciones, tipos)
-- El gestor de enlaces
-- El gestor de archivos
-- El chat de IA
-- Los ajustes completos
-- Una vista personalizada (kanban, calendario, lista)
-- El editor de una nota individual
-
-### Barra de estado (footer)
-
-Siempre visible en la parte inferior:
-- **Indicador de agentes (izquierda):** Muestra cuantos agentes estan activos/pausados, proxima ejecucion y boton de revisar pendientes. Clic navega a Ajustes > Agentes.
-- **Indicador de IA (derecha):** Estado de conexion, modelo actual, balance de tokens
-- **Selector de modelo:** Cambiar modelo IA activo
-- **Boton de refresco:** Recarga manual de notas desde disco
-
-### Barra de cabecera (header)
-
-Encima del contenido central:
-- **Botones de historial (izquierda):** Atras/Adelante
-- **Buscador global (centro):** Busqueda en tiempo real en toda la app
-- **Botones de accion rapida (derecha):**
-  - Nueva nota (`note.text.badge.plus`)
-  - Nuevo proyecto (`Cmd+Shift+P`)
-  - Nueva area
-  - Nuevo evento
-  - Nueva tarea (`Cmd+R`)
-  - Nueva vista personalizada
-  - Dropdown de agentes manuales
-
-### Modo Focus
-
-`Cmd+F` oculta la sidebar y paneles laterales para edicion sin distracciones. Se activa/desactiva con animacion suave.
+### Ajustes (SettingsView)
+- Cuenta: login, tokens IA, suscripción
+- Espacio: configuración del directorio local
+- Tipos y Estados: personalización del sistema de taxonomía
+- Calendario: sincronización con Apple Calendar
+- Backup: estado de backups de nodos
+- IA: Agentes, Prompts, Asistente, Taller
+- Atajos de teclado: configurables
 
 ---
 
-## Atajos de teclado
+## Funcionalidades principales (iOS)
 
-| Atajo | Accion |
-|---|---|
-| Cmd+N | Nueva nota |
-| Cmd+R | Nueva tarea |
-| Cmd+E | Nuevo evento |
-| Cmd+Shift+P | Nuevo proyecto |
-| Cmd+O | Busqueda Spotlight |
-| Cmd+F | Modo Focus (ocultar/mostrar paneles) |
-| Cmd+Shift+M | Mantenimiento/Ajustes |
-| Cmd+? | Abrir documentacion en el navegador |
+### Árbol de bullets (IOSNodesView)
+- Pantalla principal con selector de workspace
+- Buscador con comandos idénticos a macOS
+- Chips de filtros activos
+- Zoom in/out mediante tap en el dot
+- Swipe para marcar hecho / eliminar
+- Long press para menú contextual
 
-Los atajos son personalizables en Ajustes > Atajos.
+### Detalle de nodo (IOSNodeDetailView)
+- Propiedades en scroll horizontal en la parte superior (estado, fecha, prioridad, tipos)
+- Título y body editables
+- Árbol de hijos
+- Botón añadir bullet hijo
 
----
-
-## Notas
-
-### Crear una nota
-
-Formas de crear una nota:
-1. **Cmd+N** desde cualquier lugar
-2. **Boton "+"** en la cabecera
-3. **Boton "+"** al pasar el raton sobre una nota en el arbol (crea nota hija)
-4. **Desde el editor** de otra nota (boton + en breadcrumb, crea nota hija)
-5. **Desde una plantilla** (menu de plantillas en el editor)
-
-### Editor de notas (NoteEditorView)
-
-El editor es la pieza central de From. Se compone de:
-
-#### Breadcrumb (parte superior)
-- Muestra la ruta: Raiz > Padre > ... > Nota actual
-- Cada nivel es clickable para navegar
-- Titulo editable inline (click para renombrar)
-- Boton + para crear nota hija
-- Controles (derecha): fecha, parent, tarea (circulo), favorito (estrella), publicar (globo), Google Docs
-  - Todos los iconos: circulos de 22x22 con fondo sutil, color activo/inactivo
-- Menu contextual (tres puntos):
-  - Exportar como Markdown
-  - Exportar como PDF
-  - Abrir en Finder
-  - Eliminar nota
-
-#### Barra de tipo y coleccion
-- **Tipo:** Pills multiseleccion para asignar tipos a la nota (ej: proyecto, idea, recurso, futuro). Se pueden crear tipos nuevos sobre la marcha. Busqueda integrada.
-- **Coleccion (Col):** Asignar la nota a una o mas colecciones.
-
-#### Panel de propiedades de tarea
-Aparece cuando la nota tiene `activa: true`:
-- **Estado:** Dropdown con estados configurables (pending, in_progress, done, cancelled)
-- **Fecha limite:** Date picker con o sin hora
-- **Fecha fin:** Para tareas con bloque de tiempo
-- **Prioridad:** Alta, media, baja
-- **Recurrencia:** Diaria, semanal, mensual
-
-#### Editor Markdown
-- Edicion de texto enriquecido en Markdown (CodeMirror 6 con WKWebView)
-- Barra de herramientas de formato
-- Wikilinks: `[[Nombre de nota]]` para enlazar notas
-- Checkboxes de tareas inline: `- [ ] Texto libre` — estas tareas aparecen en el timeline
-- Insercion de plantillas
-- Autoguardado con debounce de 800ms
-
-#### Panel izquierdo — RaizTreePanel (colapsable)
-- Vista jerarquica de notas bajo la raiz actual
-- Nodos expandibles/colapsables con color de raiz
-- Indicadores de estado (verde = activa, naranja = futuro)
-- Click para navegar entre notas
-
-#### Panel derecho (3 pestanas, ancho ajustable)
-
-**Pestana Chat:**
-- Conversacion de IA vinculada a la nota actual
-- El contexto de la nota se inyecta automaticamente
-- Instrucciones permanentes accesibles via icono `note.text` en el toolbar
-- Las modificaciones de la IA se aplican en vivo al editor
-
-**Pestana Indice (tab por defecto en notas normales):**
-- Headings de la nota — click para saltar a la seccion
-- **Conexiones:**
-  - Frontmatter editable (campos clave-valor)
-  - Enlaces salientes (wikilinks)
-  - Enlaces entrantes (notas que enlazan a esta)
-  - Tareas agrupadas por heading
-  - Enlaces externos (URLs en el contenido)
-  - Historial IA
-  - Notas hijas (max 6)
-
-**Pestana Historial:**
-- Lista de versiones guardadas (cronologico inverso)
-- Preview de la version seleccionada
-- Boton de restaurar (crea backup de seguridad antes de restaurar)
+### Captura rápida (FAB + IOSQuickCaptureSheet)
+- Texto libre con comandos inline: `-t`, `-d:hoy`, `-p:alta`, `-f`
+- Botones rápidos de comandos
+- Selector de workspace
 
 ---
 
-### Workspace de proyecto y area (`tipo: proyecto` / `tipo: area`)
+## Servidor Railway
 
-Cuando una nota tiene `tipo: proyecto` o `tipo: area`, se abre en un layout de 3 columnas (workspace). El comportamiento es identico en proyectos y areas.
-
-#### Panel izquierdo — RaizTreePanel (igual que nota normal)
-
-#### Columna central — Editor master-detail
-- Cuando se selecciona una nota hija: editor Markdown embebido (`embedded: true`) para esa nota
-- Cuando no hay nota hija seleccionada: editor del propio proyecto/area
-- La cabecera (breadcrumb, tipo, coleccion) siempre pertenece a la nota que se esta editando
-
-#### Panel derecho — 4 pestanas
-
-**Pestana Workspace (tab por defecto):**
-
-`ProjectTaskPanel` — Bloque de tareas del proyecto:
-- Tareas almacenadas en el bloque `tasks:` del frontmatter (no en el body)
-- Crear tarea inline (Enter confirma, Esc cancela)
-- Toggle completado con un clic
-- Fecha+hora asignable via DateTimePickerPopover
-- Barra de progreso en el header
-
-`ProjectContextPanel` — Bloque de contexto unificado:
-- Primera fila: siempre la propia nota del proyecto/area (icono `folder.fill`)
-- Notas hijas debajo (parent = titulo del proyecto)
-- Refs del frontmatter: notas vinculadas, colecciones, URLs, archivos, Google Docs
-- Seleccion con highlight: click en cualquier fila → cambia la nota activa en el editor central
-- Campo de busqueda siempre visible: busca notas y detecta URLs automaticamente
-  - URLs pegadas (`http...`) se anaden directamente
-  - Sin coincidencias: ofrece "Crear nota" inline
-- Icono de colecciones (`folder`) con popover de pills clicables
-- Icono de adjuntos (`paperclip`) para anadir archivos
-- Boton `note.text.badge.plus` para crear nota hija directamente
-- Eliminar nota con context menu
-
-`ProjectLogPanel` — Log de actividad del proyecto.
-
-**Pestana Chat:** Misma funcionalidad que en notas normales, con contexto automatico del proyecto:
-- Body del proyecto/area
-- Ancestros (raiz, padres)
-- Tareas del bloque `tasks:`
-- Notas hijas
-- Refs, URLs, archivos, colecciones
-
-**Pestana Indice:** Headings + conexiones del proyecto.
-
-**Pestana Historial:** Versiones guardadas.
-
-#### Identidad de proyecto vs area
-- `isProject` = `tipos.contains("proyecto")`
-- `isArea` = `tipos.contains("area")`
-- Ambos abren el mismo workspace layout — el comportamiento es identico
-
----
-
-### Frontmatter
-
-Cada nota tiene un bloque YAML al inicio del archivo:
-
-```yaml
----
-parent: nombre-del-padre
-tipo: proyecto, idea
-col: coleccion1, coleccion2
-refs: nota-vinculada, url:https://..., file:nombre-archivo, gdoc:ID
-fav: true
-activa: true
-status: pending
-due: 2026-05-01
-due_end: 2026-05-01 18:00
-priority: high
-created: 2026-01-15
-recurrence: weekly
-evento: true
-apple_id: EVENTKIT_ID
-public_slug: abc12345
-archivado: true
-vista: kanban
-vista_col: status
-vista_group: tipo
-pizarra: true
-gdoc_id: GOOGLE_DOC_ID
-gdoc_account: email@gmail.com
-gdoc_url: https://docs.google.com/...
----
-```
-
-Campos especiales:
-- `archivado: true` — oculta la nota de listas principales pero no la elimina
-- `tasks:` — bloque YAML especial para tareas de proyecto (no es un campo simple)
-- `chat: true` — indica que la nota es una conversacion de IA
-
-### Tareas de proyecto (`tasks:`)
-
-Las notas de tipo proyecto almacenan sus tareas en un bloque `tasks:` del frontmatter (tipo `ProjectTask`), separadas del body de la nota:
-
-```yaml
-tasks:
-  - id: abc123
-    text: Redactar propuesta
-    done: false
-    due: 2026-05-10T10:00
-  - id: def456
-    text: Revisar con equipo
-    done: true
-```
-
-Estas tareas se renderizan en el `ProjectTaskPanel` del workspace y aparecen en todas las vistas de timeline (Dia, Semana, Mes, Ano) como `InlineTaskChipView`.
-
-### Tareas inline del body
-
-Las notas pueden tener checkboxes en el body de Markdown (`- [ ] texto`). Estas se parsean como `InlineTask` y aparecen tambien en las vistas de timeline. Son independientes de las `ProjectTask` del frontmatter.
-
-### Jerarquia parent-child
-
-El sistema usa un unico campo `parent:` para definir la jerarquia. No hay campo `raiz:`.
-
-- El `parent:` es siempre el padre directo inmediato
-- El raiz se resuelve subiendo la cadena de padres hasta encontrar un archivo en `Raices/`
-- Una nota puede estar a cualquier profundidad
-
-Ejemplo:
-```
-Raices/coding.md                         (raiz, sin parent)
-  └─ Notas/From — Nota principal.md     (parent: coding)
-      └─ Notas/From — Plugin.md         (parent: From — Nota principal)
-          └─ Notas/From — Plugin API.md  (parent: From — Plugin)
-```
-
-### Tipos de nota
-
-Los tipos son etiquetas personalizables con color. Ejemplos:
-- `proyecto`, `area` — abren el workspace de 3 columnas
-- `idea`, `recurso`, `futuro` — notas normales
-- El usuario puede crear tipos nuevos sobre la marcha desde el editor o desde Ajustes > Tipos
-- Cada tipo tiene una propiedad `defaultActiva` que marca automaticamente las notas de ese tipo como activas
-
-### Colecciones
-
-Las colecciones agrupan notas transversalmente (sin relacion jerarquica). Una nota puede pertenecer a varias colecciones. Desde la seccion Explorar se pueden filtrar notas por coleccion.
-
-### Publicar notas
-
-Cualquier nota se puede publicar como pagina web publica:
-1. Boton de globo en el breadcrumb — clic para publicar
-2. Se genera un slug corto de 8 caracteres
-3. La nota es accesible en `https://from-server-production.up.railway.app/p/SLUG`
-4. La URL se copia al portapapeles y se muestra alert con opcion de abrir en navegador
-5. El boton se pone verde cuando la nota esta publicada
-6. **Auto-sync:** los cambios se sincronizan al servidor cada 30s (debounce, solo si cambio el contenido)
-7. Clic en el boton verde → despublica y destruye la URL
-
-### Historial de versiones
-
-- From guarda automaticamente una version antes de cada cambio importante
-- Las versiones se almacenan en `.from/versions/`
-- Se puede restaurar cualquier version previa
-- Al restaurar, se crea un backup de seguridad del estado actual
-- Las versiones son locales (no se sincronizan via iCloud)
-
----
-
-## Timeline / Calendario
-
-From ofrece 4 vistas temporales que combinan notas con fecha, eventos de Apple Calendar y tareas de proyecto.
-
-### Vista Dia (DayTimelineView)
-
-La vista de dia tiene dos zonas:
-
-**Columna izquierda — Timeline horizontal por horas:**
-- Franjas horarias configurables (inicio y fin)
-- Notas con `due` en hora especifica posicionadas en su franja
-- Eventos de Apple Calendar en su hora
-- Drag para mover notas a otra hora
-- Resize del borde derecho para ajustar duracion
-- Linea roja de hora actual
-- Creacion de tarea/evento inline haciendo clic en una franja vacia
-
-**Columna izquierda — 3 secciones verticales:**
-- **Agenda:** Eventos y notas de todo el dia (sin hora o multi-dia)
-- **Tareas:** Notas-tarea y tareas inline de proyectos (`InlineTaskChipView`), agrupadas por nota padre. Incluye tareas vencidas. Clic en una tarea abre su nota padre (nunca un popover).
-- **Notas de hoy:** Notas creadas o modificadas hoy
-
-**Panel lateral derecho:** Nota diaria (`YYYYMMDD.md`) con editor Markdown.
-
-Toggles de visibilidad: Notas / Eventos de calendario / Boton "Ir a hoy".
-
-### Vista Semana (WeekTimelineView)
-- 7 columnas (lunes a domingo)
-- Cada columna muestra eventos y tareas del dia
-- `ProjectsUnscheduledSidebar` lateral izquierdo con dos secciones: Vencidas (`due < inicio semana`) + Sin fecha (`due == nil && isActiva`)
-- Colores diferenciados: notas (acento) vs calendario (morado)
-- **Soporte multi-dia:** notas con `due` (inicio) y `due_end` (fin en otro dia) aparecen en la franja "todo el dia" de cada columna que cubren
-- Tareas inline de proyecto (`InlineTaskChipView`) con drag para asignar fecha
-
-### Vista Mes (MonthTimelineView)
-- Grid mensual clasico
-- `ProjectsUnscheduledSidebar` lateral con Vencidas + Sin fecha
-- Cada celda muestra eventos/tareas del dia
-- **Soporte multi-dia** por rango de fechas
-- Tareas inline de proyecto (`InlineTaskChipView`) con drag `alwaysAllDay: true`
-
-### Vista Ano (YearTimelineView)
-- 12 bloques mensuales con filas semanales
-- Indicadores de actividad tipo heatmap
-- `ProjectsUnscheduledSidebar` lateral con Vencidas + Sin fecha
-- Tareas inline de proyecto (`InlineTaskChipView`) con drag
-
----
-
-## Raices
-
-### Que es un Raiz
-
-Un Raiz es la categoria de nivel superior en la jerarquia de From. Cada raiz:
-- Tiene su propio color personalizable
-- Contiene notas organizadas en arbol
-- Tiene un campo de contexto en markdown que la IA usa para entender el ambito
-- Se almacena como archivo `.md` en la carpeta `Raices/`
-
-### Gestion de Raices
-
-Las raices se gestionan desde **Ajustes > Raices**:
-- Crear nueva raiz (nombre + color)
-- Renombrar (actualiza automaticamente el campo `parent:` de todas las notas hijas)
-- Cambiar color
-- Eliminar (las notas hijas se "huerfanan" — no se eliminan)
-
-### Vista Explorar (ColeccionesView)
-
-La seccion **Explorar** en la sidebar es la puerta de entrada a todo el contenido organizado:
-
-**Sidebar izquierdo de Explorar:**
-- Lista de raices expandibles, cada una con:
-  - Contador de notas
-  - Colecciones de la raiz
-  - Tipos de nota usados en la raiz
-- Click en raiz → panel central con dashboard de esa raiz
-- Click en coleccion → lista de notas de esa coleccion
-- Click en tipo → lista de notas de ese tipo
-
-**Panel central de raiz:**
-- Header: nombre (doble clic para renombrar), recuento de notas/colecciones/tipos, boton "Abrir nota" (nota de la raiz)
-- Seccion Colecciones: tarjetas de cada coleccion con recuento
-- Seccion Tipos: pills con colores y recuento
-
-**Panel central de coleccion/tipo:**
-- Lista de notas filtradas con acciones batch (cambiar col/tipo)
-- Click en nota → editor en panel derecho con sidebar colapsado
-
----
-
-## Vistas configurables
-
-From permite crear vistas personalizadas sobre las notas. Accesibles desde la seccion "Vistas" en la sidebar.
-
-### Kanban (KanbanView)
-- Columnas configurables (por estado, tipo, prioridad, etc.)
-- Arrastrar tarjetas entre columnas
-- Crear notas directamente en columnas
-
-### Lista configurable (NoteListViewConfig)
-- Lista de notas con filtros y ordenacion personalizada
-- Columnas visibles configurables
-
-### Calendario (NoteCalendarView)
-- Vista de calendario con notas posicionadas por fecha
-
-### Tarjetas (NoteCardsView)
-- Vista de tarjetas con previews de contenido
-
-### Focus (NoteFocusView)
-- Una nota a la vez con navegacion secuencial
-
-### Vistas inline
-
-Las vistas se pueden embeber dentro del editor de una nota:
-- **Inline Kanban, Lista, Calendario, Tabs** — filtran las notas hijas de la nota actual
-
-Se crean desde el editor.
-
----
-
-## Busqueda
-
-### Busqueda Spotlight (Cmd+O)
-- Modal centrado estilo Spotlight de macOS (480x520px)
-- Busqueda instantanea en titulo y contenido
-- Pills de raiz para filtrar rapidamente
-- Resultados clickables para navegar directamente
-
-### Buscador global (header)
-- Barra integrada en el header, siempre visible
-- Busqueda en tiempo real mientras se escribe
-- Resultados: notas, tareas, archivos, enlaces
-
-### Motor de busqueda
-- SQLite FTS5 para full-text search
-- Indexacion automatica al cargar notas
-- Tambien usado internamente para RAG (la IA busca contexto relevante en el vault)
-
----
-
-## Chat de IA
-
-### Vista principal de Chat (ChatView)
-
-Interfaz de 3 columnas:
-
-**Columna izquierda (280px) — Sidebar de conversaciones:**
-- Campo de busqueda (filtra por titulo y contenido)
-- Boton de nota vinculada: vincula una nota a la conversacion
-- Boton Google Drive (si conectado): importa documentos como contexto
-- Boton + para nueva conversacion
-- Lista de conversaciones con titulo, fecha y nota asociada
-
-**Columna central — Chat (ChatPanel):**
-- Mensajes de usuario y asistente con streaming
-- Soporte Markdown en respuestas
-- Input multilinea con auto-resize
-- Soporte de @menciones:
-  - `@nombre_agente` — Ejecutar agente
-  - `@/nombre_prompt` — Usar prompt guardado
-  - `@nombre_nota` — Inyectar nota como contexto
-- Popup de menciones con navegacion por teclado
-
-**Columna derecha (360px) — Panel de nota vinculada (colapsable):**
-- Editor de la nota vinculada
-- Toolbar: Deshacer, Rehacer, Abrir en editor principal, Desvincular
-- Sincronizacion en vivo con el contexto del chat
-
-### Modos de IA
-
-| Modo | Descripcion | Requisitos |
-|---|---|---|
-| Automatico | Usa el servidor de From, tokens gestionados | Suscripcion activa |
-| Manual | Usa API key propia del usuario | Clave de API valida |
-| Claude OAuth | Usa suscripcion Claude Pro/Max del usuario | Login OAuth |
-
-### Proveedores y modelos soportados
-
-| Proveedor | Modelos | Tier |
-|---|---|---|
-| Google | Gemini 2.5 Flash | Rapido |
-| OpenAI | GPT-4o Mini | Rapido |
-| Anthropic | Claude Haiku 4.5 | Equilibrado |
-| OpenAI | GPT-4o | Potente |
-| Anthropic | Claude Sonnet 4.6 | Potente |
-| Google | Gemini 1.5 Pro | Equilibrado |
-
-### Chat contextual en el editor
-
-Cuando se abre la pestana Chat en el panel derecho del editor, el chat tiene contexto automatico de:
-- Contenido completo de la nota actual
-- Cadena de ancestors (raiz > padre > nota)
-- Busqueda RAG para contexto relevante del vault
-
-En proyectos y areas, el chat incluye adicionalmente: tareas del bloque `tasks:`, notas hijas, refs, URLs, archivos y colecciones.
-
----
-
-## Editor IA (AIEditorService)
-
-### Que es el modo Editor IA
-
-Un modo especial donde la IA puede editar directamente el contenido de una nota. La IA lee la nota, recibe instrucciones del usuario, y devuelve la nota modificada.
-
-### Como funciona
-
-1. El usuario activa el modo IA en el editor
-2. Aparece el **AISessionBanner** con controles:
-   - Deshacer / Rehacer cambios de la IA
-   - Confirmar cambios
-   - Descartar cambios
-   - Toggle para ver version original
-3. El usuario escribe instrucciones
-4. La IA modifica la nota y muestra el resultado
-5. El usuario confirma o descarta
-
-### Instrucciones permanentes
-
-Cada nota puede tener instrucciones permanentes para la IA (almacenadas en `.from/ai_instructions/`). Estas instrucciones se aplican siempre que la IA edita esa nota. Se configuran via el icono `note.text` en el toolbar del chat.
-
----
-
-## Agentes autonomos
-
-### Que es un agente
-
-Un agente es una tarea automatizada que la IA ejecuta de forma autonoma. Cada agente tiene instrucciones, un horario de ejecucion, acciones permitidas y fuentes de contexto.
-
-### Acceso a Agentes
-
-Los agentes estan en **Ajustes > Agentes**. Tambien se puede:
-- Clic en el indicador de agentes en la barra de estado inferior
-- Usar el dropdown de agentes manuales en el header para lanzarlos directamente
-
-### Vista de Agentes (AgentListView)
-
-**Columna izquierda (340px):**
-- Campo de busqueda
-- Menu de creacion (tres puntos):
-  - "Desde descripcion" (sparkles): Describir en lenguaje natural y la IA genera el agente
-  - "Manual": Crear agente en blanco
-  - "Desde plantilla": Clonar una plantilla predefinida
-- Lista de agentes con horario, proxima ejecucion y acciones (Play, Stop, Eliminar)
-
-**Columna derecha:** Detalle del agente seleccionado (AgentDetailView)
-
-### Configuracion de un agente (AgentDetailView)
-
-**Horario:**
-| Tipo | Descripcion |
-|---|---|
-| Manual | Solo se ejecuta cuando el usuario lo lanza |
-| Diario | Se ejecuta cada dia a la hora configurada |
-| Semanal | Un dia especifico de la semana a una hora |
-| Mensual | Un dia especifico del mes a una hora |
-| Al abrir | Al abrir From (maximo una vez por hora) |
-
-**Instrucciones:** Editor de texto con @menciones:
-- `@hoy`, `@perfil`, `@diario`, `@Raiz`, `@Nota`
-
-**Acciones permitidas:**
-
-| Accion | Descripcion |
-|---|---|
-| leer notas | Leer contenido de notas |
-| actualizar nota | Modificar o crear secciones en notas |
-| crear nota | Crear notas nuevas |
-| fetch_url | Descargar y parsear contenido web |
-| buscar web | Buscar en internet |
-| leer raiz | Leer contenido de un raiz |
-| leer perfil | Leer perfil y contexto del usuario |
-| actualizar perfil | Modificar el perfil |
-
-**Fuentes de contexto (pre-loaded):**
-
-| Fuente | Descripcion |
-|---|---|
-| Perfil | Contenido de profile.md y contexto.md |
-| Hoy | Nota del diario de hoy |
-| Diario (N) | Ultimas N entradas del diario |
-| Todas las notas | Indice de todas las notas |
-| Raiz X | Todas las notas de un raiz |
-| Nota X | Una nota especifica |
-| Nota X + hijas | Una nota y todas sus descendientes |
-
-**Ejecucion manual:** Boton que ejecuta el agente inmediatamente con input opcional.
-
-**Memoria del agente:** Seccion `## Memoria del agente` en el archivo .md donde se guarda el log de ejecuciones.
-
-### Ejecucion de agentes
-
-El proceso de ejecucion:
-1. Se cargan las fuentes de contexto
-2. Se construye el system prompt con instrucciones y contexto
-3. Se envia al modelo IA seleccionado
-4. La IA responde con texto y opcionalmente bloques de accion
-5. Los bloques de accion se parsean y ejecutan
-6. El resultado se devuelve a la IA para la siguiente iteracion
-7. Se repite hasta un maximo de 8 turnos
-8. Se registra el resultado en la memoria del agente
-
-Formato de bloques de accion:
-````
-```from-action
-action: actualizar_nota
-title: Nombre de la nota
-content: Contenido nuevo
-heading: ## Seccion especifica
-```
-````
-
-### Panel de ejecucion (AgentRunPanel)
-
-Dialog modal al ejecutar un agente manualmente:
-- Input multilinea (requerido u opcional segun el agente)
-- Grabacion de voz para dictar input
-- Botones: Cancelar (Esc) / Ejecutar (Enter)
-
-### Plantillas predefinidas
-
-From incluye plantillas de agentes listos para usar que cubren casos comunes de productividad.
-
----
-
-## Taller (TallerChatView)
-
-Un espacio de trabajo en Ajustes > Taller para depurar y mejorar agentes y prompts. Es un sandbox donde la IA ayuda a refinar las instrucciones.
-
-Uso:
-1. Escribir en el chat con `@nombre_agente` para cargar un agente, `@/nombre_prompt` para un prompt, `@nombre_nota` para una nota
-2. La IA analiza el agente/prompt y sugiere mejoras
-3. Las sugerencias incluyen botones "Aplicar" y "Descartar"
-4. Aplicar actualiza directamente el agente o prompt
-
----
-
-## Archivos (ArchivosView)
-
-Archivos adjuntos almacenados en la carpeta `Archivos/` del vault. Cada archivo tiene un sidecar `.md` con metadatos.
-
-### Funcionalidades
-- **Importar:** Drag & drop o boton de importar
-- **Buscar:** Por nombre, descripcion, tags o nota padre
-- **Agrupar:** Por fecha, tipo o nota padre
-- **Tipos:** PDF, imagen, video, audio, documento, otro
-- **Vincular:** Cada archivo puede estar vinculado a multiples notas
-
-### Sidecar de metadata
-
-```yaml
----
-tipo: pdf
-descripcion: Manual de usuario
-tags: documentacion, referencia
-parents: Nota principal, Proyecto X
----
-```
-
----
-
-## Canvas / Pizarra (PizarraView)
-
-Espacio visual de canvas infinito para crear diagramas y mapas mentales. Se almacena como una nota con `pizarra: true`.
-
-### Funcionalidades
-- Superficie de dibujo libre con zoom/pan
-- Nodos de texto
-- Flechas/conexiones entre nodos
-- Paleta de colores
-- Grosor de linea configurable
-- Deshacer/Rehacer
-- Exportar como imagen
-
----
-
-## Perfil
-
-### Que es el Perfil
-
-El perfil es informacion sobre el usuario que la IA usa como contexto para personalizar respuestas y que los agentes entiendan al usuario.
-
-### Componentes
-- **profile.md** — Datos del usuario: nombre, rol, intereses, etc.
-- **contexto.md** — Contexto adicional y memoria de la IA
-- **ProfileWizardView** — Asistente guiado para crear el perfil paso a paso
-
-Gestionado desde Ajustes > Perfil IA.
-
----
-
-## Ajustes (FromSettingsView)
-
-Los Ajustes tienen una sidebar izquierda con grupos y seleccion de pestana. Ancho maximo del area de contenido: 760px.
-
-### Grupo (sin titulo) — Cuenta
-- **Cuenta** — Login/registro, configuracion completa de IA:
-  - Toggle IA on/off
-  - Modo: Automatico (suscripcion €7/mes) / Manual (licencia o Claude Pro)
-  - Balance de tokens y recarga (modo Automatico)
-  - Login OAuth con Claude (modo Manual)
-  - Selector de modelo Claude (modo Manual)
-  - Licencia: activar/desactivar license key
-  - Proveedores multi-API: Anthropic, OpenAI, Google con validacion
-  - Busqueda web (Brave Search API key)
-  - Privacidad IA
-  - Gestion de plan, cambiar contrasena, cancelar suscripcion, eliminar cuenta
-- **Google** — Integracion Google Drive y Google Docs:
-  - Lista de cuentas Google conectadas (multi-cuenta)
-  - Conectar/eliminar cuenta
-  - Carpeta destino para nuevos Google Docs
-
-### Grupo Contenido
-- **Espacio** — Ruta del vault, carpetas configuradas
-- **Raices** — Crear, renombrar, cambiar color y eliminar raices
-- **Tipos** — Crear, editar y eliminar tipos de nota (color, nombre, defaultActiva)
-- **Estados** — Configurar estados de tarea personalizados con color e icono
-- **Plantillas** — Gestionar plantillas de notas del vault
-- **Calendario** — Calendarios visibles, listas de recordatorios, configuracion de sincronizacion
-
-### Grupo Apariencia
-- **Vista** — Configuracion de las vistas de timeline (hora inicio/fin, etc.)
-- **Apariencia** — Tema: Sistema, Claro, Oscuro
-- **Voz** — Configuracion de grabacion y transcripcion de voz
-
-### Grupo Inteligencia Artificial
-- **Prompts** — Biblioteca de prompts guardados. Se invocan desde el chat con `@/nombre`
-- **Perfil IA** — Editor de profile.md y contexto.md; ProfileWizardView
-- **Agentes** — Gestor completo de agentes autonomos (AgentListView)
-- **Taller** — Sandbox para depurar agentes y prompts (TallerChatView)
-- **Asistente** — Asistente de prompts para crear/mejorar prompts (PromptAssistantTab)
-
-### Grupo Productividad
-- **Atajos** — Atajos de teclado personalizables (ShortcutsSettingsTab)
-
-### Grupo Datos
-- **Backup** — Backup manual/automatico diario, maximo de backups, restaurar desde backup
-- **Exportar** — Exportar notas a ZIP
-- **Importar** — Importar notas desde ZIP o vault de Obsidian
-- **Mantenimiento** — Auditoria del vault:
-  - Tareas sin fecha, eventos antiguos sin contenido, raices vacias
-  - Tipos sin usar, notas sin contenido, notas huerfanas
-  - Tareas huerfanas, archivos sin nota madre, titulos duplicados
-  - Nota madre rota
-
----
-
-## Sincronizacion y datos
-
-### iCloud Drive
-- Las notas son archivos `.md` en iCloud Drive
-- La sincronizacion entre dispositivos es automatica via iCloud
-- From no depende de un servidor propio para la sincronizacion
-
-### CloudKit (CloudSyncService)
-- Sincronizacion activa de cambios (push notifications)
-- Resolucion de conflictos (gana el timestamp mas reciente, tolerancia de 1 segundo)
-- Upload con debounce de 2 segundos
-- Tipos de registro: "Note" (contenido) y "File" (assets)
-- En caso de conflicto: banner visible con boton para ir a ConflictsView y resolver
-
-### Backups automaticos
-- Se ejecutan 10 minutos despues de abrir la app
-- Frecuencia: diaria (si han pasado mas de 24h desde el ultimo)
-- Ubicacion: Application Support (no en el vault)
-- Incluyen: Notas, Raices, Diario, Plantillas, Agentes, Archivos
-- Retencion: maximo 10 backups (configurable en Ajustes > Backup)
-
----
-
-## Backend (from-server)
-
-### Descripcion
-
-Backend opcional construido con TypeScript, Bun y Hono. Gestiona autenticacion, tokens de IA, publicacion de notas y pagos.
+URL: `https://from-server-production.up.railway.app`
 
 ### Endpoints principales
 
-**Autenticacion (/auth)**
-- POST /auth/register — Registro con email + password
-- POST /auth/login — Login
-- POST /auth/refresh — Rotacion de tokens
-- POST /auth/logout — Cerrar sesion
-- POST /auth/google — Login con Google OAuth
-- GET /auth/me — Perfil del usuario actual
-
-**Agentes (/agents)**
-- POST /agents/run — Ejecutar agente con contexto
-- GET /agents/runs — Historial de ejecuciones
-- GET /agents/runs/:id — Detalle de una ejecucion
-
-**Tokens (/tokens)**
-- GET /tokens/balance — Balance de tokens del usuario
-- GET /tokens/ledger — Historial de transacciones
-
-**Admin (/admin)**
-- GET /admin/providers — Estado de proveedores IA
-- PUT /admin/providers/key — Configurar API keys
-- PATCH /admin/providers/:provider/toggle — Activar/desactivar proveedor
-- GET /admin/users — Lista de usuarios
-- POST /admin/tokens/add — Ajuste manual de tokens
-- POST /admin/users/:id/make-admin — Hacer admin
-- GET /admin/stats — Estadisticas de uso
-
-**Webhooks (/webhooks)**
-- POST /webhooks/lemonsqueezy — Procesador de pagos
-- POST /webhooks/license-verify — Validacion de licencia
-- POST /webhooks/checkout-url — Generar enlace de pago
-
-**Notas publicas (/notes, /p)**
-- POST /notes/publish — Publicar nota con slug
-- POST /notes/unpublish/:slug — Despublicar
-- GET /p/:slug — Renderizar nota publica (sin auth)
-
-### Base de datos
-
-PostgreSQL con Drizzle ORM. Tablas:
-
-| Tabla | Descripcion |
-|---|---|
-| users | Cuentas, suscripcion, licencia, balance de tokens |
-| token_ledger | Log inmutable de transacciones de tokens |
-| agent_runs | Historial de ejecuciones de agentes |
-| admin_api_keys | API keys de proveedores IA (encriptadas AES) |
-| refresh_tokens | Tokens de refresco con TTL 30 dias |
-| public_notes | Notas publicadas con slugs |
-
-### Seguridad
-- JWT (HS256) con access token de 15 min + refresh token de 30 dias
-- Passwords hasheados con bcryptjs (cost 12)
-- API keys encriptadas con AES en la base de datos
-- CORS restringido a getfrom.app y localhost
-- Queries parametrizadas via Drizzle ORM
-
----
-
-## Modelo de negocio y precios
-
-### Planes
-
-| Plan | Precio | Incluye |
+| Método | Ruta | Descripción |
 |---|---|---|
-| Gratis | 0 | Todas las funciones de la app sin IA |
-| Licencia | 59 USD (unico pago) | App completa + IA con API key propia (Anthropic/OpenAI/Google) o Claude OAuth |
-| Suscripcion | 7 euros/mes | App completa + IA gestionada (10M tokens/mes, sin API key) |
+| GET | `/health` | Estado del servidor |
+| POST | `/auth/login` | Login, devuelve JWT |
+| POST | `/sync` | Delta sync de nodos (requiere JWT) |
+| GET | `/files/status` | Estado de R2 |
+| POST | `/files/presign-upload` | URL presignada para subir archivo |
+| POST | `/files/presign-download` | URL presignada para descargar archivo |
+| POST | `/admin/bootstrap` | Crear/verificar usuario admin |
 
-**Importante:** La suscripcion y la licencia son modos excluyentes. Con suscripcion se usa solo IA gestionada (From gestiona las API keys). Con licencia se usa solo la propia API key o Claude OAuth. No se pueden mezclar modos.
+### Autenticación
 
-### Procesador de pagos
-
-LemonSqueezy gestiona:
-- Ciclo de vida de suscripciones (creacion, renovacion, cancelacion)
-- Ordenes (licencias, top-ups)
-- Validacion de licencias
-- Creacion automatica de usuarios al comprar
+JWT HS256 con `JWT_SECRET` de Railway. Expiración: 15 min (access) + 30 días (refresh).
 
 ---
 
-## Integraciones
+## Modelo de monetización
 
-### Apple Calendar
-- Lectura de eventos del calendario
-- Creacion de eventos desde From
-- Sincronizacion bidireccional de eventos (`evento: true` + `due: FECHA`)
-
-### Apple Reminders
-- Lectura de recordatorios pendientes
-- Creacion de recordatorios desde tareas
-- Marcar como completado desde From
-- Soporte de recurrencia
-
-### Google Drive y Google Docs
-- **Multi-cuenta:** Multiples cuentas de Google simultaneas
-- **Navegacion:** Explorador de Drive desde el chat (seleccion como contexto IA)
-- **Icono sync por nota:** En la toolbar de cada nota, icono para vincular/gestionar Google Doc
-  - Sin vincular (gris): clic para crear Doc. Si hay >1 cuenta, popup para elegir cual
-  - Vinculado (verde): desplegable con Abrir Doc / Copiar enlace / Mover a carpeta / Desvincular
-- **Carpeta destino:** Configurable en Ajustes > Google
-- **Sync bidireccional nota <> Google Doc:**
-  - **Push:** Al guardar una nota con `gdoc_id`, se actualiza el Doc automaticamente (debounce 3s)
-  - **Pull:** Al abrir una nota con `gdoc_id`, se descarga el contenido si el Doc cambio
-  - Frontmatter: `gdoc_id` (ID del doc) + `gdoc_account` (email) + `gdoc_url` (enlace)
-- **Contexto IA:** Cualquier Google Doc anadir como contexto del chat
-- **OAuth:** ASWebAuthenticationSession con scopes `drive.file` + `documents` + perfil
-- **Conversion:** Google Docs JSON → Markdown (headings, bold, italic, links, listas, strikethrough)
-
-### Google OAuth
-- Login con cuenta de Google (sin password)
-- Gestionado en Ajustes > Cuenta
-
-### Claude OAuth
-- Login con suscripcion Claude Pro/Max
-- Uso de tokens de la suscripcion del usuario
-- Flujo PKCE para seguridad
+- **Modo manual:** API key propia del usuario (Anthropic, OpenAI, Google)
+- **Modo automático (From Server):** Tokens prepago consumidos por petición
+  - 1M tokens = tarifa escalada
+  - Suscripción mensual con tokens incluidos
+  - Variantes LemonSqueezy: suscripción (`1553200`), licencia (`1553210`), topup 5M (`1553900`)
 
 ---
 
-## Glosario
+## Proceso de publicación de versión (macOS)
 
-| Termino | Significado |
-|---|---|
-| Vault | Carpeta raiz que contiene todo el contenido del usuario |
-| Raiz | Categoria de nivel superior (ej: trabajo, personal, proyectos) |
-| Nota | Archivo .md con frontmatter — unidad basica de contenido |
-| Tarea | Nota con `activa: true` y propiedades de tarea (estado, fecha, prioridad) |
-| Proyecto | Nota con `tipo: proyecto` — abre workspace de 3 columnas |
-| Area | Nota con `tipo: area` — abre el mismo workspace de 3 columnas |
-| ProjectTask | Tarea de proyecto almacenada en bloque `tasks:` del frontmatter |
-| InlineTask | Checkbox en el body de la nota (`- [ ] texto`) |
-| Agente | Tarea automatizada que la IA ejecuta autonomamente |
-| Tipo | Etiqueta personalizable para clasificar notas |
-| Coleccion | Agrupacion transversal de notas (campo `col:`) |
-| Wikilink | Enlace entre notas: `[[Nombre de nota]]` |
-| Pizarra | Canvas visual para diagramas (nota con `pizarra: true`) |
-| Frontmatter | Bloque YAML al inicio de cada nota con propiedades |
-| Parent | Nota o raiz padre en la jerarquia |
-| Vista | Configuracion de visualizacion (kanban, calendario, lista, etc.) |
-| Taller | Sandbox para depurar agentes y prompts |
-| RAG | Retrieval-Augmented Generation — la IA busca contexto relevante |
-| Token | Unidad de medida del uso de IA |
-| Slug | Identificador corto para notas publicas |
-| Archivado | Nota oculta de listas principales (`archivado: true`) |
+1. Bump `MARKETING_VERSION` en Xcode project
+2. `xcodebuild archive` → `.xcarchive`
+3. `xcodebuild -exportArchive` → `.app`
+4. `create-dmg` → `.dmg` firmado
+5. `codesign` + `xcrun stapler`
+6. Subir DMG a GitHub Release
+7. Actualizar `appcast.xml` con versión, URL y tamaño
+8. `git push` → Sparkle detecta actualización automáticamente
+
+Referencia completa: `docs/publicar-version.md`
 
 ---
 
-## Servicios internos (referencia tecnica)
+## Estructura del repositorio
 
-| Servicio | Responsabilidad |
-|---|---|
-| VaultService | Acceso a archivos .md en disco (actor async) |
-| NoteService | CRUD de notas, arbol de jerarquia, integracion Calendar |
-| CalendarService | EventKit: eventos + recordatorios |
-| SearchService | SQLite FTS5 + RAG |
-| AIService | Multi-proveedor IA + streaming SSE |
-| AIEditorService | Sesiones de edicion IA con historial |
-| ClaudeAuthService | OAuth PKCE para Claude |
-| ProfileService | Perfil del usuario + contexto + resumen automatico |
-| AgentService | Carga, scheduling y ejecucion de agentes |
-| RaizService | Raices con colores + contexto |
-| ViewService | Vistas configurables (kanban, etc.) |
-| FileService | Archivos adjuntos con metadata sidecar |
-| BackupService | Snapshots del vault |
-| CloudSyncService | Sincronizacion CloudKit |
-| VersionService | Historial de versiones (local) |
-| ActivityLogService | Log de actividad en JSONL |
-| NavigationHistoryService | Historial atras/adelante |
-| StatusBarService | Notificaciones en barra de estado |
-| TranscriptionService | Voz a texto |
-| GoogleDriveService | Integracion Google Drive |
-| VaultImporterService | Importar vaults externos |
-| LicenseService | Validacion de licencia |
-| LinkService | Gestion de enlaces (SQLite FTS5 tabla `links`) |
-| FromServerService | Cliente API del backend |
+```
+from/
+├── app/                    # App macOS + iOS (Swift/SwiftUI)
+│   ├── From/               # Target macOS
+│   │   ├── Services/       # Lógica de negocio (NodeService, AgentService, etc.)
+│   │   ├── Models/         # Modelos de datos (Node, Workspace, VaultFile, etc.)
+│   │   └── Views/          # Vistas SwiftUI
+│   └── FromiOS/            # Target iOS
+│       └── Views/          # Vistas iOS
+├── server/                 # Servidor Railway (TypeScript + Bun + Hono)
+│   └── src/
+│       ├── routes/         # Endpoints (sync, files, auth, admin)
+│       ├── db/             # Schema Drizzle + PostgreSQL
+│       └── lib/            # JWT, R2 wrapper
+├── landing/                # Web estática (getfrom.app)
+├── docs/                   # Documentación técnica y procesos
+└── logs/                   # Logs de sesiones de desarrollo
+```
 
 ---
 
-## Changelog
+## Variables de entorno (Railway)
 
-### 2026-04-30 — iOS v1: primera versión de la app para iPhone
-- **Target iOS añadido** al proyecto Xcode (`From iOS`, bundle `com.albertolezaun.FromiOS`, iOS 26.0+)
-- **CloudKit compartido**: misma base de datos `iCloud.com.albertolezaun.From` que el Mac — sync automático
-- **Código compartido**: Models/ y Services/ compilan en ambas plataformas con guards `#if os(macOS)`
-- **Vistas iOS**: onboarding de permisos, setup de vault, home con raíces y recientes, lista de notas con filtros, detalle/editor, lista de tareas, creación rápida (nota/tarea/foto)
-- **App ejecutada en iPhone 16 Pro** (iOS 26.3.1) — compilación y ejecución confirmadas
+```
+JWT_SECRET                      # Firma JWT (access tokens)
+JWT_REFRESH_SECRET              # Firma JWT (refresh tokens)
+ADMIN_SECRET                    # Bootstrap admin
+ADMIN_EMAIL                     # Email del admin
+LS_STORE_ID                     # LemonSqueezy store
+LS_VARIANT_SUBSCRIPTION         # Variant suscripción mensual
+LS_VARIANT_LICENSE              # Variant licencia perpetua
+LS_VARIANT_TOPUP_5M             # Variant topup 5M tokens
+R2_ACCOUNT_ID                   # Cloudflare R2 account
+R2_ACCESS_KEY_ID                # R2 S3 access key
+R2_SECRET_ACCESS_KEY            # R2 S3 secret
+R2_BUCKET                       # Nombre del bucket (from-vault)
+DATABASE_URL                    # PostgreSQL Railway (interna)
+```
 
-### 2026-04-29 — v2.6: timeline — popup creación amplio, fix eventos no aparecían, tareas en filas separadas
-- **Popup creación**: el popup de nuevo evento/tarea ahora es un popover macOS nativo (ancho 280px) en lugar de renderizarse dentro de la columna de hora (ilegible por estrecha)
-- **Fix eventos**: tras crear un evento desde el popup, `loadAll()` se llama correctamente — los eventos ya aparecen en el timeline sin recargar manualmente
-- **Layout tareas**: las tareas usan un margen visual de 90 minutos para el algoritmo de filas, evitando que títulos de tareas cercanas se superpongan en la misma fila
-- **Ancho tareas**: ancho mínimo de tareas aumentado a 200px para mostrar títulos completos sin truncar
+---
 
-### 2026-04-29 — v2.5: fix permisos Calendario — entitlement hardened runtime + detección por fetch
-- **Fix definitivo**: añadido el entitlement `com.apple.security.personal-information.calendars` y `.reminders` en el binario firmado. Con hardened runtime activo (requerido para notarización), macOS exige este entitlement para mostrar el diálogo TCC incluso en apps no sandboxed
-- **Fix banner**: si `fetchFilteredEvents` devuelve eventos reales, el servicio infiere que tiene acceso real y actualiza `calendarAccessGranted = true` — el banner desaparece aunque `authorizationStatus` devuelva `notDetermined` por el estado cacheado del EKEventStore
+## Decisiones de arquitectura clave
 
-### 2026-04-29 — v2.4: fix permisos Calendario — petición diferida y diagnóstico TCC
-- **Fix raíz**: la petición de permisos de Calendario ya no ocurre durante el startup síncrono (cuando la app puede no ser frontmost). Ahora se hace en un Task diferido 3s después del arranque, con `NSApp.activate()` previo, para garantizar que macOS muestre el diálogo TCC
-- **Fix lógica**: si el estado TCC es `.denied`, el botón pasa a "Abrir Preferencias" en lugar de intentar `requestFullAccessToEvents()` (que no muestra diálogo para estado denegado)
-- **Diagnóstico**: en Ajustes → Calendario aparece el estado TCC raw (notDetermined / denied / fullAccess) para facilitar el diagnóstico
+### Por qué nodos en lugar de .md
 
-### 2026-04-29 — v2.3: fix permisos Calendario conflicto de identidad de firma
-- **Fix definitivo**: al pulsar "Permitir acceso", From resetea la entrada TCC de Calendario antes de pedir permiso (tccutil reset Calendar). Esto resuelve el conflicto entre el permiso concedido al build de desarrollo y el build de producción (Developer ID), que son identidades de firma distintas en TCC
+El sistema de archivos .md era frágil: dependía de iCloud Drive para sync (lento, conflictos frecuentes), la estructura se codificaba en frontmatter YAML manual, y añadir nuevas propiedades requería parsear texto. Con NodeDB (SQLite) + Railway sync:
+- Sync instantáneo y fiable entre dispositivos
+- Propiedades first-class en la base de datos
+- FTS5 para búsqueda de texto completo nativa
+- Sin dependencia de iCloud Drive
 
-### 2026-04-29 — v2.2: fix banner Calendario no desaparecía aunque permiso concedido
-- **Fix**: `CalendarService.init()` ahora inicializa `calendarAccessGranted=true` directamente si TCC ya tiene el permiso concedido, evitando que el banner aparezca al arrancar aunque el permiso esté activo
+### Por qué Railway en lugar de iCloud/CloudKit
 
-### 2026-04-29 — v2.1: fix permisos Calendario definitivo + tarjeta de actualización
-- **Fix permisos Calendario**: el banner "Sin acceso" ya no se queda bloqueado aunque el permiso esté concedido. `CalendarService` tiene propiedades observables `calendarAccessGranted`/`remindersAccessGranted` que se actualizan con el resultado real de cada fetch. Al volver desde Preferencias del Sistema se resetea la caché de TCC y se reintenta el acceso
-- **Tarjeta de actualización en sidebar**: cuando Sparkle detecta una actualización disponible, aparece una tarjeta al fondo del sidebar (estilo Claude) en lugar de la ventana de Sparkle. Muestra icono, "Reiniciar para actualizar" y versión. Al pulsar abre el diálogo de instalación de Sparkle
+CloudKit tiene límites de escritura, latencia variable y no funciona bien en plataformas no-Apple. Railway + PostgreSQL da control total del esquema, queries SQL directas y se puede escalar.
 
-### 2026-04-29 — Rendimiento Backup + layout unificado Ajustes
-- **Optimización BackupSettingsTab**: cálculo de tamaños en background (caché `backupSizes`), folderList async con `ProgressView`, activity log con `LazyVStack`
-- **Panel derecho unificado en Ajustes**: nuevo `SettingsRightPanel` (260pt) con info contextual por pestaña. Tabs full-width (Taller, Asistente, Agentes) sin panel. Sin modificar ningún tab individual
+### Por qué R2 para archivos
 
-### 2026-04-29 — v2.0: fix banner permisos no desaparecía al volver desde Preferencias
-- **Fix**: el banner "Sin acceso a Calendario" ahora desaparece automáticamente al volver a From tras conceder permisos en Preferencias del Sistema (escucha NSApplication.didBecomeActiveNotification)
-
-### 2026-04-29 — v1.9: fix permisos calendario, banner timeline
-- **Fix botón "Permitir acceso" en Ajustes**: si el diálogo del sistema no aparece (TCC bloqueado), abre Preferencias del Sistema → Privacidad automáticamente
-- **Banner de permisos en timeline de Día**: aparece encima del timeline cuando faltan permisos de Calendario o Recordatorios
-
-### 2026-04-29 — v1.8.1: fix permisos calendario, banner timeline
-- **Fix botón "Permitir acceso" en Ajustes**: si el diálogo del sistema no aparece (TCC bloqueado por build anterior), abre Preferencias del Sistema → Privacidad automáticamente
-- **Banner de permisos en timeline de Día**: aparece encima del timeline cuando faltan permisos de Calendario o Recordatorios, con botón directo para concederlos
-
-### 2026-04-29 — v1.8: timeline tareas vs eventos, fix save loop, fix all-day
-- **Timeline diario — tareas sin caja**: las tareas aparecen como punto de color de raíz + texto, sin fondo ni caja. Los eventos mantienen su bloque con fondo. Sin checkbox
-- **Fix save loop crítico**: `saveImmediately` ahora ignora guardados cuando el contenido no ha cambiado. Esto corta el bucle crash→restore→save que causaba que las tareas inline reaparecieran y el scroll saltara al inicio
-- **Fix evento todo el día en Calendar**: el ciclo From→Apple→From hacía que all-day events se convirtieran en eventos a las 00:00. Corregido detectando start+end ambos a medianoche como all-day
-
-### 2026-04-29 — Dashboard UX, drag mejoras, bugs críticos sync/duplicado/scroll
-- **Card "Próximos días"**: 3 columnas (mañana/pasado/trasposado). Eventos con barra de color, tareas con punto de raíz. Con hora → posición cronológica; sin hora → al final con divisor
-- **Card "Recientes"**: orden cronológico global (eliminado agrupado por raíz). Botón hover para elegir cantidad de notas (3–20, por defecto 5)
-- **Card "Notas de hoy"**: fix race condition cache. Fix filtro IA. Fix fallback `created:` en buildNote (hoy en vez de ayer)
-- **Botón editar dashboard**: movido a icono flotante en esquina topTrailing, sin texto ni fila propia
-- **Atajos rápidos**: context menu "Cambiar icono y color" con paleta + grid SF Symbols. Emoji eliminado (macOS popover focus irresolvible)
-- **Timeline diario — colores**: eventos usan color del calendario Apple, tareas usan color de raíz, inline tasks usan color de raíz de su nota padre
-- **Timeline diario — hover 15min**: cada hora dividida en 4 QuarterSlotDropZone con dimensiones explícitas via GeometryReader
-- **Timeline diario — duración**: por defecto 1h (antes 45min)
-- **Timeline diario — sin flicker al soltar**: posición snapped se mantiene hasta que el save confirma
-- **Dashboard bloques fijos**: `.draggable("")` → `OptionalDraggable`; permite selección de texto sin activar drag
-- **Fix tareas inline que reaparecen**: threshold sync externo subido a 60s; evita ciclo CloudSync revert
-- **Fix scroll**: preserva `scrollDOM.scrollTop` de CodeMirror al aceptar cambios externos
-- **Fix duplicado timeline**: `triggerAppleIntegration` comprueba `appleId` existente y actualiza en lugar de crear nuevo recordatorio
-
-### 2026-04-29 — Fixes: shortcuts, drag semana, sync checkboxes, caché timelines
-- **Shortcuts atajos rápidos**: raíz/colección/tipo ahora navegan correctamente a Explorar. Shortcut nueva tarea usa QuickTaskSheet con pill de fecha
-- **QuickTaskSheet**: selector de fecha como pill naranja con popover de calendario (estilo NewEventView)
-- **Drag en vista semanal**: gesture vertical/horizontal en eventos y tareas de From. Handle de resize en borde inferior. Apple Calendar events son solo lectura
-- **Fix eventos no aparecían**: CalendarService invalida caché inmediatamente tras crear/editar/borrar eventos
-- **Fix botón actualizar**: NoteService.notesVersion notifica a todos los timelines para reconstruir caches
-- **Fix loop checkboxes / scroll al inicio / regeneración**: syncInlineCheckboxesToApple solo corre para notas con activa:true. El body sin activa:true es checklist, no tarea. Esto eliminaba un loop de guardado que causaba scroll al inicio y regeneración de checkboxes
-
-
-### 2026-04-29 — Editor de evento, vista Mes scroll continuo, fixes timeline
-- **EventPropertiesPanel**: panel bajo el título cuando la nota es un evento. Pills editables de fecha (azul), hora inicio (cyan), hora fin (índigo) y repetición. Aparece en el editor de notas automáticamente
-- **Vista Mes — scroll continuo**: eliminada la paginación por mes. Scroll libre desde 180 días atrás hasta 365 adelante. Día actual centrado al abrir. Cabeceras de mes pegadas (pinned) al hacer scroll. Botón "Hoy" para volver al día actual. Clic en miniCalendar navega al día
-- **Tareas con hora en el grid semanal**: tareas con hora específica aparecen en el grid horario como bloques compactos con barra de color de raíz, igual que eventos pero visualmente distintos
-- **Fix duplicación al arrastrar tareas sin fecha**: `rebuildItemsCache` solo incluye `isNoteTask` en Loop 1, evitando que notas de proyecto aparezcan dos veces (una como nota y otra via sus ProjectTasks)
-- **Fix eventos no aparecían tras crear**: `onCreated` recarga datos del calendario en todos los timelines
-
-### 2026-04-29 — Rediseño timelines semana/mes/año + popup Evento/Tarea + fixes chips
-- **Timeline Semana rediseñado**: fila de tareas compacta por día (punto+texto), eventos en el grid como bloques proporcionales a su duración con color real del EKCalendar. Sin chips en el grid horario
-- **Timeline Mes**: eventos como píldoras de color (barra+título+hora), tareas como texto plano con punto. Eventos primero, lureas después en cada fila
-- **Timeline Año**: eventos de nota como píldoras compactas, tareas sustituidas por contador gris "· N tareas"
-- **Popup Evento/Tarea**: al hacer clic en cualquier timeline aparece un popup con dos pestañas (rojo/azul). "Evento" crea en Apple Calendar, "Tarea" crea nota activa
-- **CalendarEvent.color**: campo `Color` que refleja el color del EKCalendar. Usado en bloques de eventos
-- **Sidebar Sin fecha**: ahora incluye `InlineTask` del body (`- [ ]` checkboxes) además de ProjectTask YAML. Eliminado requisito `note.isActiva` de ProjectTask undated
-- **DraggableTaskChip compact**: checkbox y fecha ocultos en modo compact (timelines semana/mes/año)
-
-### 2026-04-29 — Notas en seguimiento, dashboard de Día configurable, alarmas eventos
-- **Notas en seguimiento** (concepto nuevo, independiente de tareas): flag `seguimiento: true` en frontmatter, botón bookmark en el editor, sección destacada en Dashboard de raíz y vista Día con drag para reordenar manualmente
-- **Dashboard de Día configurable**: 3 columnas con cards que el usuario añade/quita/reordena en modo edición. 9 tipos de cards: Diario, Tareas, En seguimiento, Notas de hoy, Eventos hoy, Próximas 24h, Recientes, Atajos rápidos, Mini calendario. Layout persiste en UserDefaults
-- **Atajos rápidos configurables**: 3 acciones (Nueva nota, Nueva tarea, Nuevo evento) + 5 destinos (nota, enlace web, colección, tipo, raíz). Cada uno con icono, color y label
-- **Mini calendario**: 4 meses horizontales con navegación cómoda
-- **Cards visuales**: SeguimientoRow con punto de color de raíz, Recientes/Notas de hoy con DashboardNoteRow agrupado por raíz, hover calendario en tareas para cambiar fecha rápida
-- **Alarmas configurables para eventos**: en Ajustes > Calendario y Recordatorios, sección "Alarmas por defecto". Hora para all-day (default 9:00) y minutos antes para timed (default 5 min)
-- **RaizDashboardView**: selector de color con círculo + paleta compacta, `+` en cada colección/tipo para crear nota, `+` en headers para crear nuevos
-- **Esqueleto del día**: altura 76px en DayStrip, alturas mayores en timeline horario, fuentes ajustadas
-
-### 2026-04-28 — Optimización de rendimiento (perf pass)
-- VaultService: `read()` ahora es `async` — elimina congelados de hasta 2s esperando iCloud
-- NoteService: `parseFrontmatter` en un pase (20x menos iteraciones por nota), `loadAll()` paralelo con `withTaskGroup`
-- NoteEditorView: 3 `onChange` fusionados en 1 — evita triple `syncNoteFromService()` por cada recarga
-- ColeccionesView: `NoteType.loadAll()` cacheado en `@State` — ya no lee disco en cada render del sidebar
-- NoteListView: `filteredNotes` y `availableTipos` cacheados en `@State`
-- DayTimelineView: `tasksByRaiz` y `notesCreatedGrouped` cacheados — no recalculan en cada render
-- ChatPanel: `onChange(of: activePrompt?.id)` duplicado eliminado
-
-### 2026-04-28 — Dashboard raíz: tareas, drag&drop, mejoras UI
-- Botón "Editar Raíz", auto-colapso sidebar, columna derecha 420px
-- Sección Próximas Tareas: note tasks + inline tasks por nota, overdue en rojo, context menu
-- DashNoteRow: hover icon colección, drag a cards/tipos, context menu completo (abrir, props, colección, eliminar)
-- Colecciones y tipos aceptan drops de notas
-
-### 2026-04-28 — Absorber tarea a nota
-- "Añadir a proyecto" renombrado a "Añadir a nota" con buscador en todas las notas
-- Al seleccionar nota: inserta `- [ ] Título` como checkbox en el cuerpo de la nota destino
-- Elimina la nota de tarea (incluye limpiar Apple Reminders) — fix del bug de reaparición
-
-### 2026-04-28 — Editor visual upgrade + fixes
-- Editor: font 16px, line-height 1.75, max-width 740px centrado, headings con espaciado, blockquote estilo Notion, syntax markers dimmed (opacity 0.3), inline code con borde, HR gradiente, dark mode mejorado
-- Fix drag cursor invertido al arrastrar archivos sobre la nota (conversión de coordenadas incorrecta en WKWebView embebido en SwiftUI)
-- Fix paste PDF: comprueba file URL antes que imagen raw (el icono TIFF del PDF ya no se pega en lugar del archivo)
-- Fix click en tarjetas (links/archivos/YouTube): ignoreEvent corregido para separar click izquierdo (abre) de click derecho (editar)
-- URLs inline también se muestran como tarjetas (eliminada condición isStandalone)
-
-### 2026-04-28 — Publicacion v1.7 (build 8)
-- Release con todas las mejoras de la sesión anterior: timeline drag&drop, rich editor previews, explorar, tareas agrupadas por raíz
-
-### 2026-04-28 — Timeline drag&drop, editor rich previews, explorar mejoras
-- **Timeline:** drag horizontal para eventos y recordatorios, resize por borde derecho en eventos editables, drag vertical →todo el día con hint visual, snap redondeo correcto, tareas con hora excluidas de lista "Tareas"
-- **Reminders:** tareas sin hora se guardan sin componente de tiempo (antes aparecían a las 00:00 en Reminders)
-- **Editor:** URLs sueltas clicables, YouTube preview con thumbnail, link preview cards (favicon+dominio) para cualquier URL standalone, file cards estilo Apple Notes con icono por tipo
-- **Bug PDF:** `importAndInsert` insertaba `[[file.pdf]]` (wikilink) en lugar de `![[file.pdf]]` (file embed) — corregido
-- **Campo URL en contexto:** reemplazado `TextField` SwiftUI por `NSViewRepresentable` que fuerza `makeFirstResponder` — paste ya no va a la WKWebView
-- **Explorar:** botón `← raíz` en FilteredNotesView para volver al dashboard; dashboard tiene ColorPicker nativo, botón renombrar y botón eliminar con confirmación
-- **Tareas Hoy:** agrupación por raíz → parent (antes solo parent); overdue mezclados en su grupo natural con fecha en rojo
-
-### 2026-04-28 — Publicacion v1.6 (build 7)
-- Explorar completamente rediseñado: raices expandibles, dashboard por raiz, FilteredNotesView con chat integrado, batch select col/tipo/madre
-- Fix keychain: eliminados los prompts de contraseña al instalar nuevas versiones de la app
-- Agente limpiador de contexto con `runOnStartup` + `startupDelay`
-- `NoteService.tipos(inRaiz:)` — tipos unicos de una raiz
-- `ChatPanel`: modo Explorar con contexto prioritario de coleccion/tipo, limite 60K chars
-
-### 2026-04-28 — Limpieza de codigo muerto
-- Eliminados ficheros nunca usados: `AreasView.swift`, `TaskListView.swift`, `NewTaskNoteSheet.swift`, `NoteTreeView.swift`, `NoteContextBar.swift`
-- Documentacion completamente revisada y actualizada al estado real del codigo
-
-### 2026-04-27 — Diagnostico Sparkle
-- Identificado problema con v1.2 sin `SUPublicEDKey` que impide updates automaticos
-- Solucion: instalar v1.5 manualmente; a partir de v1.5 los updates automaticos funcionan
-
-### 2026-05-04b — Panel Actividad, URL contexto, chat colapsable
-
-**Panel de Actividad unificado (reemplaza Tareas + Log):**
-- `ProjectTask` gana campo `createdAt` serializado como `%YYYY-MM-DDTHH:mm:ss`. Tareas antiguas van al fondo.
-- `ProjectActivityPanel`: un solo bloque cronológico (más reciente primero) con tareas + log mezclados. Pill selector "Tarea / Log". Al crear tarea (Enter) → popover de fecha opcional; segundo Enter confirma sin fecha. Completadas inline en su posición cronológica.
-- `ProjectWorkspacePanel` elimina `ProjectTaskPanel` + `ProjectLogPanel` y usa el panel unificado.
-
-**Fix URL en bloque de contexto:**
-- `isURL` detecta dominios sin `https://` (e.g. `miramiweb.es`). En `commitInput`, normaliza añadiendo `https://` automáticamente.
-
-**Chat colapsable:**
-- Botón `›` en esquina del panel de chat para colapsar; franja vertical de 22px con `‹` para expandir.
-- `@AppStorage("chatDefaultExpanded")` persiste el estado por defecto.
-- Ajustes → Vista: toggle "Chat abierto por defecto".
-
-### 2026-05-04 — Fixes resize timeline, ForEach IDs, dashboard layout
-
-**Fix resize evento de calendario:**
-- Añadido `onlyThisOccurrence: Bool = false` a `CalendarService.updateEvent`. Cuando es `true` usa `span: .thisEvent` y preserva el identificador del evento recurrente.
-- `commitResizeHorizontal` y `commitMoveHorizontal` pasan `onlyThisOccurrence: true`. Bug: para recurrentes, `span: .futureEvents` cambiaba el ID → el evento desaparecía tras `loadAll()`.
-
-**Fix ForEach IDs duplicados en dashboard cards:**
-- `DashboardCards`: reemplazado `id: \.min` (minuto de inicio, colisiona) por `id: \.offset` con `enumerated()`.
-
-**Fix dashboard columnas expandidas:**
-- `.fixedSize(horizontal: false, vertical: true)` en cada columna del dashboard para que no se estiren a la altura de la columna más alta.
-- Editor de diario acotado a `minHeight: 240, maxHeight: 480`.
-
-### 2026-04-27 — Timelines rediseñados, inline tasks, ventana y mejoras sistema
-
-**Vistas Timeline rediseñadas:**
-- `DayTimelineView`: panel izquierdo con 3 secciones — Agenda (eventos todo el dia), Tareas (notas + inline tasks agrupadas por padre), Notas de hoy (creadas en el dia). El click en tarea abre su nota dashboard, nunca popover.
-- `ProjectsUnscheduledSidebar` reescrito con parametro `periodStart: Date`. Secciones: Vencidas (`due < periodStart`) + Sin fecha (`due == nil && isActiva`). Usado en Semana, Mes y Año.
-
-**Inline tasks en todos los timelines:**
-- Las tareas inline de proyectos (`ProjectTask`, parseadas de `tasks:` en el frontmatter) ahora aparecen en Dia, Semana, Mes y Año.
-- Render: `InlineTaskChipView` con `.draggable("projecttask||{parentNoteUUID}||{task.text}")`. Tap abre la nota padre.
-- `ForEach` usa `task.id` (UUID) como identificador, no `task.text`, para evitar colisiones con texto duplicado.
-- Fix drag a semana/mes/año: parametro `alwaysAllDay: Bool = false` en `NoteDropTarget`. Con `alwaysAllDay: true` el drop no calcula hora desde posicion Y y guarda solo la fecha.
-
-**Mejoras sistema:**
-- Ventana arranca maximizada: `WindowScreenConstraint.constrain` llama `window.setFrame(visible, display: true, animate: false)` siempre al arrancar.
-- Menu "Comprobar actualizaciones…" añadido al menu From (despues de "About").
-- Menu "Ayuda de From" abre `https://getfrom.app/docs/` en el navegador (Cmd+?).
-
-**Publicacion:** v1.4 (build 5) publicada. v1.5 (build 6) pendiente.
-
-### 2026-04-24 — Fixes editor y navegacion notas hijas
-
-**Bug 1: Contenido pegado desaparece**
-- Race condition en WebMarkdownEditor cuando el WebContent process crashea al pegar
-- Fix: comparar `editorDoc` con `self.parent.text` (valor actual) en lugar del `content` capturado
-
-**Bug 2: syncNoteFromService revertia bodyText del usuario**
-- `lastSaveAt = .distantPast` al arrancar + falta de guarda de ediciones locales
-- Fix: nueva guarda `hasLocalBodyChanges = bodyText != Self.extractBody(from: lastSavedContent)`
-
-**Bug 3: Notas hijas en proyecto sin UI completa**
-- El caso PROJECT usaba `WebMarkdownEditorWithToolbar` simple con binding corrupto
-- Fix: reemplazar por `NoteEditorView(note: selectedNote, embedded: true, suppressRightPanel: true)`
-
-**Bug 4: Navegacion entre notas hermanas en proyecto no funcionaba**
-- SwiftUI reutilizaba el mismo `NoteEditorView` embebido sin reinicializar `@State`
-- Fix: `.id(selectedNote.id)` en embedded NoteEditorView; `if embedded { onNavigate?(target) }`
-
-### 2026-04-23 — Fixes panel de contexto de proyectos/areas
-
-- `ProjectContextPanel.swift`: implementado uso del parametro `onNavigate` (antes ignorado)
-- `NoteEditorView.swift`: binding `selectedNote` mas explicito en `ProjectContextPanel` — SwiftUI detecta correctamente los cambios
-
-### 2026-04-23 — Rediseño panel derecho + bloque contexto
-
-**Panel derecho unificado (NoteEditorView):**
-- Tab por defecto en notas normales: Indice
-- Añadido tab `workspace` para proyectos y areas — muestra tareas + contexto + log apilados
-- Tab `workspace` es el default al abrir un proyecto o area
-- `projectWorkspacePanel` extraido como componente reutilizado por proyecto y area
-
-**Chat compacto simplificado:**
-- Eliminado `ContextElementsView` del modo compacto
-- Instrucciones permanentes movidas a icono `note.text` en el toolbar
-
-**Bloque contexto rediseñado (ProjectContextPanel):**
-- Eliminado sistema de modos (`addMode`) con menu de 6 opciones
-- Campo unificado siempre visible: busca notas y detecta URLs automaticamente
-- Sin coincidencias: ofrece "Crear nota" inline
-- Colecciones movidas a icono `folder` con popover
-- Icono `paperclip` para adjuntar archivos
-
-### 2026-04-28 — Dashboard de administracion del servidor
-
-- Nuevo panel admin en `/admin/dashboard` servido desde el propio servidor Hono en Railway
-- Login en-pagina con JWT, auto-refresh cada 60s
-- KPIs: usuarios totales, suscripciones activas, MRR estimado, ejecuciones, tokens consumidos
-- Graficas Chart.js: nuevos usuarios y ejecuciones de agentes (ultimos 30 dias)
-- Estado del servidor: health, DB, latencia, version
-- Gestion de proveedores IA: configurar API keys cifradas (Anthropic/OpenAI/Google), activar/pausar
-- Tabla de usuarios con busqueda y paginacion (20/pagina)
-- Acciones por usuario: añadir tokens, editar suscripcion/licencia/rol, resetear contraseña, eliminar con confirmacion
-- Nuevos endpoints: `GET /admin/stats/detailed`, `GET /admin/agents/recent`, `GET /admin/ledger/recent`, `PATCH /admin/users/:id`, `POST /admin/users/:id/reset-password`, `DELETE /admin/users/:id`
-- Tabla de ejecuciones recientes con email de usuario (JOIN)
-- Tabla de movimientos de tokens recientes con email de usuario (JOIN)
-
-### 2026-04-21 (sesion 6) — Paridad chat area/proyecto
-- Chat de area con paridad completa con chat de proyecto en `ChatPanel.swift`
-- Contexto automatico de area: body, ancestros, tareas, notas hijas, refs, URLs, archivos, colecciones
-
-### 2026-04-20 (sesion web) — Web i18n 9 idiomas
-- `getfrom.app`: sistema i18n con 9 idiomas (ES, EN, FR, DE, ZH, JA, PT, IT, KO)
-- Deteccion automatica por idioma del navegador, persistencia en localStorage
-- Correcciones de contenido en pricing: planes son excluyentes
-
-### 2026-04-19 (sesion 4) — Pestaña Enlaces
-- Nueva pestaña `Links` (`enlaces.json` en raiz del vault)
-- Extraccion automatica de URLs de notas con cache por `modifiedAt`
-- `LinkService` con tabla FTS5 `links` en SQLite
-
-### 2026-04-19 (sesiones 1-3) — Workspace proyectos, editor CodeMirror 6
-- Workspace de proyecto: columna tareas (frontmatter `tasks:`), notas hijas, refs
-- `ProjectTaskPanel`, `ProjectContextPanel` (antes `RefsPicker`)
-- Chat de proyecto con contexto automatico (body + tareas + notas hijas + refs + URLs)
-- Editor CodeMirror 6: tablas, archivos como chips, imagenes con resize/align, wikilinks clicables, drag & drop
-
-### 2026-04-18 — Fundacion de la app actual
-- Editor migrado de NSTextView a WKWebView + CodeMirror 6
-- Colecciones (`col:`) y Notas Vista (`vista:`)
-- Integracion completa Google Drive y Google Docs con soporte multi-cuenta
-- Web completa `getfrom.app` en GitHub Pages
-- Publicacion de notas end-to-end
-- Rediseño iconos toolbar: circulos 22x22 con fondo sutil
+Los archivos binarios no deben pasar por Railway (coste de transferencia). R2 con presigned URLs permite subir/descargar directamente desde el cliente, con el servidor solo gestionando autorización.

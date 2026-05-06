@@ -1,31 +1,30 @@
-# From — Your second brain. On your Mac. Yours alone.
+# From — Your second brain. On all your devices.
 
-**From** is a native macOS app that works as a personal second brain. It combines Markdown notes, task management, calendar views, autonomous AI agents, and iCloud sync — all in a local-first app where your data never leaves your device.
+**From** is a native macOS and iOS app that works as a personal second brain. It organizes everything — notes, tasks, projects, diary — in a real-time synchronized bullet tree across your devices, with autonomous AI agents and integrated file storage.
 
 ---
 
 ## What makes From different
 
-- **Local-first, radical privacy.** No mandatory cloud server, no telemetry, no lock-in. Notes are standard `.md` files that work with Obsidian, iA Writer, VS Code, or any text editor.
-- **Native macOS.** Built in Swift and SwiftUI. Native performance with deep system integration: Calendar, Reminders, iCloud Drive, Spotlight.
-- **Integrated AI.** Conversational assistant with full context of your vault. Autonomous agents that work in the background.
-- **Natural organization.** Flexible parent-child hierarchy without rigid folders. Areas with colors, customizable note types, configurable views.
+- **Bullet tree, not files.** Everything lives in a flexible node tree organized into color-coded workspaces. No folders, no .md files to manage, no sync conflicts.
+- **Real-time sync.** Changes sync instantly between Mac and iPhone via a private cloud server. Open your iPhone and your work is there.
+- **Native macOS + iOS.** Built in Swift and SwiftUI. Native performance on both platforms.
+- **Integrated AI.** Conversational assistant with full context of your nodes. Autonomous agents that run scheduled tasks in the background.
 
 ---
 
 ## Core features
 
-- **Notes** — Full Markdown editor with wikilinks, version history, and hierarchical organization
-- **Tasks** — Dedicated task manager with states, due dates, priorities, and recurrence
-- **Calendar** — Day, week, month, and year views combining your notes with Apple Calendar events
-- **AI Chat** — Conversational assistant with full vault context; create and edit notes directly from chat
-- **AI Editor** — Let the AI edit your notes directly, with confirm/discard controls
-- **Autonomous Agents** — Scheduled AI workflows that run automatically (daily summaries, research, etc.)
-- **Projects** — 3-panel workspace: tasks + editor + AI chat, all in context
-- **Collections** — Cross-hierarchy grouping of notes, with kanban/list/calendar views
-- **Links** — Automatic URL extraction from notes + manual link manager
-- **Canvas** — Infinite visual canvas for diagrams and mind maps
-- **Google Drive** — Two-way sync between notes and Google Docs, multi-account support
+- **Bullet tree** — Expandable, collapsible nodes with text, Markdown body, and unlimited depth. Zoom in on any node to focus.
+- **Workspaces** — Multiple named spaces with colors (Work, Personal, Projects...). All synced.
+- **Tasks** — Any node can be a task: status (pending/done/cancelled), due date, priority. Filter and view tasks across all workspaces.
+- **Daily diary** — A daily note for each day, automatically organized by date.
+- **Inline search** — Fast search with commands: `status:pending`, `date:today`, `type:project`, `priority:high`, `col:Marketing`...
+- **Calendar** — Day, week, month, and year views with Apple Calendar integration.
+- **AI Chat** — Conversational assistant with full workspace context. Create and update nodes from chat.
+- **Autonomous Agents** — Scheduled AI workflows: daily summaries, research, reminders. Run while you sleep.
+- **Files** — Attach files to workspaces. Stored in Cloudflare R2, accessible from any device.
+- **Quick capture** — Capture anything instantly from Mac (⌘R) or iOS (FAB button).
 
 ---
 
@@ -34,7 +33,7 @@
 | Plan | Price | Includes |
 |---|---|---|
 | One-time license | $59 | Full app + connect your own AI API key |
-| Monthly subscription | $7/month | Managed AI experience, no API key needed |
+| Monthly subscription | $7/month | Managed AI, no API key needed |
 
 Payments processed securely by [Lemon Squeezy](https://lemonsqueezy.com).
 
@@ -42,20 +41,20 @@ Payments processed securely by [Lemon Squeezy](https://lemonsqueezy.com).
 
 ## Roadmap
 
-- **English release** — The app is currently in Spanish. The first public release will be in English, with multi-language support to follow.
-- **iOS version** — Coming after the Mac release stabilizes. The codebase is already structured for cross-device sync via iCloud.
+- **App Store (iOS)** — iOS app is ready; App Store submission in progress.
+- **Full English UI** — The app is primarily in Spanish. English localization is next.
 
 ---
 
 ## Documentation
 
-Full product documentation (features, UI flows, integrations, and more) is available in [`docs/DOCUMENTACION_EN.md`](docs/DOCUMENTACION_EN.md).
+Full technical and product documentation: [`docs/DOCUMENTACION_EN.md`](docs/DOCUMENTACION_EN.md)
 
 ---
 
 ## Website
 
-[getfrom.app](https://getfrom.app) *(coming soon)*
+[getfrom.app](https://getfrom.app)
 
 ---
 
