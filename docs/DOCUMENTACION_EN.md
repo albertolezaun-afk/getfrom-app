@@ -1,7 +1,17 @@
 # From — Complete Product Documentation
 
 > Living document. Updated with each development session.
-> Last update: 2026-05-06 (v3.0 — full migration, auth/AppMode, macOS published)
+> Last update: 2026-05-07 (v3.5.4 — performance fixes, dead code cleanup)
+
+## Changelog
+
+### v3.5.4 (2026-05-07)
+- **Performance**: TemporalNavigator pre-buckets nodes by day — O(1) lookup per cell instead of iterating all nodes with Calendar operations
+- **Performance**: Dashboards (Projects, Tasks, Week, Month, Elements) with debounce + cache — no recomputation on every node change
+- **Performance**: NodesView body no longer depends on `nodesByWorkspace` — eliminates unnecessary re-renders
+- **Performance**: Apple Calendar sync uses direct ID lookups instead of scanning 3,000+ events
+- **Swift 6**: `Node` properties (`isAtomicTask`, `isOverdue`, `isDone`...) marked `nonisolated` — compatible with `-default-isolation=MainActor`
+- **Cleanup**: Removed 12 dead code files (~5,500 lines): BulletTreeView, NodeDashboardView, NodeWorkspaceDashboard and 9 legacy panel views
 
 ---
 

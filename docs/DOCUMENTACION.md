@@ -1,7 +1,22 @@
 # From — Documentación completa
 
 > Documento vivo. Actualizado en cada sesión de desarrollo.
-> Última actualización: 2026-05-06 (v3.0 — migración completa, auth/AppMode, publicación macOS)
+> Última actualización: 2026-05-07 (v3.5.4 — performance fixes, limpieza código muerto)
+
+## Changelog
+
+### v3.5.4 (2026-05-07)
+- **Rendimiento**: TemporalNavigator pre-buckea nodos por día — lookup O(1) por celda en vez de iterar todos los nodos con Calendar operations
+- **Rendimiento**: Dashboards (Proyectos, Tareas, Semana, Mes, Elementos) con debounce + cache — no recomputan en cada cambio de nodo
+- **Rendimiento**: NodesView body ya no depende de `nodesByWorkspace` — elimina re-renders innecesarios
+- **Rendimiento**: Apple Calendar sync con lookups directos por ID en vez de escanear 3.000+ eventos
+- **Swift 6**: Propiedades de `Node` (`isAtomicTask`, `isOverdue`, `isDone`...) marcadas `nonisolated` — compatibles con `-default-isolation=MainActor`
+- **Limpieza**: Eliminados 12 ficheros de código muerto (~5.500 líneas): BulletTreeView, NodeDashboardView, NodeWorkspaceDashboard y 9 panel views del sistema antiguo
+
+### v3.5.2 (2026-05-06)
+- Fix crash `Dictionary(uniqueKeysWithValues:)` en Apple Calendar sync con eventos recurrentes duplicados
+- Añadidos `NodeMode.enlace` y `NodeMode.archivo` como tipos first-class
+- GlobalDashboardView rediseñado con 6 pestañas fijas (Proyectos/Tareas/Agenda/Mes/Elementos/Chat IA)
 
 ---
 
