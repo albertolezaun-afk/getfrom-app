@@ -1,9 +1,15 @@
 # From — Complete Product Documentation
 
 > Living document. Updated with each development session.
-> Last update: 2026-05-08 (v3.6.6 — temporal hierarchy + calendar fixes)
+> Last update: 2026-05-08 (v3.6.7 — flat model + onboarding + area AI context)
 
 ## Changelog
+
+### v3.6.7 (2026-05-08)
+- **Architecture**: workspace removed as structural entity — flat node model (`allNodes`), area as tag in `extraData["area"]`
+- **Onboarding**: first use automatically creates the temporal hierarchy (year→month→week→daily) and opens today's diary
+- **Area as AI context**: special node per area (`_areaCtx=1`) whose body is automatically included in the chat system prompt
+- **Chat**: area tag button to edit/create the context node from any note
 
 ### v3.6.6 (2026-05-08)
 - **Breadcrumb**: correct temporal hierarchy — no "From" prefix, each level shows only its ancestors. Year: no prefix; Month: year only; Week: year+month; Daily: year+month+week

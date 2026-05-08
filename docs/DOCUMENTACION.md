@@ -1,9 +1,15 @@
 # From — Documentación completa
 
 > Documento vivo. Actualizado en cada sesión de desarrollo.
-> Última actualización: 2026-05-08 (v3.6.6 — jerarquía temporal + calendarios corregidos)
+> Última actualización: 2026-05-08 (v3.6.7 — modelo plano + onboarding + área como contexto IA)
 
 ## Changelog
+
+### v3.6.7 (2026-05-08)
+- **Arquitectura**: workspace eliminado como entidad estructural — modelo plano de nodos (`allNodes`), área como tag en `extraData["area"]`
+- **Onboarding**: primer uso crea automáticamente la jerarquía temporal (año→mes→semana→diario) y abre el diario de hoy
+- **Área como contexto IA**: nodo especial por área (`_areaCtx=1`) cuyo body se incluye automáticamente en el system prompt del chat
+- **Chat**: botón de tag de área para editar/crear el nodo de contexto desde cualquier nota
 
 ### v3.6.6 (2026-05-08)
 - **Breadcrumb**: jerarquía temporal correcta — sin "From", cada nivel muestra solo sus ancestros. Año: sin prefijo; Mes: solo año; Semana: año+mes; Diario: año+mes+semana
