@@ -1,9 +1,49 @@
 # From — Documentación completa
 
 > Documento vivo. Actualizado en cada sesión de desarrollo.
-> Última actualización: 2026-05-08 (v3.6.8 — área picker + workspace eliminado)
+> Última actualización: 2026-05-11 (v3.7.0 — supertags Tana + refactor estructural)
 
 ## Changelog
+
+### v3.7.0 (2026-05-11) — Supertags estilo Tana + refactor profundo
+
+**Supertags (#objetos):**
+- Nuevo palette inline al escribir `#` en cualquier posición. Tipos predefinidos (tarea, proyecto, evento, agente, prompt) y tipos de usuario.
+- Tipos predefinidos disponibles sin configuración. Los nuevos se crean al momento, sin confirmación.
+- `#` se borra como unidad (Backspace) y salta con ← →.
+- Coloreado dinámico (~78% del tamaño base) con color por tipo, visible en bullets, título de nota y árbol.
+
+**Sistema de colores por tipo:**
+- `TypeColorService`: paleta de 12 colores curados, asignación aleatoria persistida en primera aparición.
+- Clic derecho en el chip del sidebar → cambiar color (preset + ColorPicker nativo).
+- Animación flash al aplicar `#tipo` (spring + fade).
+
+**Columna derecha rediseñada:**
+- Tabs limpios: **Propiedades** / **Chat**.
+- Sección de tipos siempre visible con campos editables (text/number/date/select/bool/url/email/phone).
+- `ObjectPickerButton` para asignar/cambiar objeto desde el sidebar.
+- Cabecera "Tareas & Eventos" con botones separados para crear cada tipo.
+- Eventos hijos visibles junto a tareas.
+
+**Chat IA:**
+- Historial específico por nota — al abrir otra nota se limpia (salvo si el chat creó esa nota).
+- Headers limpios sin ALLCAPS. Tarjetas de acción con icono coloreado.
+
+**Breadcrumb:**
+- Año > Mes > Semana > **Día** > [padres] > título.
+- El día se calcula desde `node.createdAt` independientemente del nodo diario.
+- Soporta zoom dentro de diarios.
+
+**Layout:**
+- Panel izquierdo simplificado a un solo tab (Árbol). Día y 24h eliminados.
+- 24h timeline reubicado a columna derecha en nodos diarios (estilo NotePlan3 dashboard).
+
+**Refactor estructural (deuda técnica):**
+- **Schema version** en BD para migraciones de datos: ahora se ejecutan una sola vez en la vida de cada BD (antes corrían en cada arranque, con riesgo de destruir features nuevas como ocurrió con el nodo Búsquedas).
+- **God-views troceadas:** `NodesView.swift` -18%, `NodeBodyPanel.swift` -25%.
+- Nuevos archivos: `NodeRightSidebar.swift`, `NoteBreadcrumb.swift`, `NodeTitleHeader.swift`.
+- Eliminado código muerto: `DayPickerView`, `PropValuesPanel`, `PropertySection*` (legacy), `nodeTitleWithActions`, `zoomedNodeHeader`, comentarios-tumba.
+- Sistema de foco unificado: una sola fuente de verdad (`focusedId` → `focusedBulletId` → sidebar).
 
 ### v3.6.8 (2026-05-08)
 - **Área picker**: picker en el panel de propiedades para asignar o crear áreas. Muestra áreas existentes y permite escribir nuevas
