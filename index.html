@@ -59,9 +59,18 @@
 </section>
 
 <!-- Screenshot -->
-<div class="screenshot">
-    <div class="screenshot-placeholder">
-        <span data-i18n="index.screenshot_placeholder">Captura de From (próximamente)</span>
+<div class="screenshots-gallery">
+    <div class="screenshots-tabs">
+        <button class="tab-btn active" onclick="showTab(0)" data-i18n="index.tab_diary">Diario de hoy</button>
+        <button class="tab-btn" onclick="showTab(1)" data-i18n="index.tab_note">Notas con IA</button>
+        <button class="tab-btn" onclick="showTab(2)" data-i18n="index.tab_search">Búsqueda ⌘K</button>
+        <button class="tab-btn" onclick="showTab(3)" data-i18n="index.tab_ai">Chat IA</button>
+    </div>
+    <div class="screenshots-viewer">
+        <img class="screenshot-img active" src="img/screenshots/screen-1-diary.png" alt="Diario de hoy en From" />
+        <img class="screenshot-img" src="img/screenshots/screen-2-note.png" alt="Nota con bullets y tags en From" />
+        <img class="screenshot-img" src="img/screenshots/screen-3-search.png" alt="Búsqueda ⌘K en From" />
+        <img class="screenshot-img" src="img/screenshots/screen-4-ai.png" alt="Chat IA en From" />
     </div>
 </div>
 
@@ -504,6 +513,17 @@
         © 2026 Alberto Lezaun. All rights reserved. — <a href="mailto:hello@getfrom.app">hello@getfrom.app</a>
     </div>
 </footer>
+
+<script>
+function showTab(index) {
+    document.querySelectorAll('.screenshot-img').forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+}
+</script>
 
 </body>
 </html>

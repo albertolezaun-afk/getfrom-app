@@ -159,6 +159,10 @@ const TRANSLATIONS = {
     "index.faq8_q": "¿Puedo importar mis notas desde Notion u Obsidian?",
     "index.faq8_a": "Sí. From importa desde Obsidian, Notion, LogSeq, NotePlan, Bear y cualquier carpeta de Markdown. Las notas sin fecha van al diario de ayer; las tareas con fecha van automáticamente al día que les corresponde. Consulta el Manual para instrucciones detalladas por app.",
 
+    "index.tab_diary":  "Diario de hoy",
+    "index.tab_note":   "Notas con IA",
+    "index.tab_search": "Búsqueda ⌘K",
+    "index.tab_ai":     "Chat IA",
     "index.cta_title": "Tu segundo cerebro te está esperando",
     "index.cta_body":  "Descarga From y empieza a organizar tus ideas, tareas y proyectos. Disponible para Mac y iPhone.",
     "index.cta_btn":   "Descargar para macOS",
@@ -489,6 +493,10 @@ const TRANSLATIONS = {
     "index.faq8_q": "Can I import my notes from Notion or Obsidian?",
     "index.faq8_a": "Yes. From imports from Obsidian, Notion, LogSeq, NotePlan, Bear, and any Markdown folder. Notes without a date go to yesterday's diary; tasks with a date are automatically placed on their correct day. See the Manual for step-by-step instructions per app.",
 
+    "index.tab_diary":  "Today's diary",
+    "index.tab_note":   "Notes with AI",
+    "index.tab_search": "Search ⌘K",
+    "index.tab_ai":     "AI Chat",
     "index.cta_title": "Your second brain is waiting",
     "index.cta_body":  "Download From and start organizing your ideas, tasks, and projects. Available for Mac and iPhone.",
     "index.cta_btn":   "Download for macOS",
