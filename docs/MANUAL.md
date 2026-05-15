@@ -375,6 +375,18 @@ From puede sincronizar el contenido de cualquier nota con un documento de Google
 - From exporta todos tus nodos a Markdown automáticamente cada 2 horas en:
   `~/Library/Application Support/From/Backups/`
 
+### Backup local automático
+
+From guarda un snapshot completo de tus notas cada 2 horas en `~/Documents/From Backup/{Workspace}/`. Cada snapshot incluye:
+- Todos tus nodos en Markdown estándar (compatible con Obsidian y cualquier editor)
+- Una copia del archivo de base de datos para restauración instantánea
+
+**Historial**: se conservan los últimos 6 snapshots por workspace (12 horas de historial).
+
+**Restaurar**: Ajustes → Datos → Backup → elige el snapshot → pulsa "Restaurar". La app recarga automáticamente.
+
+Tus notas no dependen de ningún servidor. Incluso sin conexión a internet, el backup sigue funcionando.
+
 ---
 
 ## 19. Ajustes útiles

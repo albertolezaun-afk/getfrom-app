@@ -167,6 +167,14 @@ Esta sección describe el estado completo de la aplicación From tal como está 
 - **LemonSqueezy** para pagos. Variants: suscripción (`1553200`), licencia (`1553210`), topup 5M tokens (`1553900`).
 - **Backup local automático:** `NodeBackupService` exporta todos los nodos a Markdown cada 2 horas en `~/Library/Application Support/From/Backups/`.
 
+**Backup local por workspace:**
+- Snapshots timestampados cada 2h: `~/Documents/From Backup/{Workspace}/{yyyy-MM-dd_HH-mm}/`
+- Cada snapshot: copia SQLite (nodes.db) + Markdown de todos los nodos
+- Historial: 6 snapshots por workspace (12h)
+- Restauración desde Settings sin reinicio
+- Clave lastBackupDate por workspace: `from.nodeBackup.lastDate.{wsId}`
+- Separado por workspace: Personal y Demo tienen historial independiente
+
 ---
 
 ### Captura rápida

@@ -126,6 +126,8 @@ const TRANSLATIONS = {
     "index.priv_notelemetry_body":  "No rastreamos uso, no enviamos analíticas, no recopilamos datos de comportamiento. Cero.",
     "index.priv_nolockin_title":    "Sin lock-in",
     "index.priv_nolockin_body":     "Tu contenido es exportable en cualquier momento. Si dejas From, te llevas todo. No hay formatos propietarios sin salida.",
+    "index.priv_backup_title":      "Backup local cada 2 horas",
+    "index.priv_backup_body":       "From guarda un snapshot completo de tus notas en tu Mac cada 2 horas en Markdown estándar. Legible con cualquier editor, compatible con Obsidian. Restaura cualquier punto de las últimas 12h desde Ajustes.",
 
     "index.steps_title": "Empieza en 30 segundos",
     "index.step1_title": "Descarga From",
@@ -452,6 +454,8 @@ const TRANSLATIONS = {
     "index.priv_notelemetry_body":  "We don't track usage, send analytics, or collect behavioral data. Zero.",
     "index.priv_nolockin_title":    "No lock-in",
     "index.priv_nolockin_body":     "Your content is exportable at any time. If you leave From, you take everything with you. No proprietary formats with no way out.",
+    "index.priv_backup_title":      "Local backup every 2 hours",
+    "index.priv_backup_body":       "From saves a complete snapshot of your notes on your Mac every 2 hours as standard Markdown. Readable with any editor, compatible with Obsidian. Restore any point from the last 12h from Settings.",
 
     "index.steps_title": "Up and running in 30 seconds",
     "index.step1_title": "Download From",

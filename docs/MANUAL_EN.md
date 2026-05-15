@@ -375,6 +375,18 @@ From can sync any note's content with a Google Docs document.
 - From automatically exports all your nodes to Markdown every 2 hours to:
   `~/Library/Application Support/From/Backups/`
 
+### Automatic local backup
+
+From saves a complete snapshot of your notes every 2 hours to `~/Documents/From Backup/{Workspace}/`. Each snapshot includes:
+- All your nodes as standard Markdown (compatible with Obsidian and any editor)
+- A copy of the database file for instant restoration
+
+**History**: the last 6 snapshots per workspace are kept (12 hours of history).
+
+**Restore**: Settings → Data → Backup → choose the snapshot → press "Restore". The app reloads automatically.
+
+Your notes don't depend on any server. Even without an internet connection, backups keep running.
+
 ---
 
 ## 19. Useful settings
