@@ -389,7 +389,41 @@ Tus notas no dependen de ningún servidor. Incluso sin conexión a internet, el 
 
 ---
 
-## 19. Ajustes útiles
+## 19. From para iPhone
+
+From está disponible para iPhone con sync instantáneo con tu Mac.
+
+### Pestaña Hoy
+La pantalla principal muestra dos vistas para el día seleccionado:
+
+- **Agenda**: tus bucles activos, tareas overdue y tareas del día. Las tareas completadas permanecen visibles hasta el día siguiente.
+- **Notas**: el diario del día, con bullets, headings y estructura libre.
+
+Navega entre semanas con las flechas < > o con swipe horizontal en la tira de días. Toca el nombre del mes para volver a hoy. El icono de calendario permite saltar a cualquier fecha.
+
+### Bullets
+Cada bullet puede tener hijos. Si los tiene, aparece un chevron a la izquierda para colapsar/expandir. Toca **>** a la derecha para hacer zoom-in en el nodo y ver su contenido completo.
+
+Los bullets están plegados por defecto. Al desplegarlos, los hijos se muestran con el mismo estilo (checkboxes, tags, etc.).
+
+### Tareas y Bucles
+- **Tareas** (checkbox amarillo/naranja): tienen fecha de vencimiento. Overdue = naranja.
+- **Bucles** (checkbox morado): open loops, siempre visibles en Agenda.
+- Swipe izquierda para completar, swipe derecha para eliminar.
+
+### Captura rápida
+El botón **+** expande dos opciones:
+- **Nota**: crea un bullet en el diario de hoy
+- **Tarea**: crea una tarea con fecha (por defecto hoy)
+
+El botón de micrófono crea notas por voz.
+
+### Sync con Mac
+From sincroniza automáticamente entre Mac e iPhone. Los cambios aparecen en segundos. El diario, tareas, bucles y favoritos están siempre actualizados en todos tus dispositivos.
+
+---
+
+## 20. Ajustes útiles
 
 Accede desde el menú **From → Ajustes** o con `⌘,`.
 
@@ -418,7 +452,7 @@ Accede desde el menú **From → Ajustes** o con `⌘,`.
 
 ---
 
-## 20. Importar desde otras apps
+## 21. Importar desde otras apps
 
 From puede importar notas desde Obsidian, Notion, LogSeq, NotePlan, Bear, Apple Notes y cualquier carpeta de archivos Markdown.
 
