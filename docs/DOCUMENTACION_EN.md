@@ -5,6 +5,13 @@
 
 ## Changelog
 
+### v3.10.1 — 2026-05-18
+
+**Audio / AI**
+- If the AI fails when processing a voice recording (no subscription, expired session, network error), the transcript is automatically saved as a bullet under today's diary. The recording is no longer lost.
+- Distinct server error messages: "session expired" vs "no subscription" vs generic error.
+- After Sign in with Apple, subscription status is hydrated immediately via `fetchMe()` if the auth endpoint didn't return it.
+
 ### v3.10.0 — 2026-05-18
 
 **Editor**

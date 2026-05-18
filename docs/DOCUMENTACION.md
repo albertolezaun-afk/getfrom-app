@@ -5,6 +5,13 @@
 
 ## Changelog
 
+### v3.10.1 — 2026-05-18
+
+**Audio / IA**
+- Si la IA falla al procesar una grabación (sin suscripción, sesión expirada, error de red), la transcripción se guarda automáticamente como bullet en el diario de hoy. La grabación ya no se pierde.
+- Mensajes de error de servidor diferenciados: "sesión expirada" vs "sin suscripción" vs error genérico.
+- Tras login con Apple, el estado de suscripción se hidrata inmediatamente vía `fetchMe()` si el endpoint de auth no lo devolvió.
+
 ### v3.10.0 — 2026-05-18
 
 **Editor**
