@@ -754,4 +754,182 @@ Cualquier carpeta con archivos `.md` o `.txt` puede importarse en From, sin impo
 
 ---
 
+## 22. From para Claude — Integración MCP
+
+From se conecta con Claude (Claude Desktop y Claude Code) para que puedas crear notas, añadir tareas y consultar tu vault directamente desde el chat. Claude también guarda automáticamente las conversaciones, artefactos y archivos que subes en tu diario de From.
+
+---
+
+### 22.1 Qué hace la integración
+
+Cuando conectas From con Claude ocurren tres cosas automáticamente:
+
+**1. Claude lee tu contexto al empezar**
+En cuanto mencionas un área de trabajo (La Isla, piloto, inversión, personal...), Claude carga el contexto de ese tag desde From antes de responderte. No tienes que explicarle nada.
+
+**2. Todo queda guardado en From**
+- Los documentos y análisis que Claude genera van a From como notas del día.
+- Los archivos, PDFs y enlaces que tú subes van a From etiquetados con la fecha.
+- Al terminar la sesión Claude crea un resumen y lo guarda en el diario.
+
+**3. Claude actualiza tu contexto**
+Si la sesión generó información nueva relevante a un área (decisión tomada, cambio de estado, datos nuevos), Claude actualiza el contexto del tag en From para que la próxima sesión empiece con todo al día.
+
+---
+
+### 22.2 Instalación — 3 pasos
+
+#### Paso 1: Genera tu token de API
+En From, ve a **Ajustes → Cuenta → Integraciones** y pulsa **"Generar token de API"**.
+
+- El token dura 1 año.
+- Si lo generas en Mac, aparece automáticamente en iOS al abrir Ajustes.
+- Cópialo — lo necesitarás en el paso 3.
+
+> Asegúrate de que From está sincronizado antes de usar la integración. Si nunca has sincronizado, Claude no podrá ver tus tags ni tu diario.
+
+#### Paso 2: Instala la extensión (Claude Desktop)
+
+**Opción A — Un click (recomendada):**
+1. Pulsa **"Instalar extensión"** en Ajustes → Cuenta → Integraciones, o ve a [getfrom.app/claude](https://getfrom.app/claude) y descarga `From.dxt`.
+2. Haz doble click en el archivo `.dxt`.
+3. Claude Desktop te pedirá el token — pégalo y confirma.
+
+**Opción B — Manual (Claude Code / avanzado):**
+Añade esto en `~/.claude/settings.json`:
+```json
+{
+  "mcpServers": {
+    "from": {
+      "type": "http",
+      "url": "https://from-server-production.up.railway.app/mcp",
+      "headers": {
+        "Authorization": "Bearer TU_TOKEN"
+      }
+    }
+  }
+}
+```
+
+#### Paso 3: Reinicia Claude
+Cierra y vuelve a abrir Claude. Las tools de From aparecen automáticamente. No hace falta decirle nada más.
+
+---
+
+### 22.3 Cómo funciona por dentro
+
+```
+Tú hablas con Claude
+       │
+       ├── Claude detecta el área (La Isla, piloto...)
+       │   └── from_get_tag_context("la-isla") → lee contexto del tag
+       │
+       ├── Trabajas: Claude responde con contexto completo
+       │
+       ├── Subes un PDF / URL / imagen
+       │   └── from_create_node → nodo en el diario de hoy
+       │
+       ├── Claude genera un documento / plan / análisis
+       │   └── from_create_node → nodo en el diario de hoy
+       │
+       └── Dices "fin" o terminas la sesión
+           ├── from_create_node → nota de sesión en el diario
+           └── from_update_tag_context → actualiza contexto del tag
+```
+
+---
+
+### 22.4 Tags disponibles
+
+Cada tag en From tiene su contexto. Claude los carga automáticamente cuando los mencionas:
+
+| Lo que dices | Tag que carga Claude |
+|---|---|
+| "La Isla", "Freelanders", "trading" | `la-isla` |
+| "Café Olé", "radio", "Radiolé" | `cafe-ole` |
+| "MiTrading", "podcast" | `mitrading` |
+| "Media Sector", "Íñigo", "clientes" | `media-sector` |
+| "inversión", "IBKR", "Apex", "Indexa" | `inversion` |
+| "piloto", "PPL", "X-Plane", "ATPL" | `piloto` |
+| "personal", "Marina", "diario" | `personal` |
+| "coding", "código", "automatización" | `coding` |
+| "From" (la app) | `from` |
+| "biblioteca", "libro", "curso" | `biblioteca` |
+| "procesos", "checklist" | `procesos` |
+
+Para añadir o editar el contexto de un tag: abre el tag en From y edita los bullets directamente en el editor. Claude los leerá en la próxima sesión.
+
+---
+
+### 22.5 Ejemplos de uso
+
+**Empezar sesión de trabajo:**
+```
+"Hablemos de La Isla — necesito preparar el lanzamiento de junio"
+→ Claude carga el contexto de la-isla y trabaja con él
+```
+
+**Guardar lo que hace Claude:**
+```
+"Crea un plan de lanzamiento para el Squad de junio"
+→ Claude crea el plan Y lo guarda automáticamente en From (diario de hoy)
+```
+
+**Subir contexto:**
+```
+[Subes un PDF con datos de ventas]
+→ Claude lee el PDF, crea una nota en From con el contenido y lo referencia en la sesión
+```
+
+**Añadir tareas:**
+```
+"Añade una tarea para hablar con Adrián el lunes a las 10h"
+→ Crea la tarea en From con fecha, sin salir del chat
+```
+
+**Consultar tu vault:**
+```
+"¿Qué tareas tengo pendientes esta semana?"
+→ Claude busca en From y te responde con las tareas reales
+```
+
+**Cerrar sesión:**
+```
+"fin"
+→ Claude guarda resumen en el diario de hoy y actualiza el contexto del tag si hay algo nuevo
+```
+
+---
+
+### 22.6 Sincronización entre tags y Claude
+
+Los tags de From y lo que lee Claude son exactamente lo mismo. El contexto que ves en From al abrir un tag (los bullets bajo "Quién es Alberto", "Qué es", "Escala de valor"...) es exactamente lo que Claude carga con `from_get_tag_context`.
+
+**Para actualizar el contexto de un tag:**
+- Edita los bullets directamente en From — Claude los leerá en la próxima sesión.
+- O dile a Claude "actualiza el contexto de este tag" al final de una sesión y lo hará automáticamente.
+
+**No hace falta señalar carpetas ni configurar nada extra.** La sincronización es automática por token.
+
+---
+
+### 22.7 Preguntas frecuentes
+
+**¿Necesito tener From abierto mientras uso Claude?**
+No. Pero From debe haber sincronizado al menos una vez para que el servidor tenga tus datos. Si creas una nota en Claude y luego abres From, aparecerá en el siguiente sync (automático cada ~60 segundos).
+
+**¿Los tags de From son los mismos que usaba en Claude Cowork?**
+Sí. Los tags (antes llamados áreas) de From corresponden directamente a los archivos `contexto-[área].md` de tu vault de Centro. La fuente de verdad ahora es From — edita el contexto en From y Claude lo verá.
+
+**¿Qué pasa si no digo "fin"?**
+Claude no guarda la nota de sesión automáticamente sin la señal de cierre. Si quieres que guarde, di "fin" o "guarda esto en From". También puedes pedírselo en cualquier momento: "guarda esta conversación en From".
+
+**¿Funciona con Claude.ai (web)?**
+Por ahora solo con Claude Desktop y Claude Code (ambos con soporte MCP). Claude.ai web no soporta MCP todavía.
+
+**¿El token caduca?**
+El token dura 1 año. Si regeneras el token en From, el anterior deja de funcionar — tendrás que actualizar la configuración de Claude.
+
+---
+
 *getfrom.app*
