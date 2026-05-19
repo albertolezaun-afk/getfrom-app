@@ -811,40 +811,16 @@ Añade esto en `~/.claude/settings.json`:
 }
 ```
 
-#### Paso 3: Añade el protocolo a CLAUDE.md *(recomendado)*
+#### Paso 3: Escribe "Configura From" una sola vez
 
-El DXT instala la conexión, pero para que Claude siga el protocolo completo de forma automática (cargar contexto al empezar, guardar al terminar, responder al comando "fin"...) necesitas añadir las instrucciones a tu `CLAUDE.md`.
+Una vez instalado y reiniciado Claude, escribe esto en el chat:
 
-**Si usas Claude Code**, añade esto a `~/.claude/CLAUDE.md` (créalo si no existe):
+> **Configura From**
 
-```markdown
-## From — Protocolo de sesión
-
-Tienes acceso al vault de From del usuario vía MCP (tools: from_get_today_note,
-from_get_tag_context, from_update_tag_context, from_create_node, from_search).
-
-### AL INICIAR
-1. Si el usuario menciona un área (La Isla, piloto, inversión, personal, coding...),
-   llama a from_get_tag_context("nombre-tag") antes de responder. Tags disponibles:
-   la-isla, cafe-ole, mitrading, media-sector, inversion, piloto, personal, coding,
-   from, biblioteca, procesos.
-2. Llama a from_get_today_note() y guarda el ID para usarlo durante la sesión.
-
-### DURANTE LA SESIÓN
-3. Si el usuario sube un archivo, PDF o URL → from_create_node con parentId=ID_DIARIO.
-4. Cuando generes un documento, plan o análisis → from_create_node con parentId=ID_DIARIO.
-
-### AL TERMINAR (el usuario dice "fin" o termina la sesión)
-5. Crea nota de sesión: from_create_node(text="Sesión YYYY-MM-DD — [tema]",
-   body=[resumen markdown], parentId=ID_DIARIO).
-6. Si hubo información nueva relevante al área → from_update_tag_context(tag, texto).
-7. Confirma en una línea qué se guardó en From.
-```
-
-**Si usas Claude Desktop (DXT)**, Claude aplica las instrucciones del servidor automáticamente en la mayoría de casos. Si quieres control total, añade el snippet anterior a un archivo `CLAUDE.md` en tu carpeta de trabajo habitual.
+Claude configurará todo automáticamente — crea o actualiza tu `CLAUDE.md` con el protocolo completo (cargar contexto al empezar, guardar al terminar, comando "fin"). Solo hay que hacerlo una vez.
 
 #### Paso 4: Reinicia Claude
-Cierra y vuelve a abrir Claude. Las tools de From aparecen automáticamente.
+Cierra y vuelve a abrir Claude para que las tools aparezcan. Luego escribe "Configura From".
 
 ---
 
@@ -954,7 +930,7 @@ No. Pero From debe haber sincronizado al menos una vez para que el servidor teng
 Sí. Los tags (antes llamados áreas) de From corresponden directamente a los archivos `contexto-[área].md` de tu vault de Centro. La fuente de verdad ahora es From — edita el contexto en From y Claude lo verá.
 
 **¿El DXT modifica mi CLAUDE.md automáticamente?**
-No. El DXT instala la conexión MCP (las tools), pero no toca tus archivos de configuración. Para el protocolo completo (cargar contexto, guardar al terminar, "fin"...) necesitas añadir el snippet de la sección 22.2 a tu CLAUDE.md. Solo hay que hacerlo una vez.
+No directamente, pero solo tienes que escribir **"Configura From"** una vez en Claude y él lo hace solo. El DXT instala la conexión; ese comando instala el comportamiento.
 
 **¿Qué hace exactamente el comando "fin"?**
 Si tienes el protocolo en tu CLAUDE.md, al decir "fin" Claude:
