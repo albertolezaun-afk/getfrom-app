@@ -1,5 +1,36 @@
 import React from 'react'
 
+// ── Tag color system (matches From Mac) ──────────────────────────────────────
+const TAG_COLORS = ['blue', 'green', 'orange', 'purple', 'pink', 'red', 'yellow', 'teal']
+
+function getTagColor(tag: string): string {
+  let hash = 0
+  for (let i = 0; i < tag.length; i++) hash = tag.charCodeAt(i) + ((hash << 5) - hash)
+  return TAG_COLORS[Math.abs(hash) % TAG_COLORS.length]
+}
+
+// Render text with colored hashtags
+function renderWithTags(text: string, key: number): React.ReactNode {
+  const parts = text.split(/(#[\wÀ-ɏ]+)/g)
+  if (parts.length === 1) return text
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (part.startsWith('#') && part.length > 1) {
+          const tagName = part.slice(1)
+          const color = getTagColor(tagName)
+          return (
+            <span key={`tag-${key}-${i}`} className={`tag-inline tag-inline--${color}`}>
+              {part}
+            </span>
+          )
+        }
+        return part
+      })}
+    </>
+  )
+}
+
 // Parses inline markdown and returns JSX
 export function renderInline(text: string): React.ReactNode {
   // Tokenize: bold, italic, code, strikethrough, link
@@ -28,7 +59,7 @@ export function renderInline(text: string): React.ReactNode {
     if (strikeMatch) candidates.push({ index: strikeMatch[1].length, type: 'strike', match: strikeMatch })
 
     if (candidates.length === 0) {
-      tokens.push(remaining)
+      tokens.push(renderWithTags(remaining, key++))
       break
     }
 
@@ -38,7 +69,7 @@ export function renderInline(text: string): React.ReactNode {
     const before = best.match[1]
 
     if (before) {
-      tokens.push(before)
+      tokens.push(renderWithTags(before, key++))
     }
 
     if (best.type === 'bold') {

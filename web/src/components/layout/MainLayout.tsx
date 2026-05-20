@@ -153,6 +153,12 @@ export default function MainLayout() {
       {showNewEvent && <NewEventModal onClose={() => setShowNewEvent(false)} />}
       {showVoiceCapture && <VoiceCaptureModal onClose={() => setShowVoiceCapture(false)} />}
       <OnboardingTooltip />
+      {s.isSyncing && (
+        <div className="sync-indicator">
+          <div className="sync-spinner" />
+          <span>Sincronizando...</span>
+        </div>
+      )}
     </div>
   )
 }

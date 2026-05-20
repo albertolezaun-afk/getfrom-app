@@ -1,27 +1,48 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { store, useStore } from '../../store/nodeStore'
+import type { Node } from '../../types'
 import Outliner from '../outliner/Outliner'
 
 type DiaryPanelTab = 'pending' | 'timeline'
 
+function getDiaryForDate(date: Date): Node | null {
+  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  const end = new Date(start.getTime() + 86400000)
+  for (const node of store.nodes.values()) {
+    if (!node.isDiaryEntry || node.deletedAt) continue
+    if (!node.diaryDate) continue
+    const d = new Date(node.diaryDate)
+    if (d >= start && d < end) return node
+  }
+  return null
+}
+
 export default function DiaryView() {
   const s = useStore()
   const navigate = useNavigate()
-  const diary = s.todayDiary()
+  const [dateOffset, setDateOffset] = useState(0) // 0 = hoy, -1 = ayer, etc.
   const [panelTab, setPanelTab] = useState<DiaryPanelTab>('pending')
+
+  const targetDate = new Date()
+  targetDate.setDate(targetDate.getDate() + dateOffset)
+
+  const diary = dateOffset === 0 ? s.todayDiary() : getDiaryForDate(targetDate)
 
   if (s.isSyncing && !diary) {
     return <div className="view-loading">Cargando...</div>
   }
 
-  if (!diary) {
-    return <div className="view-empty">No hay entrada para hoy</div>
-  }
-
-  const date = new Date()
+  const date = targetDate
   const dayName = date.toLocaleDateString('es-ES', { weekday: 'long' })
   const dateStr = date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
+
+  function formatOffsetLabel(): string {
+    if (dateOffset === 0) return 'Hoy'
+    if (dateOffset === -1) return 'Ayer'
+    if (dateOffset === 1) return 'Mañana'
+    return dateStr
+  }
 
   // ── Pending tasks logic ────────────────────────────────────────────────
   const now = new Date()
@@ -190,18 +211,41 @@ export default function DiaryView() {
         <div className="diary-main">
           <div className="view-header">
             <div className="diary-date">
+              <div className="diary-nav">
+                <button
+                  onClick={() => setDateOffset(d => d - 1)}
+                  title="Día anterior"
+                >←</button>
+                <span className="diary-date-label">{formatOffsetLabel()}</span>
+                <button
+                  onClick={() => setDateOffset(d => d + 1)}
+                  disabled={dateOffset >= 0}
+                  title="Día siguiente"
+                >→</button>
+                {dateOffset !== 0 && (
+                  <button onClick={() => setDateOffset(0)} title="Volver a hoy">Hoy</button>
+                )}
+              </div>
               <span className="diary-day">{dayName.charAt(0).toUpperCase() + dayName.slice(1)}</span>
               <span className="diary-full-date">{dateStr}</span>
             </div>
           </div>
 
           <div className="view-body">
-            <Outliner
-              parentId={diary.id}
-              autoFocusEmpty
-              placeholder="Escribe lo que está en tu mente..."
-              className="diary-outliner"
-            />
+            {diary ? (
+              <Outliner
+                parentId={diary.id}
+                autoFocusEmpty
+                placeholder="Escribe lo que está en tu mente..."
+                className="diary-outliner"
+              />
+            ) : (
+              <div className="view-empty-state" style={{ padding: '32px 0' }}>
+                <p style={{ color: 'var(--text-tertiary)', fontSize: 14 }}>
+                  No hay entrada de diario para este día
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

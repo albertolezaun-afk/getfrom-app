@@ -4,6 +4,17 @@ import { useStore, store } from '../../store/nodeStore'
 import type { Node } from '../../types'
 
 const SECTIONS_KEY = 'from_task_sections'
+const FILTERS_KEY = 'from_tasks_filters'
+
+function loadFilters(): { filterPriority: 'all'|'high'|'medium'|'low'; showDone: boolean; sortBy: 'date'|'priority'|'created' } {
+  try {
+    return JSON.parse(localStorage.getItem(FILTERS_KEY) || '{}')
+  } catch { return { filterPriority: 'all', showDone: false, sortBy: 'date' } }
+}
+
+function saveFilters(f: { filterPriority: string; showDone: boolean; sortBy: string }) {
+  localStorage.setItem(FILTERS_KEY, JSON.stringify(f))
+}
 
 function loadSectionState(): Record<string, boolean> {
   try {
@@ -131,6 +142,31 @@ function TaskSection({ section, collapsed, onToggle }: SectionProps) {
 export default function TasksView() {
   const s = useStore()
   const [sectionState, setSectionStateRaw] = useState<Record<string, boolean>>(loadSectionState)
+  const savedFilters = useMemo(() => loadFilters(), [])
+  const [filterPriority, setFilterPriority] = useState<'all'|'high'|'medium'|'low'>(savedFilters.filterPriority || 'all')
+  const [showDone, setShowDone] = useState<boolean>(savedFilters.showDone || false)
+  const [sortBy, setSortBy] = useState<'date'|'priority'|'created'>(savedFilters.sortBy || 'date')
+
+  function updateFilter<K extends keyof ReturnType<typeof loadFilters>>(key: K, value: ReturnType<typeof loadFilters>[K]) {
+    const current = loadFilters()
+    const next = { ...current, [key]: value }
+    saveFilters(next)
+  }
+
+  function setAndSaveFilterPriority(v: 'all'|'high'|'medium'|'low') {
+    setFilterPriority(v)
+    updateFilter('filterPriority', v)
+  }
+
+  function setAndSaveShowDone(v: boolean) {
+    setShowDone(v)
+    updateFilter('showDone', v)
+  }
+
+  function setAndSaveSortBy(v: 'date'|'priority'|'created') {
+    setSortBy(v)
+    updateFilter('sortBy', v)
+  }
 
   function toggleSection(id: SectionId) {
     setSectionStateRaw(prev => {
@@ -145,7 +181,18 @@ export default function TasksView() {
     return !defaultOpen
   }
 
-  const allTasks = useMemo(() => s.allActive().filter(n => n.status !== null), [s])
+  const allTasks = useMemo(() => {
+    let tasks = s.allActive().filter(n => n.status !== null)
+    // Filter by priority
+    if (filterPriority !== 'all') {
+      tasks = tasks.filter(n => n.priority === filterPriority)
+    }
+    // Filter done
+    if (!showDone) {
+      tasks = tasks.filter(n => n.status !== 'done')
+    }
+    return tasks
+  }, [s, filterPriority, showDone])
 
   const now = new Date()
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -160,7 +207,7 @@ export default function TasksView() {
     const nodate: Node[] = []
 
     for (const t of allTasks) {
-      if (t.status === 'done') continue // skip done in main view
+      if (!showDone && t.status === 'done') continue
       if (!t.due) {
         nodate.push(t)
         continue
@@ -177,20 +224,36 @@ export default function TasksView() {
       }
     }
 
-    // Sort by due
-    const byDue = (a: Node, b: Node) => {
-      if (a.due && b.due) return a.due < b.due ? -1 : 1
-      return 0
+    const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 }
+
+    function makeSorter(list: Node[]): Node[] {
+      if (sortBy === 'priority') {
+        return list.sort((a, b) => {
+          const pa = PRIORITY_ORDER[a.priority || ''] ?? 3
+          const pb = PRIORITY_ORDER[b.priority || ''] ?? 3
+          if (pa !== pb) return pa - pb
+          if (a.due && b.due) return a.due < b.due ? -1 : 1
+          return 0
+        })
+      }
+      if (sortBy === 'created') {
+        return list.sort((a, b) => (a.createdAt || '') < (b.createdAt || '') ? -1 : 1)
+      }
+      // default: date
+      return list.sort((a, b) => {
+        if (a.due && b.due) return a.due < b.due ? -1 : 1
+        return 0
+      })
     }
 
     return [
-      { id: 'overdue', label: 'Vencidas', tasks: overdue.sort(byDue), defaultOpen: true },
-      { id: 'today', label: 'Hoy', tasks: today.sort(byDue), defaultOpen: true },
-      { id: 'week', label: 'Esta semana', tasks: week.sort(byDue), defaultOpen: true },
-      { id: 'later', label: 'Más tarde', tasks: later.sort(byDue), defaultOpen: false },
-      { id: 'nodate', label: 'Sin fecha', tasks: nodate, defaultOpen: false },
+      { id: 'overdue', label: 'Vencidas', tasks: makeSorter(overdue), defaultOpen: true },
+      { id: 'today', label: 'Hoy', tasks: makeSorter(today), defaultOpen: true },
+      { id: 'week', label: 'Esta semana', tasks: makeSorter(week), defaultOpen: true },
+      { id: 'later', label: 'Más tarde', tasks: makeSorter(later), defaultOpen: false },
+      { id: 'nodate', label: 'Sin fecha', tasks: makeSorter(nodate), defaultOpen: false },
     ]
-  }, [allTasks]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [allTasks, sortBy, showDone]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const totalPending = sections.reduce((acc, s) => acc + s.tasks.length, 0)
 
@@ -201,6 +264,48 @@ export default function TasksView() {
         {totalPending > 0 && (
           <span className="tasks-count">{totalPending} pendiente{totalPending !== 1 ? 's' : ''}</span>
         )}
+      </div>
+
+      {/* Filter bar */}
+      <div className="tasks-filter-bar">
+        <div className="tasks-filter-group">
+          {(['all', 'high', 'medium', 'low'] as const).map(p => (
+            <button
+              key={p}
+              className={`tasks-filter-chip ${filterPriority === p ? 'active' : ''}`}
+              onClick={() => setAndSaveFilterPriority(p)}
+            >
+              {p === 'all' ? 'Todas' : p === 'high' ? 'Alta' : p === 'medium' ? 'Media' : 'Baja'}
+            </button>
+          ))}
+        </div>
+        <div className="tasks-filter-separator" />
+        <div className="tasks-filter-group">
+          <button
+            className={`tasks-filter-chip ${!showDone ? 'active' : ''}`}
+            onClick={() => setAndSaveShowDone(false)}
+          >
+            Solo pendientes
+          </button>
+          <button
+            className={`tasks-filter-chip ${showDone ? 'active' : ''}`}
+            onClick={() => setAndSaveShowDone(true)}
+          >
+            Incluir completadas
+          </button>
+        </div>
+        <div className="tasks-filter-separator" />
+        <div className="tasks-filter-group">
+          {(['date', 'priority', 'created'] as const).map(s => (
+            <button
+              key={s}
+              className={`tasks-filter-chip ${sortBy === s ? 'active' : ''}`}
+              onClick={() => setAndSaveSortBy(s)}
+            >
+              {s === 'date' ? 'Por fecha' : s === 'priority' ? 'Por prioridad' : 'Por creación'}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="view-body">
