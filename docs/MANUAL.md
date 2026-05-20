@@ -601,7 +601,92 @@ Tus notas no dependen de ningún servidor. Incluso sin conexión a internet, el 
 
 ---
 
-## 19. From para iPhone
+## 19. From Web — El editor en el navegador
+
+From Web es la versión de From que funciona directamente en el navegador, sin necesidad de instalar nada. Está disponible en **[getfrom.app/app](https://getfrom.app/app)** y sincroniza en tiempo real con From para Mac y iPhone.
+
+### Acceso y cuenta
+
+- **Con cuenta**: inicia sesión con email/contraseña, Google o Apple ID. Tus notas se sincronizan automáticamente entre Mac, iPhone y web.
+- **Sin cuenta (modo invitado)**: puedes usar From Web sin registrarte. Los datos se guardan en el navegador. Al crear una cuenta, los datos se conservan.
+
+### Funcionalidades disponibles en la web
+
+**Editor:**
+- Outliner jerárquico con Tab/Shift+Tab para indentar
+- Drag & drop para reordenar y reparentar nodos
+- Tipos de bloque vía `/`: H1, H2, H3, cita, separador
+- Markdown inline: **negrita**, *cursiva*, `código`, ~~tachado~~, [enlaces](url)
+- Tags `#palabra` con colores automáticos
+- @menciones para referenciar otras notas
+- Undo/Redo con ⌘Z / ⌘⇧Z (historial de 50 estados)
+
+**Vistas:**
+- **Diario**: nota automática del día con panel derecho (Pendiente + Timeline)
+- **Tareas**: secciones por fecha (Vencidas, Hoy, Semana, Más tarde, Sin fecha), filtros de prioridad y ordenación
+- **Calendario**: vista semanal Mon-Sun con navegación Prev/Next
+- **Kanban**: columnas Pendiente/Completado con drag & drop
+- **Búsqueda**: texto libre + ✨ Búsqueda IA (síntesis de resultados con IA)
+- **Agentes**: ejecutar agentes IA con historial de runs
+
+**Organización:**
+- Sidebar con 4 tabs: Tags, Fijados, Paneles, Ajustes
+- Panel contextual en notas: subtareas, áreas relacionadas, backlinks
+- Paneles guardados (filtros de búsqueda persistidos)
+- Command palette ⌘K
+
+**IA:**
+- AI inline: ⌘Space en el body de una nota → Claude Haiku completa el texto
+- Grabación de voz → nota (Chrome/Edge)
+- ✨ Búsqueda IA: síntesis del vault sobre una query
+- Agentes: ejecutar agentes con system prompt personalizado
+
+**Atajos de teclado:**
+
+| Atajo | Acción |
+|---|---|
+| `⌘N` | Nueva nota |
+| `⌘K` | Command palette |
+| `⌘T` | Nueva tarea (modal) |
+| `⌘E` | Nuevo evento (modal) |
+| `⌘R` | Grabar voz |
+| `⌘Z` | Deshacer |
+| `⌘⇧Z` | Rehacer |
+| `⌘Space` | IA inline en el editor |
+| `Escape` | Ir al diario de hoy |
+
+**Datos:**
+- Exportar en JSON o Markdown desde Ajustes
+- Publicar nota con URL pública (`getfrom.app/p/SLUG`)
+- Adjuntar archivos (subida a R2)
+- Backup completo descargable
+
+### Instalar como app (PWA)
+
+From Web es instalable como app en el escritorio o en el móvil:
+- **Chrome/Edge**: clic en el icono de instalación en la barra de dirección
+- **Safari iOS**: compartir → "Añadir a pantalla de inicio"
+
+Una vez instalada, funciona como una app nativa con su propio icono.
+
+### Diferencias con Mac
+
+| Feature | Mac | Web |
+|---|---|---|
+| Editor outliner completo | ✅ | ✅ |
+| Sync en tiempo real | ✅ | ✅ |
+| IA inline | ✅ | ✅ |
+| Grabación de voz | ✅ | ✅ (Chrome/Edge) |
+| Drag & drop reparenting | ✅ | ✅ |
+| Apple Calendar sync | ✅ | ❌ |
+| Canvas/whiteboard | ✅ | ❌ |
+| Spotlight integration | ✅ | ❌ |
+| Agentes con schedule | ✅ | Parcial |
+| Instalación | App nativa | PWA |
+
+---
+
+## 20. From para iPhone
 
 From está disponible para iPhone con sync instantáneo con tu Mac.
 

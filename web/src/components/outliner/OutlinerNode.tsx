@@ -53,6 +53,7 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
   const [showSlash, setShowSlash] = useState(false)
   const [picker, setPicker] = useState<InlinePicker | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [isDragOverChild, setIsDragOverChild] = useState(false)
 
   const blockType = detectBlockType(node.text)
   const isHeading = blockType === 'h1' || blockType === 'h2' || blockType === 'h3'
@@ -344,6 +345,15 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
     setIsDragOver(false)
   }
 
+  function isDescendant(potentialAncestorId: string, checkId: string): boolean {
+    let cur = store.getNode(checkId)
+    while (cur?.parentId) {
+      if (cur.parentId === potentialAncestorId) return true
+      cur = store.getNode(cur.parentId)
+    }
+    return false
+  }
+
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault()
     setIsDragOver(false)
@@ -354,21 +364,52 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
     const draggedNode = store.getNode(draggedId)
     if (!draggedNode) return
 
-    // Only reorder siblings with the same parent
-    if (draggedNode.parentId !== node.parentId) return
+    // Evitar mover un nodo a su propio descendiente
+    if (isDescendant(draggedId, node.id)) return
 
-    const siblings = store.children(node.parentId).sort((a, b) => a.siblingOrder - b.siblingOrder)
-    const targetIdx = siblings.findIndex(n => n.id === node.id)
-    if (targetIdx === -1) return
+    if (draggedNode.parentId === node.parentId) {
+      // MISMO PADRE → reordenar (comportamiento existente)
+      const siblings = store.children(node.parentId).sort((a, b) => a.siblingOrder - b.siblingOrder)
+      const targetIdx = siblings.findIndex(n => n.id === node.id)
+      if (targetIdx === -1) return
+      const before = targetIdx > 0 ? siblings[targetIdx - 1].siblingOrder : siblings[targetIdx].siblingOrder - 1000
+      const newOrder = (before + siblings[targetIdx].siblingOrder) / 2
+      store.updateNode(draggedId, { siblingOrder: newOrder })
+    } else {
+      // DIFERENTE PADRE → reparenting: mover antes del nodo destino
+      const newSiblings = store.children(node.parentId).sort((a, b) => a.siblingOrder - b.siblingOrder)
+      const targetIdx = newSiblings.findIndex(n => n.id === node.id)
+      const before = targetIdx > 0 ? newSiblings[targetIdx - 1].siblingOrder : (newSiblings[targetIdx]?.siblingOrder ?? 0) - 1000
+      const after = newSiblings[targetIdx]?.siblingOrder ?? before + 2000
+      const newOrder = (before + after) / 2
+      store.updateNode(draggedId, { parentId: node.parentId, siblingOrder: newOrder })
+    }
+  }
 
-    const before = targetIdx > 0 ? siblings[targetIdx - 1].siblingOrder : siblings[targetIdx].siblingOrder - 1000
-    const newOrder = (before + siblings[targetIdx].siblingOrder) / 2
-    store.updateNode(draggedId, { siblingOrder: newOrder })
+  function handleDropAsChild(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    setIsDragOverChild(false)
+    const draggedId = _draggedNodeId
+    _draggedNodeId = null
+    if (!draggedId || draggedId === node.id) return
+    const draggedNode = store.getNode(draggedId)
+    if (!draggedNode) return
+    // Verificar que no es descendiente
+    if (isDescendant(draggedId, node.id)) return
+    // Mover como último hijo de este nodo
+    const childNodes = store.children(node.id).sort((a, b) => a.siblingOrder - b.siblingOrder)
+    const lastOrder = childNodes.length > 0 ? childNodes[childNodes.length - 1].siblingOrder : 0
+    store.updateNode(draggedId, { parentId: node.id, siblingOrder: lastOrder + 1000 })
+    // Expandir si estaba colapsado
+    if (node.isCollapsed) {
+      store.updateNode(node.id, { isCollapsed: false })
+    }
   }
 
   function handleDragEnd() {
     _draggedNodeId = null
     setIsDragOver(false)
+    setIsDragOverChild(false)
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -444,6 +485,7 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
         onDrop={handleDrop}
         onDragEnd={handleDragEnd}
       >
+
         {/* Collapse toggle — hidden for headings and dividers */}
         {!isDivider && (
           <button
@@ -522,6 +564,16 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
           </button>
         )}
       </div>
+
+      {/* Drop zone: make child */}
+      {!isDivider && !isHeading && (
+        <div
+          className={`drop-as-child ${isDragOverChild ? 'active' : ''}`}
+          onDragOver={e => { e.preventDefault(); setIsDragOverChild(true) }}
+          onDragLeave={() => setIsDragOverChild(false)}
+          onDrop={handleDropAsChild}
+        />
+      )}
 
       {/* Slash menu */}
       {showSlash && (
