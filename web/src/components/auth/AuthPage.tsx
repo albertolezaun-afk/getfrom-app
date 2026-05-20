@@ -1,9 +1,11 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { login, register } from '../../api/client'
 
 export default function AuthPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const locationState = location.state as { message?: string } | null
   const [mode, setMode] = useState<'login' | 'register'>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -47,6 +49,10 @@ export default function AuthPage() {
             : 'Crea tu cuenta para empezar'}
         </p>
 
+        {locationState?.message && (
+          <div className="auth-success">{locationState.message}</div>
+        )}
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-field">
             <label htmlFor="email">Email</label>
@@ -79,6 +85,18 @@ export default function AuthPage() {
           <button type="submit" className="btn-primary" disabled={loading}>
             {loading ? 'Cargando...' : mode === 'login' ? 'Entrar' : 'Crear cuenta'}
           </button>
+
+          {mode === 'login' && (
+            <p style={{ textAlign: 'center', marginTop: 4 }}>
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => navigate('/forgot-password')}
+              >
+                ¿Olvidaste tu contraseña?
+              </button>
+            </p>
+          )}
         </form>
 
         <p className="auth-toggle">

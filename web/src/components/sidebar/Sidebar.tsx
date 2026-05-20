@@ -90,6 +90,14 @@ export default function Sidebar({ open, onToggle, onLogout, isSyncing }: Props) 
       </nav>
 
       <div className="sidebar-footer">
+        <button
+          className={`nav-item ${isActive('/account') ? 'active' : ''}`}
+          onClick={() => navigate('/account')}
+          title="Ajustes"
+        >
+          <span className="nav-icon">⚙</span>
+          {open && <span>Ajustes</span>}
+        </button>
         <button className="nav-item" onClick={onLogout} title="Cerrar sesión">
           <span className="nav-icon">↩</span>
           {open && <span>Salir</span>}

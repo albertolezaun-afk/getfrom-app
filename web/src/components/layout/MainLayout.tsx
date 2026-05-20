@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, useNavigate } from 'react-router-dom'
 import { store, useStore } from '../../store/nodeStore'
 import { clearTokens } from '../../api/client'
+import { userStore } from '../../store/userStore'
 import Sidebar from '../sidebar/Sidebar'
 import DiaryView from '../views/DiaryView'
 import NodeView from '../views/NodeView'
 import TasksView from '../views/TasksView'
 import SearchView from '../views/SearchView'
+import AccountView from '../views/AccountView'
 
 export default function MainLayout() {
   const navigate = useNavigate()
@@ -24,10 +26,12 @@ export default function MainLayout() {
         setLoadError(msg)
       }
     })
+    userStore.fetchMe()
   }, [navigate])
 
   function handleLogout() {
     clearTokens()
+    userStore.reset()
     navigate('/login', { replace: true })
   }
 
@@ -53,6 +57,7 @@ export default function MainLayout() {
           <Route index element={<DiaryView />} />
           <Route path="tasks" element={<TasksView />} />
           <Route path="search" element={<SearchView />} />
+          <Route path="account" element={<AccountView />} />
           <Route path="node/:id" element={<NodeView />} />
         </Routes>
       </main>

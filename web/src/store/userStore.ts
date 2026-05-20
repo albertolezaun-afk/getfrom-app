@@ -1,0 +1,61 @@
+import { useState, useEffect } from 'react'
+import { getMe, type UserProfile } from '../api/client'
+
+class UserStore {
+  user: UserProfile | null = null
+  isLoading = false
+  private listeners = new Set<() => void>()
+
+  private notify() {
+    this.listeners.forEach(fn => fn())
+  }
+
+  subscribe(fn: () => void): () => void {
+    this.listeners.add(fn)
+    return () => { this.listeners.delete(fn) }
+  }
+
+  async fetchMe(): Promise<void> {
+    this.isLoading = true
+    this.notify()
+    try {
+      const res = await getMe()
+      this.user = res.user
+    } catch {
+      this.user = null
+    } finally {
+      this.isLoading = false
+      this.notify()
+    }
+  }
+
+  get isPremium(): boolean {
+    return (
+      this.user?.subscriptionStatus === 'active' ||
+      this.user?.licenseStatus === 'active'
+    )
+  }
+
+  get planLabel(): string {
+    if (this.user?.licenseStatus === 'active') return 'Licencia perpetua'
+    if (this.user?.subscriptionStatus === 'active') return 'Suscripción activa'
+    return 'Plan gratuito'
+  }
+
+  reset() {
+    this.user = null
+    this.notify()
+  }
+}
+
+export const userStore = new UserStore()
+
+export function useUserStore() {
+  const [, setTick] = useState(0)
+
+  useEffect(() => {
+    return userStore.subscribe(() => setTick(t => t + 1))
+  }, [])
+
+  return userStore
+}

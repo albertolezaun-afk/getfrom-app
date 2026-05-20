@@ -91,7 +91,63 @@ export async function register(email: string, password: string) {
 }
 
 export async function logout() {
-  clearTokens()
+  try {
+    await apiRequest('/auth/logout', { method: 'POST' })
+  } catch {
+    // ignore errors on logout
+  } finally {
+    clearTokens()
+  }
+}
+
+export interface UserProfile {
+  id: string
+  email: string
+  subscriptionStatus: 'active' | 'expired' | 'cancelled' | null
+  subscriptionRenewsAt: string | null
+  licenseStatus: 'active' | null
+  tokensBalance: number
+}
+
+export async function getMe(): Promise<{ user: UserProfile }> {
+  return apiRequest('/auth/me')
+}
+
+export async function forgotPassword(email: string): Promise<{ ok: true }> {
+  return apiRequest('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  })
+}
+
+export async function resetPassword(token: string, newPassword: string): Promise<{ ok: true }> {
+  return apiRequest('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ token, newPassword }),
+  })
+}
+
+export async function updateMe(data: {
+  currentPassword?: string
+  newPassword?: string
+  newEmail?: string
+}): Promise<{ user: UserProfile }> {
+  return apiRequest('/auth/me', {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
+}
+
+export async function deleteAccount(): Promise<{ ok: true }> {
+  return apiRequest('/auth/account', { method: 'DELETE' })
+}
+
+export async function cancelSubscription(): Promise<{ ok: boolean; billingPortalUrl?: string }> {
+  return apiRequest('/auth/subscription/cancel', { method: 'POST' })
+}
+
+export async function changePlan(): Promise<{ ok: boolean; action: 'checkout' | 'portal'; checkoutUrl?: string }> {
+  return apiRequest('/auth/plan/change', { method: 'POST' })
 }
 
 // Sync
