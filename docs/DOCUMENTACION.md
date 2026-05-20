@@ -35,6 +35,32 @@
 
 ## Changelog
 
+### Web 1.0 — 2026-05-20
+
+**Plataforma: Web** (getfrom.app/app)
+
+**Nuevo:**
+- Sidebar con 4 tabs: Tags, Fijados, Paneles, Ajustes
+- Panel derecho en diario: Pendiente + Timeline del día
+- Panel contextual en notas: subtareas, áreas relacionadas, backlinks
+- Colores en tags inline (#palabras con 8 colores deterministas)
+- Filtros en Tareas: prioridad, estado, ordenación (persistidos en localStorage)
+- Diario navegable: botones ← → para ver días anteriores
+- Recurrencia en tareas: diaria, semanal, mensual, anual
+- Onboarding: 4 pasos para usuarios nuevos
+- Indicador de sync animado en esquina inferior derecha
+- Grabación de voz → nota (Web Speech API, Chrome/Edge)
+- ⌘T nueva tarea · ⌘E nuevo evento · ⌘R grabar voz · Escape → hoy
+- Publicar nota con URL pública real (getfrom.app/p/SLUG)
+
+**Arreglado:**
+- Paneles del sidebar pre-rellenan la búsqueda correctamente
+- Panel contextual de notas aparece a la derecha
+- Layout del diario con altura correcta en todos los navegadores
+- Botón Share publica en servidor y devuelve URL pública real
+
+---
+
 ### v3.12 / Web 1.0 — 2026-05-20
 
 **Plataformas: Mac + Web + iOS**
