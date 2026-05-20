@@ -176,3 +176,97 @@ export async function syncNodes(payload: {
     { method: 'POST', body: JSON.stringify(payload) }
   )
 }
+
+// ── Export ────────────────────────────────────────────────────────────────
+
+export async function exportNodes(format: 'json' | 'markdown' = 'json'): Promise<string | object> {
+  const token = getToken()
+  const res = await fetch(`${BASE}/sync/export?format=${format}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+  return format === 'markdown' ? res.text() : res.json()
+}
+
+// ── Search (server-side) ──────────────────────────────────────────────────
+
+export async function searchNodes(q: string, limit = 20): Promise<{ nodes: unknown[] }> {
+  return apiRequest(`/search/nodes?q=${encodeURIComponent(q)}&limit=${limit}`)
+}
+
+// ── Public notes ──────────────────────────────────────────────────────────
+
+export async function publishNote(nodeId: string): Promise<{ slug: string; url: string }> {
+  return apiRequest('/notes/publish', {
+    method: 'POST',
+    body: JSON.stringify({ nodeId }),
+  })
+}
+
+export async function unpublishNote(slug: string): Promise<{ ok: boolean }> {
+  return apiRequest(`/notes/unpublish/${slug}`, { method: 'POST' })
+}
+
+// ── AI inline ────────────────────────────────────────────────────────────
+
+export async function aiInlineStream(
+  prompt: string,
+  context?: string,
+  onChunk?: (chunk: string) => void
+): Promise<string> {
+  const token = getToken()
+  const res = await fetch(`${BASE}/ai/inline`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ prompt, context, maxTokens: 800 }),
+  })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
+
+  const reader = res.body?.getReader()
+  if (!reader) throw new Error('No stream')
+
+  let result = ''
+  const decoder = new TextDecoder()
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    const text = decoder.decode(value)
+    // Parse SSE lines
+    for (const line of text.split('\n')) {
+      if (line.startsWith('data: ')) {
+        try {
+          const data = JSON.parse(line.slice(6))
+          if (data.chunk) {
+            result += data.chunk
+            onChunk?.(data.chunk)
+          }
+        } catch { /* ignore parse errors */ }
+      }
+    }
+  }
+  return result
+}
+
+// ── Files (R2) ───────────────────────────────────────────────────────────
+
+export async function getPresignedUpload(filename: string, contentType: string): Promise<{ uploadUrl: string; key: string; publicUrl: string }> {
+  return apiRequest('/files/presign-upload', {
+    method: 'POST',
+    body: JSON.stringify({ filename, contentType }),
+  })
+}
+
+export async function getPresignedDownload(key: string): Promise<{ downloadUrl: string }> {
+  return apiRequest('/files/presign-download', {
+    method: 'POST',
+    body: JSON.stringify({ key }),
+  })
+}
+
+export async function getFilesUsage(): Promise<{ usedBytes: number; limitBytes: number }> {
+  return apiRequest('/files/usage')
+}

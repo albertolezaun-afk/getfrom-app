@@ -11,6 +11,7 @@ import SearchView from '../views/SearchView'
 import AccountView from '../views/AccountView'
 import GuestBanner from './GuestBanner'
 import PaywallModal from '../paywall/PaywallModal'
+import CommandPalette from '../CommandPalette'
 
 export default function MainLayout() {
   const navigate = useNavigate()
@@ -19,6 +20,7 @@ export default function MainLayout() {
   const [loadError, setLoadError] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [paywallReason, setPaywallReason] = useState<'node_limit' | 'ai_limit' | null>(null)
+  const [showCommandPalette, setShowCommandPalette] = useState(false)
 
   useEffect(() => {
     if (isGuest) {
@@ -49,12 +51,17 @@ export default function MainLayout() {
   }, [])
 
   // Cmd+N / Ctrl+N → new note
+  // Cmd+K / Ctrl+K → command palette
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'n' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault()
         const newNode = store.createNode({ text: '', parentId: null })
         navigate(`/node/${newNode.id}`)
+      }
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setShowCommandPalette(v => !v)
       }
     }
     window.addEventListener('keydown', handleKeyDown)
@@ -99,6 +106,9 @@ export default function MainLayout() {
       </main>
       {paywallReason && (
         <PaywallModal reason={paywallReason} onClose={() => setPaywallReason(null)} />
+      )}
+      {showCommandPalette && (
+        <CommandPalette onClose={() => setShowCommandPalette(false)} />
       )}
     </div>
   )

@@ -13,6 +13,34 @@ interface Props {
   onSelectNext: (id: string, dir: 'up' | 'down') => void
 }
 
+const COMMON_TYPES = ['tarea', 'proyecto', 'área', 'referencia', 'evento', 'nota']
+
+interface InlinePicker {
+  type: '@' | '#'
+  query: string
+  items: Array<{ id: string; label: string }>
+  activeIdx: number
+}
+
+function getCaretPosition(el: HTMLElement): number {
+  const sel = window.getSelection()
+  if (!sel || sel.rangeCount === 0) return 0
+  const range = sel.getRangeAt(0).cloneRange()
+  range.selectNodeContents(el)
+  range.setEnd(sel.getRangeAt(0).endContainer, sel.getRangeAt(0).endOffset)
+  return range.toString().length
+}
+
+function getCursorRect(el: HTMLElement): DOMRect {
+  const sel = window.getSelection()
+  if (sel && sel.rangeCount > 0) {
+    const range = sel.getRangeAt(0)
+    const rect = range.getBoundingClientRect()
+    if (rect.width > 0 || rect.height > 0) return rect
+  }
+  return el.getBoundingClientRect()
+}
+
 export default function OutlinerNode({ node, depth, isSelected, onSelect, onSelectNext }: Props) {
   const navigate = useNavigate()
   const contentRef = useRef<HTMLDivElement>(null)
@@ -20,6 +48,7 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
   const isCollapsed = node.isCollapsed && children.length > 0
   const [isEditing, setIsEditing] = useState(false)
   const [showSlash, setShowSlash] = useState(false)
+  const [picker, setPicker] = useState<InlinePicker | null>(null)
 
   const blockType = detectBlockType(node.text)
   const isHeading = blockType === 'h1' || blockType === 'h2' || blockType === 'h3'
@@ -46,6 +75,19 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
     }
   }, [isSelected]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  function buildPickerItems(type: '@' | '#', query: string): Array<{ id: string; label: string }> {
+    if (type === '#') {
+      return COMMON_TYPES
+        .filter(t => t.includes(query.toLowerCase()))
+        .map(t => ({ id: t, label: t }))
+    }
+    // @ — search nodes
+    return store.allActive()
+      .filter(n => !n.deletedAt && n.id !== node.id && n.text && n.text.toLowerCase().includes(query.toLowerCase()))
+      .slice(0, 8)
+      .map(n => ({ id: n.id, label: n.text }))
+  }
+
   const handleInput = useCallback(() => {
     const text = contentRef.current?.textContent || ''
     store.updateNode(node.id, { text })
@@ -53,10 +95,91 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
     // Show slash menu when user types '/' at the very beginning
     if (text === '/') {
       setShowSlash(true)
+      setPicker(null)
     } else if (!text.startsWith('/')) {
       setShowSlash(false)
     }
-  }, [node.id])
+
+    // Detect @ and # triggers
+    const pos = getCaretPosition(contentRef.current!)
+    const before = text.slice(0, pos)
+
+    const atMatch = before.match(/@(\w*)$/)
+    const hashMatch = before.match(/#(\w*)$/)
+
+    if (atMatch) {
+      const query = atMatch[1]
+      const items = buildPickerItems('@', query)
+      setPicker({ type: '@', query, items, activeIdx: 0 })
+    } else if (hashMatch) {
+      const query = hashMatch[1]
+      const items = buildPickerItems('#', query)
+      setPicker({ type: '#', query, items, activeIdx: 0 })
+    } else {
+      setPicker(null)
+    }
+  }, [node.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  function applyPickerSelection(item: { id: string; label: string }) {
+    if (!picker || !contentRef.current) return
+    const text = contentRef.current.textContent || ''
+    const pos = getCaretPosition(contentRef.current)
+    const before = text.slice(0, pos)
+    const trigger = picker.type === '@' ? '@' : '#'
+    // Remove the trigger + query
+    const queryLen = picker.query.length
+    const newBefore = before.slice(0, before.length - queryLen - 1) // remove @/# + query
+    const after = text.slice(pos)
+
+    if (picker.type === '#') {
+      // Add type to node, remove #tag from text
+      const newText = newBefore + after
+      const newTypes = node.types.includes(item.id) ? node.types : [...node.types, item.id]
+      store.updateNode(node.id, { text: newText, types: newTypes })
+      if (contentRef.current) {
+        contentRef.current.textContent = newText
+        // Move caret to end of newBefore
+        const range = document.createRange()
+        const sel = window.getSelection()
+        const textNode = contentRef.current.firstChild
+        if (textNode) {
+          range.setStart(textNode, Math.min(newBefore.length, textNode.textContent?.length || 0))
+          range.collapse(true)
+          sel?.removeAllRanges()
+          sel?.addRange(range)
+        }
+      }
+    } else {
+      // @ reference: insert @NodeName in text
+      const refText = `@${item.label}`
+      const newText = newBefore + refText + after
+      // Save ref in extraData
+      let extraData: Record<string, unknown> = {}
+      try { extraData = JSON.parse(node.extraData || '{}') } catch { /* ignore */ }
+      const existingRefs: string[] = Array.isArray(extraData.refs) ? extraData.refs as string[] : []
+      if (!existingRefs.includes(item.id)) {
+        extraData.refs = [...existingRefs, item.id]
+      }
+      store.updateNode(node.id, { text: newText, extraData: JSON.stringify(extraData) })
+      if (contentRef.current) {
+        contentRef.current.textContent = newText
+        const insertPos = newBefore.length + refText.length
+        const range = document.createRange()
+        const sel = window.getSelection()
+        const textNode = contentRef.current.firstChild
+        if (textNode) {
+          range.setStart(textNode, Math.min(insertPos, textNode.textContent?.length || 0))
+          range.collapse(true)
+          sel?.removeAllRanges()
+          sel?.addRange(range)
+        }
+      }
+    }
+
+    setPicker(null)
+    // Suppress unused variable warning
+    void trigger
+  }
 
   const handleFocus = useCallback(() => {
     setIsEditing(true)
@@ -70,6 +193,8 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
   const handleBlur = useCallback(() => {
     setIsEditing(false)
     setShowSlash(false)
+    // Delay picker hide to allow click
+    setTimeout(() => setPicker(null), 150)
   }, [])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -81,6 +206,37 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
         e.preventDefault()
         return
       }
+    }
+
+    // Inline picker navigation
+    if (picker) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setPicker(p => p ? { ...p, activeIdx: Math.min(p.activeIdx + 1, p.items.length - 1) } : p)
+        return
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setPicker(p => p ? { ...p, activeIdx: Math.max(p.activeIdx - 1, 0) } : p)
+        return
+      }
+      if (e.key === 'Enter' && picker.items.length > 0) {
+        e.preventDefault()
+        applyPickerSelection(picker.items[picker.activeIdx])
+        return
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        setPicker(null)
+        return
+      }
+    }
+
+    // Cmd+Shift+F → toggle favorite
+    if (e.key === 'f' && (e.metaKey || e.ctrlKey) && e.shiftKey) {
+      e.preventDefault()
+      store.updateNode(node.id, { isFavorite: !node.isFavorite })
+      return
     }
 
     if (e.key === 'Enter') {
@@ -163,7 +319,7 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
         }
       }
     }
-  }, [node, onSelect, onSelectNext, showSlash])
+  }, [node, onSelect, onSelectNext, showSlash, picker]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function toggleCollapse() {
     store.updateNode(node.id, { isCollapsed: !node.isCollapsed })
@@ -212,6 +368,17 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
     node.status === 'done' ? 'done' : '',
     isHeading ? `node-row--${blockType}` : '',
   ].filter(Boolean).join(' ')
+
+  // Picker position — relative to the node row
+  const pickerStyle: React.CSSProperties = { position: 'absolute', zIndex: 200 }
+  if (contentRef.current && picker) {
+    const rect = getCursorRect(contentRef.current)
+    const containerRect = contentRef.current.closest('.outliner-node')?.getBoundingClientRect()
+    if (containerRect) {
+      pickerStyle.top = rect.bottom - containerRect.top + 4
+      pickerStyle.left = Math.max(0, rect.left - containerRect.left)
+    }
+  }
 
   return (
     <div className="outliner-node" style={{ '--depth': depth } as React.CSSProperties}>
@@ -302,6 +469,25 @@ export default function OutlinerNode({ node, depth, isSelected, onSelect, onSele
           onSelect={handleSlashSelect}
           onClose={() => setShowSlash(false)}
         />
+      )}
+
+      {/* Inline picker (@ and #) */}
+      {picker && picker.items.length > 0 && (
+        <div className="inline-picker" style={pickerStyle}>
+          {picker.items.map((item, idx) => (
+            <button
+              key={item.id}
+              className={`inline-picker-item ${idx === picker.activeIdx ? 'active' : ''}`}
+              onMouseDown={e => {
+                e.preventDefault()
+                applyPickerSelection(item)
+              }}
+            >
+              <span className="inline-picker-icon">{picker.type === '#' ? '#' : '@'}</span>
+              {item.label}
+            </button>
+          ))}
+        </div>
       )}
 
       {/* Children */}

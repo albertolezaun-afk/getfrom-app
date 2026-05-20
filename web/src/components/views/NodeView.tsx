@@ -3,6 +3,8 @@ import { useStore, store } from '../../store/nodeStore'
 import { useRef, useState, useCallback, useEffect } from 'react'
 import Outliner from '../outliner/Outliner'
 import InlineRenderer from '../outliner/InlineRenderer'
+import NodePropertiesPanel from '../panels/NodePropertiesPanel'
+import { recordRecentNode } from '../CommandPalette'
 
 export default function NodeView() {
   const { id } = useParams<{ id: string }>()
@@ -12,8 +14,14 @@ export default function NodeView() {
 
   const [bodyEditing, setBodyEditing] = useState(false)
   const [bodyValue, setBodyValue] = useState('')
+  const [showProperties, setShowProperties] = useState(false)
   const bodyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Record recent visit
+  useEffect(() => {
+    if (id) recordRecentNode(id)
+  }, [id])
 
   // Sync bodyValue when node changes (e.g. external update)
   useEffect(() => {
@@ -29,6 +37,18 @@ export default function NodeView() {
       textareaRef.current.setSelectionRange(textareaRef.current.value.length, textareaRef.current.value.length)
     }
   }, [bodyEditing])
+
+  // Cmd+P → toggle properties panel
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setShowProperties(v => !v)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   if (!node || node.deletedAt) {
     return <div className="view-empty">Nodo no encontrado</div>
@@ -68,86 +88,119 @@ export default function NodeView() {
     store.updateNode(node!.id, { body: bodyValue || null })
   }
 
+  function toggleFavorite() {
+    store.updateNode(node!.id, { isFavorite: !node!.isFavorite })
+  }
+
   const hasBody = (node.body && node.body.trim().length > 0) || bodyEditing
 
   return (
-    <div className="view node-view">
-      <div className="view-header">
-        {crumbs.length > 0 && (
-          <nav className="breadcrumb">
-            <button className="breadcrumb-home" onClick={() => navigate('/')}>Inicio</button>
-            {crumbs.map((c) => (
-              <span key={c.id}>
-                <span className="breadcrumb-sep">/</span>
-                <button
-                  className="breadcrumb-item"
-                  onClick={() => navigate(`/node/${c.id}`)}
-                >
-                  {c.text || 'Sin título'}
-                </button>
-              </span>
-            ))}
-          </nav>
-        )}
+    <div className={`view node-view ${showProperties ? 'node-view--with-panel' : ''}`}>
+      <div className="node-view-main">
+        <div className="view-header">
+          {crumbs.length > 0 && (
+            <nav className="breadcrumb">
+              <button className="breadcrumb-home" onClick={() => navigate('/')}>Inicio</button>
+              {crumbs.map((c) => (
+                <span key={c.id}>
+                  <span className="breadcrumb-sep">/</span>
+                  <button
+                    className="breadcrumb-item"
+                    onClick={() => navigate(`/node/${c.id}`)}
+                  >
+                    {c.text || 'Sin título'}
+                  </button>
+                </span>
+              ))}
+            </nav>
+          )}
 
-        <h1
-          className="node-title"
-          contentEditable
-          suppressContentEditableWarning
-          onInput={handleTitleInput}
-          onBlur={handleTitleInput}
-        >
-          {node.text || 'Sin título'}
-        </h1>
-
-        {node.status !== null && (
-          <div className={`node-status-badge ${node.status}`}>
-            {node.status === 'pending' ? 'Pendiente' : 'Completado'}
-          </div>
-        )}
-      </div>
-
-      <div className="view-body">
-        {/* Body editor */}
-        <div className="node-body-editor">
-          {bodyEditing ? (
-            <textarea
-              ref={textareaRef}
-              className="node-body-textarea"
-              value={bodyValue}
-              onChange={handleBodyChange}
-              onBlur={handleBodyBlur}
-              placeholder="Añade una descripción o notas..."
-              rows={Math.max(4, bodyValue.split('\n').length + 1)}
-            />
-          ) : (
-            <div
-              className={`node-body-rendered ${!hasBody ? 'node-body-empty' : ''}`}
-              onClick={() => {
-                setBodyEditing(true)
-                setBodyValue(node.body || '')
-              }}
+          <div className="node-title-row">
+            <h1
+              className="node-title"
+              contentEditable
+              suppressContentEditableWarning
+              onInput={handleTitleInput}
+              onBlur={handleTitleInput}
             >
-              {hasBody ? (
-                // Render body lines
-                (node.body || '').split('\n').map((line, i) => (
-                  <p key={i} className="node-body-line">
-                    {line ? <InlineRenderer text={line} /> : <br />}
-                  </p>
-                ))
-              ) : (
-                <span className="node-body-placeholder">Añade una descripción...</span>
-              )}
+              {node.text || 'Sin título'}
+            </h1>
+            <div className="node-title-actions">
+              <button
+                className={`node-fav-btn ${node.isFavorite ? 'active' : ''}`}
+                onClick={toggleFavorite}
+                title={node.isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+                aria-label="Favorito"
+              >
+                {node.isFavorite ? '★' : '☆'}
+              </button>
+              <button
+                className={`node-props-btn ${showProperties ? 'active' : ''}`}
+                onClick={() => setShowProperties(v => !v)}
+                title="Propiedades (⌘P)"
+                aria-label="Propiedades"
+              >
+                ⋯
+              </button>
+            </div>
+          </div>
+
+          {node.status !== null && (
+            <div className={`node-status-badge ${node.status}`}>
+              {node.status === 'pending' ? 'Pendiente' : 'Completado'}
             </div>
           )}
         </div>
 
-        <Outliner
-          parentId={node.id}
-          autoFocusEmpty
-          placeholder="Añade contenido..."
-        />
+        <div className="view-body">
+          {/* Body editor */}
+          <div className="node-body-editor">
+            {bodyEditing ? (
+              <textarea
+                ref={textareaRef}
+                className="node-body-textarea"
+                value={bodyValue}
+                onChange={handleBodyChange}
+                onBlur={handleBodyBlur}
+                placeholder="Añade una descripción o notas..."
+                rows={Math.max(4, bodyValue.split('\n').length + 1)}
+              />
+            ) : (
+              <div
+                className={`node-body-rendered ${!hasBody ? 'node-body-empty' : ''}`}
+                onClick={() => {
+                  setBodyEditing(true)
+                  setBodyValue(node.body || '')
+                }}
+              >
+                {hasBody ? (
+                  // Render body lines
+                  (node.body || '').split('\n').map((line, i) => (
+                    <p key={i} className="node-body-line">
+                      {line ? <InlineRenderer text={line} /> : <br />}
+                    </p>
+                  ))
+                ) : (
+                  <span className="node-body-placeholder">Añade una descripción...</span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <Outliner
+            parentId={node.id}
+            autoFocusEmpty
+            placeholder="Añade contenido..."
+          />
+        </div>
       </div>
+
+      {showProperties && (
+        <NodePropertiesPanel
+          node={node}
+          onClose={() => setShowProperties(false)}
+        />
+      )}
     </div>
   )
 }
