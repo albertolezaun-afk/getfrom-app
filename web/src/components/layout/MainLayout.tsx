@@ -25,7 +25,7 @@ export default function MainLayout() {
   const s = useStore()
   const isGuest = !getToken()
   const [loadError, setLoadError] = useState('')
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768)
   const [paywallReason, setPaywallReason] = useState<'node_limit' | 'ai_limit' | null>(null)
   const [showCommandPalette, setShowCommandPalette] = useState(false)
   const [showNewTask, setShowNewTask] = useState(false)
@@ -89,6 +89,15 @@ export default function MainLayout() {
         e.preventDefault()
         setShowVoiceCapture(true)
       }
+      if (e.key === 'z' && (e.metaKey || e.ctrlKey) && !e.shiftKey) {
+        e.preventDefault()
+        store.undo()
+      }
+      if ((e.key === 'z' && (e.metaKey || e.ctrlKey) && e.shiftKey) ||
+          (e.key === 'y' && (e.metaKey || e.ctrlKey))) {
+        e.preventDefault()
+        store.redo()
+      }
       if (e.key === 'Escape') {
         const active = document.activeElement
         const isInputFocused =
@@ -129,7 +138,31 @@ export default function MainLayout() {
         isSyncing={s.isSyncing}
         isGuest={isGuest}
       />
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-mobile-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       <main className="main-content" style={isGuest ? { paddingTop: '40px' } : undefined}>
+        {/* Mobile hamburger */}
+        <div className="mobile-header">
+          <button className="mobile-hamburger" onClick={() => setSidebarOpen(true)}>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <rect y="3" width="20" height="2" rx="1"/>
+              <rect y="9" width="20" height="2" rx="1"/>
+              <rect y="15" width="20" height="2" rx="1"/>
+            </svg>
+          </button>
+          <div className="mobile-logo">
+            <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+              <rect width="100" height="100" rx="22" fill="#8b5cf6"/>
+              <text x="50" y="68" textAnchor="middle" fontSize="52" fontWeight="700" fill="white" fontFamily="Inter, sans-serif">F</text>
+            </svg>
+            <span>From</span>
+          </div>
+        </div>
         <Routes>
           <Route index element={<DiaryView />} />
           <Route path="tasks" element={<TasksView />} />

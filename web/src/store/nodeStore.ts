@@ -16,6 +16,35 @@ class NodeStore {
   private listeners: Set<Listener> = new Set()
   private dirtyIds: Set<string> = new Set()
   private syncTimer: ReturnType<typeof setTimeout> | null = null
+  private history: Array<{ nodes: Map<string, Node> }> = []
+  private historyIndex = -1
+  private readonly MAX_HISTORY = 50
+
+  private snapshot() {
+    this.history = this.history.slice(0, this.historyIndex + 1)
+    this.history.push({ nodes: new Map(this.nodes) })
+    if (this.history.length > this.MAX_HISTORY) this.history.shift()
+    this.historyIndex = this.history.length - 1
+  }
+
+  undo() {
+    if (this.historyIndex <= 0) return
+    this.historyIndex--
+    this.nodes = new Map(this.history[this.historyIndex].nodes)
+    this.notify()
+    this.scheduleSyncDebounced()
+  }
+
+  redo() {
+    if (this.historyIndex >= this.history.length - 1) return
+    this.historyIndex++
+    this.nodes = new Map(this.history[this.historyIndex].nodes)
+    this.notify()
+    this.scheduleSyncDebounced()
+  }
+
+  get canUndo() { return this.historyIndex > 0 }
+  get canRedo() { return this.historyIndex < this.history.length - 1 }
 
   subscribe(listener: Listener): () => void {
     this.listeners.add(listener)
@@ -107,6 +136,7 @@ class NodeStore {
     types?: string[]
     extraData?: Record<string, string>
   }): Node {
+    this.snapshot()
     const workspaceId = this.workspaces[0]?.id || '00000000-0000-0000-0000-000000000001'
     const now = new Date().toISOString()
     const id = generateId()
@@ -148,6 +178,7 @@ class NodeStore {
   updateNode(id: string, changes: Partial<Node>): void {
     const node = this.nodes.get(id)
     if (!node) return
+    this.snapshot()
     const updated = { ...node, ...changes, updatedAt: new Date().toISOString(), _isDirty: true }
     this.nodes.set(id, updated)
     this.dirtyIds.add(id)
