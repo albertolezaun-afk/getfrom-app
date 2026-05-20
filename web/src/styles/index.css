@@ -2141,8 +2141,9 @@ a { color: inherit; text-decoration: none; }
 
 /* ── DiaryView right panel ──────────────────────────────────────────────── */
 
-.diary-layout { display: flex; height: 100%; overflow: hidden; }
-.diary-main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.diary-view { overflow: hidden; }
+.diary-layout { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+.diary-main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-width: 0; }
 .diary-right-panel { width: 280px; border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; }
 .diary-panel-tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .diary-panel-tab { flex: 1; padding: 8px; font-size: 12px; text-align: center; cursor: pointer; border: none; background: transparent; color: var(--text-secondary); outline: none; transition: color 0.15s; font-family: inherit; }
@@ -2165,8 +2166,8 @@ a { color: inherit; text-decoration: none; }
 
 /* ── NodeContextPanel ───────────────────────────────────────────────────── */
 
-.node-view--with-context { display: flex; align-items: stretch; }
-.node-view--with-context .node-view-main { flex: 1; min-width: 0; overflow-y: auto; }
+.node-view--with-context { display: flex; flex-direction: row; align-items: stretch; height: 100%; }
+.node-view--with-context .node-view-main { flex: 1; min-width: 0; overflow-y: auto; display: flex; flex-direction: column; }
 .node-context-panel { width: 220px; border-left: 1px solid var(--border); overflow-y: auto; padding: 12px; flex-shrink: 0; background: var(--bg-secondary); font-size: 13px; }
 .context-section { margin-bottom: 16px; }
 .context-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); margin-bottom: 6px; }

@@ -1,11 +1,30 @@
-import { useState, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useMemo, useEffect, useRef } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useStore } from '../../store/nodeStore'
 
 export default function SearchView() {
   const s = useStore()
   const navigate = useNavigate()
-  const [query, setQuery] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Inicializa desde ?q= (usado por paneles del sidebar)
+  const [query, setQuery] = useState(() => searchParams.get('q') || '')
+
+  // Sincroniza URL con el estado del query
+  useEffect(() => {
+    const urlQ = searchParams.get('q') || ''
+    if (urlQ !== query) setQuery(urlQ)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
+
+  function handleQueryChange(value: string) {
+    setQuery(value)
+    if (value) setSearchParams({ q: value }, { replace: true })
+    else setSearchParams({}, { replace: true })
+  }
+
+  useEffect(() => { inputRef.current?.focus() }, [])
 
   const results = useMemo(() => {
     if (!query.trim()) return []
@@ -24,15 +43,15 @@ export default function SearchView() {
             <path d="M10.5 10.5L14 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
           <input
+            ref={inputRef}
             type="text"
             className="search-input"
             placeholder="Buscar notas..."
             value={query}
-            onChange={e => setQuery(e.target.value)}
-            autoFocus
+            onChange={e => handleQueryChange(e.target.value)}
           />
           {query && (
-            <button className="search-clear" onClick={() => setQuery('')}>×</button>
+            <button className="search-clear" onClick={() => handleQueryChange('')}>×</button>
           )}
         </div>
       </div>
