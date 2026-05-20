@@ -9,6 +9,9 @@ import NodeView from '../views/NodeView'
 import TasksView from '../views/TasksView'
 import SearchView from '../views/SearchView'
 import AccountView from '../views/AccountView'
+import CalendarView from '../views/CalendarView'
+import AgentsView from '../views/AgentsView'
+import KanbanView from '../views/KanbanView'
 import GuestBanner from './GuestBanner'
 import PaywallModal from '../paywall/PaywallModal'
 import CommandPalette from '../CommandPalette'
@@ -98,6 +101,9 @@ export default function MainLayout() {
           <Route index element={<DiaryView />} />
           <Route path="tasks" element={<TasksView />} />
           <Route path="search" element={<SearchView />} />
+          <Route path="calendar" element={<CalendarView />} />
+          <Route path="kanban" element={<KanbanView />} />
+          <Route path="agents" element={<AgentsView />} />
           <Route path="account" element={
             isGuest ? <Navigate to="/login" replace /> : <AccountView />
           } />

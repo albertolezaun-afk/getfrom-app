@@ -180,6 +180,33 @@ export default function Sidebar({ open, onToggle, onLogout, isSyncing, isGuest }
         </button>
 
         <button
+          className={`nav-item ${isActive('/calendar') ? 'active' : ''}`}
+          onClick={() => navigate('/calendar')}
+          title="Calendario"
+        >
+          <span className="nav-icon">📅</span>
+          {open && <span>Calendario</span>}
+        </button>
+
+        <button
+          className={`nav-item ${isActive('/kanban') ? 'active' : ''}`}
+          onClick={() => navigate('/kanban')}
+          title="Kanban"
+        >
+          <span className="nav-icon">⬛</span>
+          {open && <span>Kanban</span>}
+        </button>
+
+        <button
+          className={`nav-item ${isActive('/agents') ? 'active' : ''}`}
+          onClick={() => navigate('/agents')}
+          title="Agentes"
+        >
+          <span className="nav-icon">🤖</span>
+          {open && <span>Agentes</span>}
+        </button>
+
+        <button
           className={`nav-item ${isActive('/search') ? 'active' : ''}`}
           onClick={() => navigate('/search')}
         >

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { updateMe, deleteAccount, cancelSubscription, changePlan, clearTokens } from '../../api/client'
+import { updateMe, deleteAccount, cancelSubscription, changePlan, clearTokens, exportNodes, getToken } from '../../api/client'
 import { userStore, useUserStore } from '../../store/userStore'
 import { useTheme } from '../../hooks/useTheme'
 
@@ -29,6 +29,10 @@ export default function AccountView() {
   // Subscription actions
   const [subLoading, setSubLoading] = useState(false)
   const [subError, setSubError] = useState('')
+
+  // Export
+  const [exportLoading, setExportLoading] = useState(false)
+  const [exportError, setExportError] = useState('')
 
   // Delete account
   const [showDeleteModal, setShowDeleteModal] = useState(false)
@@ -116,6 +120,36 @@ export default function AccountView() {
     }
   }
 
+  async function handleExport(format: 'json' | 'markdown') {
+    setExportError('')
+    setExportLoading(true)
+    try {
+      const data = await exportNodes(format)
+      const date = new Date().toISOString().slice(0, 10)
+      let blob: Blob
+      let filename: string
+      if (format === 'markdown') {
+        blob = new Blob([data as string], { type: 'text/markdown' })
+        filename = `from-export-${date}.md`
+      } else {
+        blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+        filename = `from-export-${date}.json`
+      }
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    } catch (err: unknown) {
+      setExportError(err instanceof Error ? err.message : 'Error al exportar')
+    } finally {
+      setExportLoading(false)
+    }
+  }
+
   async function handleDeleteAccount() {
     setDeleteError('')
     setDeleteLoading(true)
@@ -152,6 +186,36 @@ export default function AccountView() {
       </div>
 
       <div className="view-body account-body">
+
+        {/* ── Exportar datos section ── */}
+        {getToken() && (
+          <section className="settings-section">
+            <h2 className="settings-section-title">Exportar datos</h2>
+            <div className="settings-row">
+              <div>
+                <div className="settings-row-label">Exportar todas tus notas y tareas</div>
+                <div className="settings-row-hint">Descarga una copia de todos tus datos en el formato que prefieras.</div>
+              </div>
+            </div>
+            {exportError && <div className="auth-error" style={{ marginTop: 8 }}>{exportError}</div>}
+            <div className="settings-actions">
+              <button
+                className="btn-secondary"
+                onClick={() => handleExport('json')}
+                disabled={exportLoading}
+              >
+                {exportLoading ? 'Exportando...' : 'Exportar JSON'}
+              </button>
+              <button
+                className="btn-secondary"
+                onClick={() => handleExport('markdown')}
+                disabled={exportLoading}
+              >
+                {exportLoading ? 'Exportando...' : 'Exportar Markdown'}
+              </button>
+            </div>
+          </section>
+        )}
 
         {/* ── Apariencia section ── */}
         <section className="settings-section">
